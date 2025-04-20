@@ -33,7 +33,7 @@ if (-not (Check-Command "git")) {
 # npm Pakete mit stabilen Versionen installieren
 Write-Host "📦 Installiere stabile Projektabhängigkeiten..." -ForegroundColor Cyan
 
-npm install express@4.18.2 socket.io@4.7.4 tailwindcss@3.4.3 daisyui@4.10.0 electron@28.2.5 sqlite3@5.1.6 bcrypt@5.1.1 pdf-lib@1.17.1 dotenv@16.5.0 prismjs@1.29.0 @capacitor/core@7.2.0 @capacitor/cli@7.2.0
+npm install express@4.18.2 cors@2.8.5 socket.io@4.7.4 tailwindcss@3.4.3 daisyui@4.10.0 electron@28.2.5 sqlite3@5.1.6 bcrypt@5.1.1 pdf-lib@1.17.1 dotenv@16.5.0 prismjs@1.29.0 @capacitor/core@7.2.0 @capacitor/cli@7.2.0
 
 # Verzeichnisse anlegen (falls nicht vorhanden)
 $folders = @("server/db", "public/pwa", "electron", "docs")
@@ -46,6 +46,7 @@ foreach ($folder in $folders) {
 # environment.txt erstellen
 Write-Host "🌐 Erstelle environment.txt..." -ForegroundColor Cyan
 
+# npm install express cors
 @"
 Technologien und Versionen fuer Meet_Note:
 Node.js: $(node --version)

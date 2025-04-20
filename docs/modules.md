@@ -13,3 +13,9 @@
 - **Drag & Drop:** Elemente verschieben
 - **Auto-Save:** Änderungen sofort speichern
 - **Dark/Light Mode:** Designumschaltung live
+
+## Verhalten der Toolbar
+
+- **Host (Admin):** Alle Funktionen verfügbar (Dateiverwaltung, Editorfunktionen, Session beenden)
+- **Teilnehmer (Collaborator):** Nur Bearbeitungsfunktionen verfügbar (kein Dateianlegen oder Löschen), Session verlassen möglich
+

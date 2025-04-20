@@ -1,9 +1,10 @@
 const socket = io();
 
-function chooseMode(mode) {
-  localStorage.setItem('meet_note_mode', mode);
-  alert(`Modus gewählt: ${mode === 'host' ? 'Hosting' : 'Beitreten'}`);
+function chooseRole(role) {
+  localStorage.setItem('meet_note_role', role);
+  alert(`Modus gewählt: ${role === 'host' ? 'Hosting' : 'Beitreten'}`);
   // Später: Weiterleitung auf Haupt-Notizen-UI
+  window.location.href = '/app.html'
 }
 
 console.log('Socket.IO verbunden');

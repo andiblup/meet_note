@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meet_Note - Client</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.8.0/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="/styles.css" rel="stylesheet">
+    <!-- <link href="./prism/prism.css" rel="stylesheet"> -->
+</head>
+
+<body class="min-h-screen p-4">
+    <div class="container mx-auto">
+        <div class="navbar bg-base-100 rounded-xl shadow mb-4">
+            <div class="flex-1">
+                <button class="btn btn-ghost text-xl text-white">Meet Note</button>
+            </div>
+            <div class="flex gap-2">
+                <button id="noteBtn" class="btn btn-sm btn-toggle" onclick="setCurrentType('note')">📝</button>
+                <button id="checkBtn" class="btn btn-sm btn-toggle" onclick="setCurrentType('check')">☑️</button>
+
+                <select id="colorSelect" class="select select-sm" onchange="setStyleAndFormat('foreColor', this.value)">
+                    <option value="white" selected>Weiß</option>
+                    <option value="red">Rot</option>
+                    <option value="blue">Blau</option>
+                    <option value="green">Grün</option>
+                </select>
+
+                <select id="alertSelect" class="select select-sm" onchange="setAlertColor(this.value)">
+                    <option value="alert-none" selected>Randlos</option>
+                    <option value="alert-white">Weiß</option>
+                    <option value="alert-info">Info</option>
+                    <option value="alert-success">Erfolg</option>
+                    <option value="alert-warning">Warnung</option>
+                    <option value="alert-error">Fehler</option>
+                </select>
+
+                <select id="sizeSelect" class="select select-sm" onchange="setStyleAndFormat('fontSize', this.value)">
+                    <option value="3" selected>Normal</option>
+                    <option value="1">Klein</option>
+                    <option value="5">Groß</option>
+                    <option value="7">Sehr groß</option>
+                </select>
+
+                <button id="boldBtn" class="btn btn-sm btn-toggle" onclick="toggleBold()"><strong>B</strong></button>
+            </div>
+        </div>
+
+
+        <div class="flex gap-4">
+            <div class="w-1/4 bg-base-100 p-4 rounded-xl shadow space-y-4">
+                <h2 class="text-lg font-bold mb-2">📁 Dateien</h2>
+                <div id="fileList" class="space-y-1 max-h-[400px] overflow-auto"></div>
+
+                <input id="newFileName" type="text" placeholder="Neue Datei"
+                    class="input input-bordered input-sm w-full" />
+                <button class="btn btn-primary btn-sm w-full" onclick="createFile()">➕ Erstellen</button>
+            </div>
+
+            <div class="w-3/4 bg-base-100 p-4 rounded-xl shadow">
+                <h2 id="currentFile" class="text-lg font-semibold mb-4">🗂️ Keine Datei ausgewählt</h2>
+
+                <div class="flex gap-2 mb-4">
+                    <div contenteditable="true" id="unifiedInput" placeholder="Text hier eingeben..."
+                        class="border p-2 rounded min-h-[50px] bg-white text-black flex-1"></div>
+                    <button class="btn btn-outline" onclick="submitInput()">➕ Hinzufügen</button>
+                </div>
+
+                <div id="editor-list" class="space-y-2"></div>
+            </div>
+        </div>
+
+        <script>
+            let currentId = null;
+            let currentData = [];
+            let currentType = 'note';
+            let currentStyle = { foreColor: 'white', alertColor: 'alert-none', fontSize: '3', bold: false };
+
+            function setCurrentType(type) {
+                currentType = type;
+                updateToolbarFeedback();
+            }
+
+            function setAlertColor(alertClass) {
+                currentStyle.alertColor = alertClass;
+                document.getElementById("alertSelect").value = alertClass;
+            }
+
+            function toggleBold() {
+                if (document.getSelection().toString()) {
+                    document.execCommand('bold');
+                }
+                currentStyle.bold = !currentStyle.bold;
+                updateToolbarFeedback();
+            }
+
+            function setStyleAndFormat(command, value) {
+                currentStyle[command] = value;
+                document.getElementById(command === 'foreColor' ? 'colorSelect' : 'sizeSelect').value = value;
+                if (document.getSelection().toString()) {
+                    document.execCommand(command, false, value);
+                }
+            }
+
+            function updateToolbarFeedback() {
+                document.getElementById('boldBtn').classList.toggle('btn-active', currentStyle.bold);
+                document.getElementById('noteBtn').classList.toggle('btn-active', currentType === 'note');
+                document.getElementById('checkBtn').classList.toggle('btn-active', currentType === 'check');
+            }
+
+            function submitInput() {
+                const input = document.getElementById('unifiedInput');
+                const html = input.innerHTML.trim();
+                if (!html) return;
+                const item = currentType === 'check'
+                    ? { type: 'check', content: html, checked: false, alert: currentStyle.alertColor }
+                    : { type: 'note', content: html, alert: currentStyle.alertColor };
+                currentData.push(item);
+                input.innerHTML = '';
+                autoSave();
+            }
+
+            async function loadFiles() {
+                const res = await fetch('/files');
+                const files = await res.json();
+                const list = document.getElementById('fileList');
+                list.innerHTML = '';
+                files.forEach(name => {
+                    const row = document.createElement('div');
+                    row.className = 'flex items-center justify-between px-2 py-1 hover:bg-base-200 rounded';
+                    row.innerHTML = `
+          <span class="cursor-pointer flex-1" onclick="loadFile('${name}')">📄 ${name}</span>
+          <div class="flex gap-1">
+            <button class="btn btn-xs btn-outline" onclick="renameFile('${name}')">✏️</button>
+            <button class="btn btn-xs btn-error" onclick="deleteFile('${name}')">🗑️</button>
+          </div>
+        `;
+                    list.appendChild(row);
+                });
+            }
+
+            async function createFile() {
+                const id = document.getElementById('newFileName').value.trim();
+                if (!id) return alert('Bitte Dateinamen eingeben.');
+                const res = await fetch('/file', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                });
+                if (res.status === 400) return alert('Datei existiert bereits.');
+                currentId = id;
+                currentData = [];
+                document.getElementById('currentFile').innerText = `🗂️ ${id}`;
+                renderContent();
+                loadFiles();
+            }
+
+            async function deleteFile(name) {
+                if (!confirm(`Datei "${name}" wirklich löschen?`)) return;
+                const res = await fetch(`/file/${name}`, { method: 'DELETE' });
+                if (res.ok) {
+                    if (currentId === name) {
+                        currentId = null;
+                        currentData = [];
+                        document.getElementById('currentFile').innerText = '🗂️ Keine Datei ausgewählt';
+                        renderContent();
+                    }
+                    loadFiles();
+                }
+            }
+
+            async function loadFile(id) {
+                const res = await fetch(`/file/${id}`);
+                const data = await res.json();
+                currentId = id;
+                currentData = data;
+                document.getElementById('currentFile').innerText = `🗂️ ${id}`;
+                renderContent();
+            }
+
+            function renderContent() {
+                const list = document.getElementById('editor-list');
+                list.innerHTML = '';
+                currentData.forEach((item, index) => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = `alert-box ${item.alert || ''}`;
+                    wrapper.draggable = true;
+                    wrapper.ondragstart = ev => ev.dataTransfer.setData('text/plain', index);
+                    wrapper.ondrop = ev => onDrop(ev, index);
+                    wrapper.ondragover = ev => ev.preventDefault();
+
+                    if (item.type === 'note') {
+                        const div = document.createElement('div');
+                        div.contentEditable = true;
+                        div.className = 'flex-1';
+                        div.innerHTML = item.content;
+                        div.onblur = () => updateItem(index, { ...item, content: div.innerHTML });
+                        wrapper.appendChild(div);
+                    } else if (item.type === 'check') {
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.checked = item.checked;
+                        checkbox.onchange = () => updateItem(index, { ...item, checked: checkbox.checked });
+
+                        const editable = document.createElement('div');
+                        editable.contentEditable = true;
+                        editable.className = 'flex-1';
+                        editable.innerHTML = item.content;
+                        editable.onblur = () => updateItem(index, { ...item, content: editable.innerHTML });
+
+                        wrapper.append(checkbox, editable);
+                    }
+
+                    const delBtn = document.createElement('button');
+                    delBtn.className = 'btn btn-sm btn-ghost';
+                    delBtn.innerHTML = '🗑️';
+                    delBtn.onclick = () => deleteItem(index);
+                    wrapper.appendChild(delBtn);
+
+                    list.appendChild(wrapper);
+                });
+            }
+
+            function updateItem(index, newItem) {
+                currentData[index] = newItem;
+                autoSave();
+            }
+
+            function deleteItem(index) {
+                currentData.splice(index, 1);
+                autoSave();
+            }
+
+            function onDrop(ev, targetIndex) {
+                ev.preventDefault();
+                const sourceIndex = parseInt(ev.dataTransfer.getData('text/plain'), 10);
+                const item = currentData.splice(sourceIndex, 1)[0];
+                currentData.splice(targetIndex, 0, item);
+                autoSave();
+            }
+
+            async function autoSave() {
+                if (!currentId) return;
+                await fetch('/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: currentId, content: currentData })
+                });
+                renderContent();
+            }
+
+            async function renameFile(oldName) {
+                const newName = prompt("Neuer Dateiname:", oldName);
+                if (!newName || newName === oldName) return;
+                const res = await fetch('/rename', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ oldName, newName })
+                });
+                if (res.ok) {
+                    if (currentId === oldName) currentId = newName;
+                    loadFiles();
+                    document.getElementById('currentFile').innerText = `🗂️ ${newName}`;
+                } else {
+                    alert('Fehler beim Umbenennen');
+                }
+            }
+
+            window.onload = () => {
+                loadFiles();
+                updateToolbarFeedback();
+            };
+
+            const socket = io();
+
+            socket.on('update', () => {
+                console.log('🔄 Update empfangen – neu laden...');
+                if (currentId) {
+                    loadFile(currentId); // Lade die aktuelle Datei neu
+                }
+            });
+
+        </script>
+</body>
+
+</html>

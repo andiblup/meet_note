@@ -21,3 +21,12 @@
 - OneNote und Markdown Exporte
 - Lokaler DNS-Server (z.B. meetnote.local)
 - Plugin-System für Erweiterungen
+
+## Rollenbasiertes Zugriffssystem
+
+| Rolle | Berechtigungen |
+|:------|:---------------|
+| Host (Admin) | Erstellen, Bearbeiten, Löschen von Dateien; Session verwalten |
+| Teilnehmer (Collaborator) | Bearbeiten von bestehenden Inhalten; keine neuen Dateien anlegen oder löschen |
+
+Rollen werden beim Starten oder Beitreten zu einer Session automatisch vergeben.

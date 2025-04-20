@@ -13,3 +13,12 @@
 - Clients verbinden sich über WebSocket (Socket.IO)
 - Änderungen werden live synchronisiert
 - Daten werden lokal auf dem Host gespeichert
+
+## Seitenübersicht
+
+- `/index.html`: Startseite mit Auswahl \"Session starten\" oder \"Beitreten\"
+- `/host.html`: Editor-Seite für den Host (Admin-Rolle)
+- `/join.html`: Editor-Seite für Teilnehmer (Collaborator-Rolle)
+
+Jede Seite lädt die entsprechende Konfiguration basierend auf der zugewiesenen Rolle (Admin oder Collaborator).
+
