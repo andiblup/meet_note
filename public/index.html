@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang="de"><head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Meet_Note</title>
+    <link href="/styles/output.css" rel="stylesheet">
+    <script src="/socket.io/socket.io.js"></script>
+    </head>
+    <body class="bg-base-200 p-6 min-h-screen flex flex-col">
+      <h2 class="text-2xl font-bold mb-4">📝 Dateien</h2>
+      <div class="flex gap-4 mb-4">
+        <input id="fileName" placeholder="Dateiname" class="input input-bordered">
+        <button id="addFile" class="btn btn-primary">➕</button>
+      </div>
+      <ul id="fileList" class="menu bg-base-100 rounded-box w-64"></ul>
+    
+      <hr class="my-6">
+    
+      <h2 id="currentFile" class="text-xl font-semibold mb-2">Kein File gewählt</h2>
+      <textarea id="content" class="textarea textarea-bordered w-full h-60"></textarea>
+      <button id="save" class="btn btn-success mt-4">💾 Speichern</button>
+    
+    <script type="module" src="/app/app.js"></script>
+    </body></html>
+    
