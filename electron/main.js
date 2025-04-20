@@ -7,6 +7,8 @@ const { spawn, execSync } = require('child_process');
 const os     = require('os');
 const net    = require('net');
 
+
+
 const PORT = 6060;
 let win;                    // BrowserWindow‑Instanz
 let serverProc = null;      // Kindprozess (node server.js)
@@ -20,6 +22,11 @@ function getIp() {
       .find(i => i.family === 'IPv4' && !i.internal)?.address || 'localhost'
   );
 }
+
+// const getIp = require('../server/server.js').getRealLocalIp;
+
+
+
 function portFree(port) {
   return new Promise(res => {
     const t = net
