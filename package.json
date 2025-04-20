@@ -1,6 +1,6 @@
 {
   "name": "meet_note",
-  "version": "0.0.1",
+  "version": "0.0.1.1",
   "description": "Netzwerk-Notizapp",
   "main": "server/server.js",
   "scripts": {

@@ -1,0 +1,39 @@
+<!-- settings.html -->
+<div id="settingsDrawer" class="fixed right-0 top-0 h-full w-80 bg-base-100 shadow-lg p-6 transform translate-x-full transition-transform z-50">
+    <h2 class="text-2xl font-bold mb-6">⚙️ Einstellungen</h2>
+  
+    <!-- Design Settings -->
+    <div class="collapse collapse-arrow bg-base-200 mb-2">
+      <input type="checkbox" class="peer" checked />
+      <div class="collapse-title font-medium">🎨 Design</div>
+      <div class="collapse-content space-y-2">
+        <select id="themeSelect" class="select select-bordered w-full">
+          <option value="light">Hell</option>
+          <option value="dark">Dunkel</option>
+        </select>
+        <select id="fontSizeSelect" class="select select-bordered w-full">
+          <option value="14px">Klein</option>
+          <option value="16px" selected>Normal</option>
+          <option value="18px">Groß</option>
+        </select>
+      </div>
+    </div>
+  
+    <!-- Editor Verhalten -->
+    <div class="collapse collapse-arrow bg-base-200 mb-2">
+      <input type="checkbox" class="peer" />
+      <div class="collapse-title font-medium">🖊️ Verhalten</div>
+      <div class="collapse-content space-y-2">
+        <div class="form-control">
+          <label class="cursor-pointer label">
+            <span class="label-text">Autosave aktivieren</span> 
+            <input type="checkbox" id="autosaveToggle" class="toggle toggle-primary" />
+          </label>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Weitere Bereiche wie Netzwerk und Sicherheit folgen später -->
+    
+  </div>
+  

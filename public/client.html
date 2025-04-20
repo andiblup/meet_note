@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meet_Note - Client</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="/styles.css" rel="stylesheet">
+  <link href="/prism/prism.css" rel="stylesheet">
+</head>
+<body class="bg-base-200 min-h-screen flex flex-col">
+
+  <!-- Toolbar Section -->
+  <nav id="toolbar" class="flex bg-base-100 p-3 shadow-md gap-2">
+    <button onclick="leaveSession()" class="btn btn-warning">🚪 Session verlassen</button>
+  </nav>
+
+  <!-- Info Box -->
+  <div class="bg-blue-100 text-blue-800 p-4 m-4 rounded-lg shadow-md">
+    Du bist als <strong>Teilnehmer</strong> verbunden. Änderungen werden automatisch synchronisiert.
+  </div>
+
+  <!-- Editor Section -->
+  <main class="flex-1 overflow-auto p-4">
+    <div id="editor" contenteditable="true" class="prose w-full min-h-[500px] bg-white rounded-lg p-4"></div>
+  </main>
+
+  <script src="/prism/prism.js"></script>
+  <script type="module" src="/editor/editor.js"></script>
+  <script type="module" src="/editor/toolbar.js"></script>
+  <script type="module" src="/editor/storage.js"></script>
+  <script type="module" src="/editor/utils.js"></script>
+
+  <script>
+    // Leave the session
+    function leaveSession() {
+      if (confirm('Möchtest du die Session wirklich verlassen?')) {
+        window.location.href = '/index.html';
+      }
+    }
+  </script>
+
+</body>
+</html>

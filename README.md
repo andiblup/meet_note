@@ -88,6 +88,7 @@ Eine moderne, sichere, modulare Netzwerk-Notiz-App für Meetings, Projekte und T
 - [ ] Code-Block + Prism.js Syntax Highlighting
 - [ ] Theme Switching Light/Dark
 - [ ] Live-Autosave
+- [ ] Settings-UI
 
 ### Phase 3: Sicherheit & Rollen
 

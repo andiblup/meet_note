@@ -5,14 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meet_Note</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="/styles.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 p-6 flex flex-col items-center justify-center min-h-screen">
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-8">
+
   <h1 class="text-4xl font-bold mb-8">Meet_Note</h1>
+
   <div class="flex gap-6">
-    <button onclick="chooseMode('host')" class="btn btn-primary text-xl p-6 rounded-xl">🌐 Host starten</button>
-    <button onclick="chooseMode('join')" class="btn btn-secondary text-xl p-6 rounded-xl">🔗 Beitreten</button>
+    <button onclick="startHost()" class="btn btn-primary text-xl px-6 py-4 rounded-xl">🌐 Session starten</button>
+    <button onclick="startClient()" class="btn btn-secondary text-xl px-6 py-4 rounded-xl">🔗 Client verbinden</button>
   </div>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="app.js"></script>
+
+  <script>
+    // Start Host Session
+    function startHost() {
+      localStorage.setItem('role', 'host'); // Save role as host
+      window.location.href = '/host.html';
+    }
+
+    // Join as Client
+    function startClient() {
+      localStorage.setItem('role', 'client'); // Save role as client
+      window.location.href = '/client.html';
+    }
+  </script>
+
 </body>
 </html>
