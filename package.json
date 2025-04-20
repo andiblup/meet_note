@@ -4,6 +4,7 @@
   "description": "Netzwerk-Notizapp",
   "main": "server/server.js",
   "scripts": {
+    "build:css": "npx tailwindcss -i ./public/styles/styles.css -o ./public/styles/output.css --minify",
     "dev": "node server/server.js",
     "electron": "electron ."
   },
@@ -20,8 +21,10 @@
     "sqlite3": "^5.1.6"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.16",
     "daisyui": "^4.10.0",
     "electron": "^28.2.5",
+    "postcss": "^8.4.24",
     "tailwindcss": "^3.4.3"
   }
 }

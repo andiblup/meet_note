@@ -4,16 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meet_Note</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="/styles/output.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 p-6 flex flex-col items-center justify-center min-h-screen">
-  <h1 class="text-4xl font-bold mb-8">Meet_Note</h1>
-  <div class="flex gap-6">
-    <button href="" onclick="chooseRole('host')" class="btn btn-primary text-xl p-6 rounded-xl">🌐 Host starten</button>
-    <button onclick="chooseRole('client')" class="btn btn-secondary text-xl p-6 rounded-xl">🔗 Beitreten</button>
+<body class="bg-base-200 min-h-screen flex flex-col">
+
+  <!-- App Container -->
+  <div id="app" class="flex flex-col min-h-screen">
+    <main id="mainContent" class="flex-1 p-4"></main>
   </div>
-  <p>debug text</p>
+
+  <!-- Socket.IO Client -->
   <script src="/socket.io/socket.io.js"></script>
-  <script src="app.js"></script>
+
+  <!-- App Initializer -->
+  <script type="module" src="/app/app.js"></script>
+
 </body>
 </html>

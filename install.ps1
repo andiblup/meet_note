@@ -46,7 +46,16 @@ foreach ($folder in $folders) {
 # environment.txt erstellen
 Write-Host "🌐 Erstelle environment.txt..." -ForegroundColor Cyan
 
-# npm install express cors
+
+
+# npm install -D tailwindcss postcss autoprefixer daisyui
+# npx tailwindcss init
+# npm install tailwindcss@3.4.3 postcss@8.4.24 autoprefixer@10.4.16 daisyui@4.10.0
+
+# npm run build:css
+
+
+
 @"
 Technologien und Versionen fuer Meet_Note:
 Node.js: $(node --version)
