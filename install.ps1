@@ -47,7 +47,7 @@ New-Item -ItemType Directory -Path "data\notes"     -Force | Out-Null
 New-Item -ItemType Directory -Path "data\settings"  -Force | Out-Null
 
 # Default settings.json
-$settings = @{ theme = "light"; autosave = 10 } | ConvertTo-Json
+$settings = @{ theme = "light"; autosave = 5000 } | ConvertTo-Json
 $settings | Out-File -Encoding utf8 "data\settings\settings.json"
 
 # --- Prism Assets kopieren ---
