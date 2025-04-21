@@ -147,25 +147,24 @@
                 <button id="btnSaveSettings" class="btn btn-primary w-full mt-4">Speichern</button>
             </div>
         </div> -->
-        <div id="electronSettings" class="hidden">
-            <input id="settingsToggle" type="checkbox" class="drawer-toggle hidden" />
-            <div class="drawer-side">
-                <label for="settingsToggle" class="drawer-overlay"></label>
-                <div class="w-80 bg-base-100 p-6 space-y-4">
-                    <h2 class="text-xl font-bold mb-4">⚙️ Einstellungen (App‑weit)</h2>
-                    <div class="form-control">
-                        <label class="flex cursor-pointer gap-2 items-center">
-                            <span class="label-text">Dark Mode</span>
-                            <input id="chkDark" type="checkbox" class="toggle theme-controller" />
-                        </label>
-                    </div>
-                    <label class="form-control w-full">
-                        <div class="label"><span class="label-text">💾 Autosave (ms)</span></div>
-                        <input id="inpAutosave" type="number" step="500" min="500"
-                            class="input input-bordered w-full" />
+        <input id="settingsToggle" type="checkbox" class="drawer-toggle hidden" />
+        <div id="settingsDrawer" class="drawer-side">
+            <label for="settingsToggle" class="drawer-overlay"></label>
+            <div class="w-80 bg-base-100 p-6 space-y-4">
+                <h2 class="text-xl font-bold mb-4">⚙️ Einstellungen</h2>
+                <!-- Theme Toggle -->
+                <div class="form-control">
+                    <label class="flex cursor-pointer gap-2 items-center">
+                        <span class="label-text">Dark Mode</span>
+                        <input id="chkDark" type="checkbox" class="toggle theme-controller" />
                     </label>
-                    <button id="btnSaveSettings" class="btn btn-primary w-full mt-4">Speichern</button>
                 </div>
+                <!-- Autosave nur in Electron -->
+                <div id="autosaveControl" class="form-control w-full">
+                    <div class="label"><span class="label-text">💾 Autosave (ms)</span></div>
+                    <input id="inpAutosave" type="number" step="500" min="500" class="input input-bordered w-full" />
+                </div>
+                <button id="btnSaveSettings" class="btn btn-primary w-full mt-4">Speichern</button>
             </div>
         </div>
 
@@ -393,49 +392,47 @@
 
     </script> -->
     <script type="module">
-        // In launcher.js (analog auch in editor.js)
-        window.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const isElectron = !!window.electronAPI;
 
-            // 1) Settings‑UI nur in Electron aktivieren
+            // 1) Settings-Button öffnet Drawer immer
+            document.getElementById('btnSettings').addEventListener('click', () => {
+                document.getElementById('settingsToggle').checked = true;
+            });
+
+            // 2) Theme‑Initialisierung
+            let currentSettings;
             if (isElectron) {
-                document.getElementById('electronSettings').classList.remove('hidden');
-                document.getElementById('btnSettings').classList.remove('hidden');
+                // Electron: aus Datei laden
+                currentSettings = await window.electronAPI.getSettings();
             } else {
-                // Browser‑Fallback: Theme aus localStorage oder prefers-color-scheme
-                const saved = localStorage.getItem('theme');
-                const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-                document.documentElement.setAttribute('data-theme', theme);
+                // Browser: localStorage oder prefers-color
+                const ls = localStorage.getItem('theme');
+                const theme = ls || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                currentSettings = { theme, autosave: null };
+            }
 
-                // Einfacher Toggle im Browser
-                document.getElementById('chkDark').checked = theme === 'dark';
-                document.getElementById('chkDark').addEventListener('change', () => {
-                    const t = document.getElementById('chkDark').checked ? 'dark' : 'light';
-                    document.documentElement.setAttribute('data-theme', t);
-                    localStorage.setItem('theme', t);
-                });
+            // Drawer-Kontrollen füllen
+            document.documentElement.setAttribute('data-theme', currentSettings.theme);
+            document.getElementById('chkDark').checked = currentSettings.theme === 'dark';
+            if (currentSettings.autosave !== null) {
+                document.getElementById('inpAutosave').value = currentSettings.autosave;
+            }
 
-                // Verstecke Autosave‑Steuerung im Browser
-                document.getElementById('inpAutosave').parentElement.classList.add('hidden');
+            // 3) Browser‑Clients: Autosave‑Controls ausblenden
+            if (!isElectron) {
+                document.getElementById('autosaveControl').classList.add('hidden');
                 document.getElementById('btnSaveSettings').classList.add('hidden');
             }
 
-            // 2) Wenn Electron, lade & speichere via IPC
-            if (isElectron) {
-                const settings = await window.electronAPI.getSettings();
-                document.documentElement.setAttribute('data-theme', settings.theme);
-                document.getElementById('chkDark').checked = settings.theme === 'dark';
-                document.getElementById('inpAutosave').value = settings.autosave;
+            // 4) Event‑Handler
+            document.getElementById('chkDark').addEventListener('change', () => {
+                const t = document.getElementById('chkDark').checked ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', t);
+            });
 
-                document.getElementById('btnSettings').addEventListener('click', () => {
-                    document.getElementById('settingsToggle').checked = true;
-                });
-                document.getElementById('chkDark').addEventListener('change', () => {
-                    document.documentElement.setAttribute(
-                        'data-theme',
-                        document.getElementById('chkDark').checked ? 'dark' : 'light'
-                    );
-                });
+            if (isElectron) {
+                // Speichern nur in Electron
                 document.getElementById('btnSaveSettings').addEventListener('click', async () => {
                     const newSettings = {
                         theme: document.getElementById('chkDark').checked ? 'dark' : 'light',
@@ -445,19 +442,15 @@
                     document.getElementById('settingsToggle').checked = false;
                 });
             } else {
-                // 3) Wenn Browser, lade & speichere via localStorage
-                const saved = localStorage.getItem('theme');
-                const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-                document.documentElement.setAttribute('data-theme', theme);
-                document.getElementById('chkDark').checked = theme === 'dark';
+                // Browser: Theme direkt in localStorage persistieren
                 document.getElementById('chkDark').addEventListener('change', () => {
                     const t = document.getElementById('chkDark').checked ? 'dark' : 'light';
-                    document.documentElement.setAttribute('data-theme', t);
                     localStorage.setItem('theme', t);
                 });
             }
 
         });
+
 
     </script>
 </body>
