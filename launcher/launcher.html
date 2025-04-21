@@ -1,18 +1,143 @@
-<!DOCTYPE html><html lang="de"><head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!DOCTYPE html>
+<html lang="de" data-theme="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Meet_Note Launcher</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="bg-base-200 flex flex-col items-center justify-center min-h-screen p-6">
-      <h1 class="text-4xl font-bold mb-8">Meet_Note</h1>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+
+    <!-- <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      // console.log('DOM fully loaded and parsed');
+      // const { theme } = window.electronAPI.getSettings();
+      // document.documentElement.setAttribute('data-theme', theme);
+      console.log(window.electronAPI.getSettings());
+      
+    });
+  </script> -->
+</head>
+
+<!-- <body class="bg-base-200 flex flex-col items-center justify-center min-h-screen p-6">
+    <h1 class="text-4xl font-bold mb-8">Meet_Note</h1>
     
-      <button id="hostBtn" class="btn btn-primary w-60 mb-6">🌐 Session starten</button>
-    
-      <div class="flex flex-col gap-3 w-60">
+
+    <button id="hostBtn" class="btn btn-primary w-60 mb-6">🌐 Session starten</button>
+
+    <div class="flex flex-col gap-3 w-60">
         <input id="joinIp" class="input input-bordered" placeholder="IP:Port">
         <button id="joinBtn" class="btn btn-secondary">🔗 Verbinden</button>
-      </div>
-    
+    </div> -->
+
+<body class="bg-base-200 flex flex-col items-center justify-center min-h-screen p-6">
+
+
+    <!-- Header mit Settings‑Button -->
+    <nav class="w-full max-w-md flex justify-end px-4 mb-8">
+        <button id="btnSettings" class="btn btn-ghost btn-sm">⚙️</button>
+    </nav>
+
+    <!-- Settings Drawer -->
+    <input id="settingsToggle" type="checkbox" class="drawer-toggle hidden" />
+    <div class="drawer-side">
+        <label for="settingsToggle" class="drawer-overlay"></label>
+        <div class="w-80 bg-base-100 p-6 space-y-4">
+            <h2 class="text-xl font-bold mb-4">⚙️ Einstellungen</h2>
+
+            <!-- Theme Toggle -->
+            <div class="form-control">
+                <label class="flex cursor-pointer gap-2 items-center">
+                    <span class="label-text">Dark Mode</span>
+                    <input id="chkDark" type="checkbox" class="toggle theme-controller" />
+                </label>
+            </div>
+
+            <!-- Autosave Intervall -->
+            <label class="form-control w-full">
+                <div class="label"><span class="label-text">💾 Autosave (ms)</span></div>
+                <input id="inpAutosave" type="number" step="500" min="500" class="input input-bordered w-full" />
+            </label>
+
+            <button id="btnSaveSettings" class="btn btn-primary w-full mt-4">Speichern</button>
+        </div>
+    </div>
+
+    <h1 class="text-4xl font-bold mb-8">Meet_Note</h1>
+
+    <!-- Host / Join -->
+    <button id="hostBtn" class="btn btn-primary w-60 mb-4">🌐 Session starten</button>
+    <div class="flex flex-col gap-3 w-60">
+        <input id="joinIp" class="input input-bordered" placeholder="IP:Port">
+        <button id="joinBtn" class="btn btn-secondary">🔗 Verbinden</button>
+    </div>
+
+
     <script type="module" src="./launcher.js"></script>
-    </body></html>
-    
+
+
+    <!-- <script type="module">
+        /* ==================================================================== */
+        /*  SETTINGS  – Drawer / Persistenz / Live‑Sync                         */
+        /* ==================================================================== */
+
+        const settings = { theme: 'light', autosave: 1000 };   // Default
+
+        /* ---- API Helpers --------------------------------------------------- */
+        async function loadSettings() {
+            Object.assign(settings, await fetch('/api/settings').then(r => r.json()));
+            applyTheme(settings.theme);
+            document.getElementById('chkDark').checked = settings.theme === 'dark';
+            document.getElementById('inpAutosave').value = settings.autosave;
+        }
+
+        async function saveSettings() {
+            settings.theme = document.getElementById('chkDark').checked ? 'dark' : 'light';
+            settings.autosave = document.getElementById('inpAutosave').value || 1000;
+            await fetch('/api/settings', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(settings)
+            });
+        }
+
+        document.getElementById('chkDark').addEventListener('change', e => {
+            const liveTheme = e.target.checked ? 'dark' : 'light';
+            applyTheme(liveTheme);          // <<— UI wechselt unmittelbar
+        });
+
+        /* ---- Theme Anwenden ----------------------------------------------- */
+        function applyTheme(t) {
+            document.documentElement.setAttribute('data-theme', t);
+            settings.theme = t;
+            saveSettings();
+            // Wenn global gehandelt werden soll
+            // socket.emit('settings-updated', { theme: t });
+        }
+
+        /* ---- Drawer UI ----------------------------------------------------- */
+        document.getElementById('btnSettings').onclick =
+            () => document.getElementById('settingsToggle').checked = true;
+
+        document.getElementById('btnSaveSettings').onclick = async () => {
+            await saveSettings();
+            document.getElementById('settingsToggle').checked = false;
+        };
+
+        /* ---- Socket Live‑Push --------------------------------------------- */
+        socket.on('settings-updated', s => {
+            Object.assign(settings, s);
+            applyTheme(settings.theme);
+            document.getElementById('chkDark').checked = settings.theme === 'dark';
+        });
+
+        /* ---- Initial Call -------------------------------------------------- */
+        await loadSettings();
+
+    </script> -->
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</body>
+
+</html>

@@ -6,8 +6,9 @@ const path   = require('path');
 const { spawn, execSync } = require('child_process');
 const os     = require('os');
 const net    = require('net');
+const fs     = require('fs');
 
-
+const SETTINGS_FILE = path.join(__dirname, '..', 'data', 'settings', 'settings.json');
 
 const PORT = 6060;
 let win;                    // BrowserWindow‑Instanz
@@ -25,7 +26,7 @@ function getIp() {
 
 // const getIp = require('../server/server.js').getRealLocalIp;
 
-
+// read settings from /data/settings/settings.json
 
 function portFree(port) {
   return new Promise(res => {
@@ -56,7 +57,28 @@ function killOldServer() {
   }
 }
 
+
+function readSettings() {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(__dirname,'..','data','settings','settings.json'),'utf8'));
+  } catch {
+    return { theme:'light', autosave:5000 };
+  }
+}
+
 /* --------------------------------- IPC --------------------- */
+
+ipcMain.handle('get-settings', () => {
+  return readSettings();
+});
+
+ipcMain.handle('save-settings', (_evt, settings) => {
+  const SETTINGS_FILE = path.join(__dirname,'..','data','settings','settings.json');
+  fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings,null,2),'utf8');
+  return { ok:true };
+});
+
+
 ipcMain.handle('start-server', async () => {
   killOldServer();                        // vorher aufräumen
 

@@ -1,49 +1,156 @@
+// const express = require('express');
+// const http = require('http');
+// const { Server } = require('socket.io');
+// const cors = require('cors');
+// const path = require('path');
+// const fs = require('fs');
+
+// const os = require('os');
+
+// const PORT = 6060;
+// const dataDir = path.join(__dirname, '../data');
+// if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir);
+
+// const app = express();
+// app.use(cors());
+// app.use(express.json());
+// app.use(express.static(path.join(__dirname, '../public')));
+
+// const srv = http.createServer(app);
+// const io = new Server(srv, { cors: { origin: '*' } });
+
+// /* ---------- API ---------- */
+// // ---- Files ----------------------------------------------
+// app.get('/api/files', (_req, res) => {
+//   const files = fs.readdirSync(dataDir).map(f => path.basename(f, '.json'));
+//   res.json(files);
+// });
+// app.get('/api/file/:id', (req, res) => {
+//   const f = path.join(dataDir, `${req.params.id}.json`);
+//   if (!fs.existsSync(f)) return res.status(404).json({ error: 'not found' });
+//   res.json(JSON.parse(fs.readFileSync(f)));
+// });
+// app.post('/api/file/:id', (req, res) => {
+//   fs.writeFileSync(path.join(dataDir, `${req.params.id}.json`),
+//     JSON.stringify(req.body, null, 2));
+//   io.emit('file-updated', req.params.id);
+//   res.json({ status: 'ok' });
+// });
+// app.get('/api/info', (_q, res) => {
+//   res.json({ ip: IP, port: PORT, status: 'online', version: '0.1.0' });
+// });
+
+// // ---- Settings ----------------------------------------------
+// app.get('/api/settings', (_req, res) => {
+//   try {
+//     const raw = fs.readFileSync(settingsFile, 'utf8');
+//     res.json(JSON.parse(raw));
+//   } catch {
+//     res.json({ theme: 'light', autosave: 1000 });   // Fallback defaults
+//   }
+// });
+
+// app.post('/api/settings', (req, res) => {
+//   fs.writeFileSync(settingsFile, JSON.stringify(req.body, null, 2));
+//   io.emit('settings-updated', req.body);            // Live‑Push
+//   res.json({ status: 'ok' });
+// });
+
+
+/* ------------------------------------------------------------------
+ *  Meet_Note ‑ Express + Socket.IO Back‑End  (server/server.js)
+ * -----------------------------------------------------------------*/
 const express = require('express');
-const http = require('http');
+const http    = require('http');
 const { Server } = require('socket.io');
-const cors = require('cors');
-const path = require('path');
-const fs = require('fs');
+const cors    = require('cors');
+const path    = require('path');
+const fs      = require('fs');
+const os      = require('os');
 
-const os = require('os');
+/* ---------- Verzeichnisse / Konstanten --------------------------- */
+const PORT          = 6060;
+const DATA_ROOT     = path.join(__dirname, '..', 'data');
+const NOTES_DIR     = path.join(DATA_ROOT, 'notes');
+const SETTINGS_DIR  = path.join(DATA_ROOT, 'settings');
+const SETTINGS_FILE = path.join(SETTINGS_DIR, 'settings.json');
 
-const PORT = 6060;
-const dataDir = path.join(__dirname, '../data');
-if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir);
+/* Ordner sicherstellen */
+[DATA_ROOT, NOTES_DIR, SETTINGS_DIR].forEach(dir => {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+});
 
+/* ---------- Express Grundsetup ---------------------------------- */
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
-const srv = http.createServer(app);
-const io = new Server(srv, { cors: { origin: '*' } });
+const server = http.createServer(app);              // <‑‑ server (nicht srv)
+const io     = new Server(server, { cors: { origin: '*' } });
 
-/* ---------- API ---------- */
+/* =================================================================
+ *  NOTES  – CRUD  (eine Datei == ein JSON‑Array aus Blöcken)
+ * =================================================================*/
 app.get('/api/files', (_req, res) => {
-  const files = fs.readdirSync(dataDir).map(f => path.basename(f, '.json'));
-  res.json(files);
+  const list = fs.readdirSync(NOTES_DIR).map(f => path.basename(f, '.json'));
+  res.json(list);
 });
+
 app.get('/api/file/:id', (req, res) => {
-  const f = path.join(dataDir, `${req.params.id}.json`);
-  if (!fs.existsSync(f)) return res.status(404).json({ error: 'not found' });
-  res.json(JSON.parse(fs.readFileSync(f)));
+  const file = path.join(NOTES_DIR, `${req.params.id}.json`);
+  if (!fs.existsSync(file)) return res.status(404).json({ error: 'not found' });
+  res.json(JSON.parse(fs.readFileSync(file, 'utf8')));
 });
+
 app.post('/api/file/:id', (req, res) => {
-  fs.writeFileSync(path.join(dataDir, `${req.params.id}.json`),
-    JSON.stringify(req.body, null, 2));
+  fs.writeFileSync(
+    path.join(NOTES_DIR, `${req.params.id}.json`),
+    JSON.stringify(req.body, null, 2)
+  );
   io.emit('file-updated', req.params.id);
   res.json({ status: 'ok' });
 });
-app.get('/api/info', (_q, res) => {
-  res.json({ ip: IP, port: PORT, status: 'online', version: '0.1.0' });
+
+app.delete('/api/file/:id', (req, res) => {
+  const file = path.join(NOTES_DIR, `${req.params.id}.json`);
+  if (!fs.existsSync(file)) return res.status(404).json({ error: 'not found' });
+  fs.unlinkSync(file);
+  io.emit('file-deleted', req.params.id);
+  res.json({ status: 'deleted' });
 });
 
-/* ---------- Socket.IO ---------- */
-io.on('connection', socket => {
-  const addr = socket.handshake.address;        // IP des Clients
-  const time = new Date().toLocaleTimeString(); // HH:MM:SS
+/* =================================================================
+ *  SETTINGS  – global persistentes JSON‑Objekt
+ * =================================================================*/
+const DEFAULT_SETTINGS = { theme: 'light', autosave: 5000 };
 
+function readSettings() {
+  try { return JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8')); }
+  catch { return DEFAULT_SETTINGS; }
+}
+
+app.get('/api/settings', (_req, res) => {
+  res.json(readSettings());
+});
+
+app.post('/api/settings', (req, res) => {
+  fs.writeFileSync(SETTINGS_FILE, JSON.stringify(req.body, null, 2));
+  io.emit('settings-updated', req.body);      // Live‑Push an Clients
+  res.json({ status: 'ok' });
+});
+
+/* ---------- Zusatzinfo für Client ------------------------------- */
+app.get('/api/info', (_rq, res) => {
+  res.json({ ip: getRealLocalIp(), port: PORT, status: 'online', version: '0.1.0' });
+});
+
+/* =================================================================
+ *  SOCKET.IO  – Join / Leave Log
+ * =================================================================*/
+io.on('connection', socket => {
+  const addr = socket.handshake.address;
+  const time = new Date().toLocaleTimeString();
   console.log(`[${time}] 🔵 Client joined  ${addr}  id:${socket.id}`);
 
   socket.on('disconnect', reason => {
@@ -52,35 +159,28 @@ io.on('connection', socket => {
   });
 });
 
-/**
- * Get the best available private local IP (192/10/172).
- * Falls nichts gefunden wird, fallback auf 'localhost'
- */
+/* ---------- Hilfs‑Funktionen ----------------------------------- */
 function getRealLocalIp() {
-  const interfaces = os.networkInterfaces();
+  const nets = os.networkInterfaces();
   const preferred = ['Wi-Fi', 'WLAN', 'LAN', 'Ethernet'];
 
-  for (const [name, infos] of Object.entries(interfaces)) {
-    if (!preferred.some(word => name.toLowerCase().includes(word.toLowerCase()))) continue;
-
+  /* bevorzugte Adapter */
+  for (const [name, infos] of Object.entries(nets)) {
+    if (!preferred.some(w => name.toLowerCase().includes(w.toLowerCase()))) continue;
     for (const info of infos) {
-      if (info.family === 'IPv4' && !info.internal) {
-        return info.address;
-      }
+      if (info.family === 'IPv4' && !info.internal) return info.address;
     }
   }
-
-  // Falls nichts unter bevorzugten Adaptern gefunden: irgendeine private IP nehmen
-  const fallback = Object.values(interfaces).flat()
-    .find(i => i.family === 'IPv4' && !i.internal && (
-      i.address.startsWith('192.') ||
-      i.address.startsWith('10.') ||
-      i.address.startsWith('172.')
-    ));
-
-  return fallback?.address || 'localhost';
+  /* Fallback irgendeine private IP */
+  const any = Object.values(nets).flat().find(
+    i => i.family === 'IPv4' && !i.internal &&
+         (i.address.startsWith('192.') || i.address.startsWith('10.') || i.address.startsWith('172.'))
+  );
+  return any?.address || 'localhost';
 }
-const IP = getRealLocalIp();
 
-/* ---------- Start ---------- */
-srv.listen(PORT, '0.0.0.0', () => console.log(`🌐 http://${IP}:${PORT}`));
+/* ---------- Start ---------------------------------------------- */
+server.listen(PORT, '0.0.0.0', () =>
+  console.log(`🌐 http://${getRealLocalIp()}:${PORT}`)
+);
+
