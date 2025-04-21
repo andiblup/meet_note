@@ -2,11 +2,11 @@
  *  Electron main‑process  •  Meet_Note
  * ----------------------------------------------------------- */
 const { app, BrowserWindow, ipcMain } = require('electron');
-const path   = require('path');
+const path = require('path');
 const { spawn, execSync } = require('child_process');
-const os     = require('os');
-const net    = require('net');
-const fs     = require('fs');
+const os = require('os');
+const net = require('net');
+const fs = require('fs');
 
 const SETTINGS_FILE = path.join(__dirname, '..', 'data', 'settings', 'settings.json');
 
@@ -60,22 +60,30 @@ function killOldServer() {
 
 function readSettings() {
   try {
-    return JSON.parse(fs.readFileSync(path.join(__dirname,'..','data','settings','settings.json'),'utf8'));
+    return JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'settings', 'settings.json'), 'utf8'));
   } catch {
-    return { theme:'light', autosave:5000 };
+    return { theme: 'light', autosave: 5000 };
   }
 }
 
 /* --------------------------------- IPC --------------------- */
 
-ipcMain.handle('get-settings', () => {
-  return readSettings();
-});
+// ipcMain.handle('get-settings', () => {
+//   return readSettings();
+// });
 
+// ipcMain.handle('save-settings', (_evt, settings) => {
+//   const SETTINGS_FILE = path.join(__dirname,'..','data','settings','settings.json');
+//   fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings,null,2),'utf8');
+//   return { ok:true };
+// });
+
+ipcMain.handle('get-settings', () => {
+  return readSettings(); // liest settings.json
+});
 ipcMain.handle('save-settings', (_evt, settings) => {
-  const SETTINGS_FILE = path.join(__dirname,'..','data','settings','settings.json');
-  fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings,null,2),'utf8');
-  return { ok:true };
+  fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2), 'utf8');
+  return { ok: true };
 });
 
 
@@ -83,7 +91,7 @@ ipcMain.handle('start-server', async () => {
   killOldServer();                        // vorher aufräumen
 
   if (serverReady) return { ip: getIp(), port: PORT }; // läuft schon
-  if (serverProc)  return { ip: getIp(), port: PORT }; // bootet gerade
+  if (serverProc) return { ip: getIp(), port: PORT }; // bootet gerade
 
   if (!(await portFree(PORT))) {                        // Port wirklich frei?
     console.log('⚠️  Port 6060 schon belegt – überspringe Spawn');

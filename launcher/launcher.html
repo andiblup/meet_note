@@ -40,13 +40,13 @@
     </nav>
 
     <!-- Settings Drawer -->
-    <input id="settingsToggle" type="checkbox" class="drawer-toggle hidden" />
+    <!-- <input id="settingsToggle" type="checkbox" class="drawer-toggle hidden" />
     <div class="drawer-side">
         <label for="settingsToggle" class="drawer-overlay"></label>
         <div class="w-80 bg-base-100 p-6 space-y-4">
             <h2 class="text-xl font-bold mb-4">⚙️ Einstellungen</h2>
 
-            <!-- Theme Toggle -->
+            
             <div class="form-control">
                 <label class="flex cursor-pointer gap-2 items-center">
                     <span class="label-text">Dark Mode</span>
@@ -54,13 +54,35 @@
                 </label>
             </div>
 
-            <!-- Autosave Intervall -->
+
             <label class="form-control w-full">
                 <div class="label"><span class="label-text">💾 Autosave (ms)</span></div>
                 <input id="inpAutosave" type="number" step="500" min="500" class="input input-bordered w-full" />
             </label>
 
             <button id="btnSaveSettings" class="btn btn-primary w-full mt-4">Speichern</button>
+        </div>
+    </div> -->
+    <button id="btnSettings" class="btn btn-ghost btn-sm ml-auto hidden">⚙️</button>
+
+    <div id="electronSettings" class="hidden">
+        <input id="settingsToggle" type="checkbox" class="drawer-toggle hidden" />
+        <div class="drawer-side">
+            <label for="settingsToggle" class="drawer-overlay"></label>
+            <div class="w-80 bg-base-100 p-6 space-y-4">
+                <h2 class="text-xl font-bold mb-4">⚙️ Einstellungen (App‑weit)</h2>
+                <div class="form-control">
+                    <label class="flex cursor-pointer gap-2 items-center">
+                        <span class="label-text">Dark Mode</span>
+                        <input id="chkDark" type="checkbox" class="toggle theme-controller" />
+                    </label>
+                </div>
+                <label class="form-control w-full">
+                    <div class="label"><span class="label-text">💾 Autosave (ms)</span></div>
+                    <input id="inpAutosave" type="number" step="500" min="500" class="input input-bordered w-full" />
+                </label>
+                <button id="btnSaveSettings" class="btn btn-primary w-full mt-4">Speichern</button>
+            </div>
         </div>
     </div>
 
