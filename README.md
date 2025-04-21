@@ -69,14 +69,18 @@ Eine moderne, sichere, modulare Netzwerk-Notiz-App für Meetings, Projekte und T
 - [x] Server/Client Infrastruktur
 - [x] Live-Server Portprüfung
 - [x] Host/Join Auswahlseite
+- [x] Electron App
+- [x] Host / Client / Electron Client System
+- [x] 'Offline' bereitstellung Tailwind & Daisy ind Web und Electron
 
 ### Phase 2: Editor-Funktionalität
 
+- [ ] File Explorer & Dokumentbasierte Speicherung
 - [ ] Responsive/Fluid Design
-- [ ] File Explorer
 - [ ] Basis Editor (Bold, Italic, etc.)
 - [ ] Code-Block + Prism.js Syntax Highlighting
-- [ ] Theme Switching Light/Dark
+- [x] Theme Switching Light/Dark
+- [~] Settings System
 - [ ] Persistente Einstellungen
 - [ ] Live-Autosave
 - [ ] Feedback dass ein User gerade diese Notiz bearbeitet
@@ -93,7 +97,25 @@ Eine moderne, sichere, modulare Netzwerk-Notiz-App für Meetings, Projekte und T
 - [ ] PDF-Export
 - [ ] Backup/Restore einzelner oder aller Dateien
 
-### Phase 5: Mobile/PWA
+### Phase 5: App Deploy
 
-- [ ] PWA Manifest, Icons, Offline-Mode
+- [ ] Windows
+- [ ] MAC
+- [ ] Linux
+- [ ] Release
+- [ ] Downloadbereitstellung und evtl. Store Veröffentlichung
+
+### Phase 6: Mobile/PWA
+
+- [ ] PWA Manifest, Offline-Mode
 - [ ] (Optional) CapacitorJS Wrapper Builds
+
+### Phase Agil: UI/UX
+
+- [ ] Icon System
+- [ ] UI/UX Verbesserungen :arrow_right: Frontend/Design Finalisierung
+
+### Phase Experimentell: Nice to haves
+
+- [ ] Webserver Deployment (Relay Server, CDN, Client selber host Möglichkeit), verbindung über Webserver(Node) URL, ohne Electron node node server.js
+- [ ] SQLite3 statt dokumentenbasiertes Speichern

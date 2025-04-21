@@ -1,0 +1,31 @@
+[
+  {
+    "type": "check",
+    "text": "Doppelklick - erstellen neuer block",
+    "checked": false
+  },
+  {
+    "type": "check",
+    "text": "Toolbar erweitern, besseres feedback",
+    "checked": false
+  },
+  {
+    "type": "check",
+    "text": "code aktivieren",
+    "checked": false
+  },
+  {
+    "type": "check",
+    "text": "",
+    "checked": false
+  },
+  {
+    "type": "note",
+    "text": "",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  }
+]

@@ -22,51 +22,39 @@
     <!-- Socket.IO -->
     <script src="/socket.io/socket.io.js"></script>
 
-
-
-    <style>
-        /* kleine Extras */
-        .btn-active {
-            background: #3b82f6 !important;
-            color: white !important
-        }
-
-        code[contenteditable] {
-            outline: none;
-            min-height: 1.5rem;
-            display: block
-        }
-    </style>
-
-    <!-- <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const { theme } = window.electronAPI.getSettings();
-      document.documentElement.setAttribute('data-theme', theme);
-    });
-  </script> -->
 </head>
 
 <body class="bg-base-200 min-h-screen flex">
 
-    <!-- === Sidebar (ein-/ausklappbar) ============================= -->
-    <input type="checkbox" id="sideToggle" class="drawer-toggle hidden">
+    <input id="sideToggle" type="checkbox" class="drawer-toggle hidden" />
+
     <aside class="drawer-side">
         <label for="sideToggle" class="drawer-overlay"></label>
-        <div class="w-72 bg-base-100 p-4 space-y-4 flex flex-col">
+        <div class="w-72 bg-base-100 p-4 flex flex-col space-y-4">
             <h2 class="text-lg font-bold">📂 Dateien</h2>
 
+            <!-- File list -->
             <ul id="fileList" class="menu bg-base-200 rounded-box flex-1 overflow-auto"></ul>
 
+            <!-- CRUD controls -->
             <div class="space-y-2">
-                <input id="newFileName" class="input input-bordered w-full" placeholder="Neuer Dateiname">
+                <input id="newFileName" class="input input-bordered w-full" placeholder="Neuer Dateiname…">
+                <!-- <div class="flex gap-2">
+                    <button id="btnAdd" class="btn btn-primary btn-sm flex-1">➕</button>
+                    <button id="btnRename" class="btn btn-outline btn-sm">✏️</button>
+                    <button id="btnDelete" class="btn btn-error btn-sm">🗑️</button>
+                </div> -->
                 <div class="flex gap-2">
                     <button id="btnAdd" class="btn btn-primary btn-sm flex-1">➕</button>
                     <button id="btnRename" class="btn btn-outline btn-sm">✏️</button>
                     <button id="btnDelete" class="btn btn-error   btn-sm">🗑️</button>
                 </div>
+
             </div>
         </div>
     </aside>
+
+
 
     <!-- === Content =============================================== -->
     <div class="flex-1 flex flex-col">
@@ -114,39 +102,6 @@
             <button id="btnSettings" class="btn btn-ghost btn-sm ml-auto">⚙️</button>
         </nav>
 
-        <!-- Settings Drawer -->
-        <!-- <input id="settingsToggle" type="checkbox" class="drawer-toggle hidden" />
-        <div class="drawer-side">
-            <label for="settingsToggle" class="drawer-overlay"></label>
-
-            <div class="w-80 bg-base-100 p-6 space-y-4">
-                <h2 class="text-xl font-bold mb-4">⚙️ Einstellungen</h2>
-
-                <div class="form-control">
-                    <label class="flex cursor-pointer gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="5" />
-                            <path
-                                d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
-                        </svg>
-                        <input id="chkDark" type="checkbox" value="dark" class="toggle theme-controller" />
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                        </svg>
-                    </label>
-                </div>
-
-                <label class="form-control w-full">
-                    <div class="label"><span class="label-text">💾 Autosave (ms)</span></div>
-                    <input id="inpAutosave" type="number" step="500" min="500" value="10000"
-                        class="input input-bordered w-full" />
-                </label>
-
-                <button id="btnSaveSettings" class="btn btn-primary w-full mt-4">Speichern</button>
-            </div>
-        </div> -->
         <input id="settingsToggle" type="checkbox" class="drawer-toggle hidden" />
         <div id="settingsDrawer" class="drawer-side">
             <label for="settingsToggle" class="drawer-overlay"></label>
@@ -173,286 +128,312 @@
     </div>
 
     <!-- ====================== SCRIPT ================================= -->
-    <script type="module">
-        const socket = io();
-        let currentFile = null, blocks = [];
-        const list = document.getElementById('fileList');
-        const area = document.getElementById('blockArea');
 
-        /* ===== File Explorer ===== */
-        async function refreshList() {
+    <script type="module">
+        const socket = window.io(); // globales io()
+        let currentFile = null;
+        let blocks = [];
+
+        // Elemente
+        const fileList = document.getElementById('fileList');
+        const newFileInput = document.getElementById('newFileName');
+        const btnAdd = document.getElementById('btnAdd');
+        const btnDelete = document.getElementById('btnDelete');
+        const infoDisplay = document.getElementById('info');
+        const blockArea = document.getElementById('blockArea');
+
+        // Toolbar-Buttons
+        const btnNote = document.getElementById('btnNote');
+        const btnCheck = document.getElementById('btnCheck');
+        const btnCode = document.getElementById('btnCode');
+        const btnAddBlock = document.getElementById('btnAddBlock');
+        const btnBold = document.getElementById('btnBold');
+        const selColor = document.getElementById('selColor');
+        const selSize = document.getElementById('selSize');
+        const selLang = document.getElementById('selLang');
+        const toolbarBtns = [btnNote, btnCheck, btnCode, btnAddBlock, btnBold];
+
+        // Toolbar-State
+        const state = {
+            mode: 'note',
+            bold: false,
+            color: '',
+            size: '3',
+            lang: 'javascript'
+        };
+
+        // Initialisierung
+        document.addEventListener('DOMContentLoaded', async () => {
+            await refreshFileList();
+            setupToolbar();
+            setupEditor();
+            setupRenameButton()
+            // Server‑Info
+            fetch('/api/info').then(r => r.json()).then(d => {
+                infoDisplay.textContent = `📡 ${d.ip}:${d.port}`;
+            });
+        });
+
+        async function refreshFileList() {
             const files = await fetch('/api/files').then(r => r.json());
-            list.innerHTML = '';
-            files.forEach(f => {
+            fileList.innerHTML = '';
+            for (const name of files) {
                 const li = document.createElement('li');
-                li.innerHTML = `<a class="block truncate">${f}</a>`;
-                li.onclick = () => openFile(f);
-                li.firstChild.classList.toggle('active', f === currentFile);
-                list.appendChild(li);
+                const a = document.createElement('a');
+                a.textContent = name;
+                a.className = 'block truncate cursor-pointer';
+                if (name === currentFile) a.classList.add('active');
+                a.onclick = () => openFile(name);
+                li.append(a);
+                fileList.append(li);
+            }
+        }
+
+        // Button-Handler für Rename
+        function setupRenameButton() {
+            btnRename.onclick = () => {
+                if (!currentFile) {
+                    alert('Kein File ausgewählt!');
+                    return;
+                }
+                // finde das <li> mit der aktiven Datei
+                const activeA = fileList.querySelector('a.active');
+                if (!activeA) return;
+                const li = activeA.parentElement;
+                enableInlineRename(li, currentFile);
+            };
+        }
+
+        async function openFile(name) {
+            currentFile = name;
+            blocks = await fetch(`/api/file/${name}`)
+                .then(r => r.ok ? r.json() : [])
+                .catch(() => []);
+            renderBlocks();
+            await refreshFileList();
+        }
+
+        btnAdd.onclick = async () => {
+            const name = newFileInput.value.trim();
+            if (!name) return;
+            await fetch(`/api/file/${name}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: '[]'
+            });
+            newFileInput.value = '';
+            await refreshFileList();
+        };
+
+        btnDelete.onclick = async () => {
+            if (!currentFile || !confirm('Datei wirklich löschen?')) return;
+            await fetch(`/api/file/${currentFile}`, { method: 'DELETE' });
+            currentFile = null;
+            blocks = [];
+            blockArea.innerHTML = '';
+            await refreshFileList();
+        };
+
+        socket.on('file-updated', name => {
+            if (name === currentFile) openFile(name);
+        });
+        socket.on('file-deleted', name => {
+            if (name === currentFile) {
+                currentFile = null;
+                blocks = [];
+                blockArea.innerHTML = '';
+            }
+            refreshFileList();
+        });
+
+        function enableInlineRename(li, oldName) {
+            if (li.querySelector('input')) return;
+            const a = li.querySelector('a');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = oldName;
+            input.className = 'input input-bordered w-full';
+            li.replaceChild(input, a);
+            input.select();
+
+            // Enter = umbenennen
+            const onEnter = async e => {
+                if (e.key === 'Enter') {
+                    input.removeEventListener('blur', onBlur);
+                    input.removeEventListener('keydown', onEnter);
+
+                    const newName = input.value.trim() || oldName;
+                    if (newName !== oldName) {
+                        await fetch(`/api/file/${oldName}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ _rename: newName })
+                        });
+                        if (currentFile === oldName) currentFile = newName;
+                    }
+
+                    restoreLink(li, newName);
+                    refreshFileList();
+                }
+                if (e.key === 'Escape') {
+                    input.removeEventListener('blur', onBlur);
+                    input.removeEventListener('keydown', onEnter);
+                    restoreLink(li, oldName);
+                }
+            };
+
+            // Blur = abbrechen (leicht verzögert, damit Enter‑Handler zuerst ran kann)
+            const onBlur = () => {
+                setTimeout(() => {
+                    if (li.contains(input)) {
+                        input.removeEventListener('blur', onBlur);
+                        input.removeEventListener('keydown', onEnter);
+                        restoreLink(li, oldName);
+                    }
+                }, 0);
+            };
+
+            input.addEventListener('keydown', onEnter);
+            input.addEventListener('blur', onBlur);
+        }
+
+
+        function restoreLink(li, name) {
+            const input = li.querySelector('input');
+            const a = document.createElement('a');
+            a.textContent = name;
+            a.className = 'block truncate cursor-pointer';
+            if (name === currentFile) a.classList.add('active');
+            a.onclick = () => openFile(name);
+            li.replaceChild(a, input);
+        }
+
+        // —— Toolbar & Editor —— 
+        function setupToolbar() {
+            btnNote.onclick = () => selectMode('note', btnNote);
+            btnCheck.onclick = () => selectMode('check', btnCheck);
+            btnCode.onclick = () => selectMode('code', btnCode);
+            btnAddBlock.onclick = addBlock;
+
+            btnBold.onclick = () => { state.bold = !state.bold; flash(btnBold); };
+            selColor.onchange = e => state.color = e.target.value;
+            selSize.onchange = e => state.size = e.target.value;
+            selLang.onchange = e => state.lang = e.target.value;
+        }
+
+        function selectMode(mode, btn) {
+            state.mode = mode;
+            toolbarBtns.forEach(b => b.classList.remove('btn-active'));
+            btn.classList.add('btn-active');
+        }
+
+        function flash(btn) {
+            btn.classList.add('btn-active');
+            setTimeout(() => btn.classList.remove('btn-active'), 200);
+        }
+
+        function setupEditor() {
+            // Doppelklick auf leeres Canvas
+            blockArea.addEventListener('dblclick', e => {
+                if (e.target === blockArea) addBlock();
             });
         }
-        async function openFile(id) {
-            currentFile = id;
-            blocks = await fetch('/api/file/' + id).then(r => r.json()).catch(() => []);
-            render(); refreshList();
-        }
-        async function addFile() {
-            const n = document.getElementById('newFileName').value.trim();
-            if (!n) return;
-            await fetch('/api/file', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: n }) });
-            document.getElementById('newFileName').value = '';
-        }
-        async function renameFile() {
-            if (!currentFile) return;
-            const newId = prompt('Neuer Name:', currentFile); if (!newId || newId === currentFile) return;
-            await fetch('/api/file/' + currentFile + '/rename', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ newId }) });
-        }
-        async function deleteFile() {
-            if (!currentFile || !confirm('Löschen?')) return;
-            await fetch('/api/file/' + currentFile, { method: 'DELETE' });
-            currentFile = null; blocks = []; render();
-        }
-        document.getElementById('btnAdd').onclick = addFile;
-        document.getElementById('btnRename').onclick = renameFile;
-        document.getElementById('btnDelete').onclick = deleteFile;
 
-        /* ===== Block‑Toolbar State ===== */
-        const state = { mode: 'note', bold: false, color: '', size: '3', lang: 'javascript' };
-        function setActive(btn, id) { document.querySelectorAll('#' + id + ' button').forEach(b => b.classList.toggle('btn-active', b === btn)); }
-        document.getElementById('btnNote').onclick = e => { state.mode = 'note'; setActive(e.target.parentNode, 'toolbar') };
-        document.getElementById('btnCheck').onclick = e => { state.mode = 'check'; setActive(e.target.parentNode, 'toolbar') };
-        document.getElementById('btnCode').onclick = e => { state.mode = 'code'; setActive(e.target.parentNode, 'toolbar') };
-
-        document.getElementById('btnBold').onclick = () => state.bold = !state.bold;
-        document.getElementById('selColor').onchange = e => state.color = e.target.value;
-        document.getElementById('selSize').onchange = e => state.size = e.target.value;
-        document.getElementById('selLang').onchange = e => state.lang = e.target.value;
-
-        document.getElementById('btnAddBlock').onclick = addBlock;
-
-        /* ===== Blocks rendering & logic ===== */
-        function render() {
-            area.innerHTML = '';
-            blocks.forEach((b, i) => {
+        async function renderBlocks() {
+            blockArea.innerHTML = '';
+            for (let i = 0; i < blocks.length; i++) {
+                const b = blocks[i];
                 const wrap = document.createElement('div');
                 wrap.className = 'p-2 bg-base-100 rounded shadow flex gap-2';
                 wrap.draggable = true;
                 wrap.ondragstart = e => e.dataTransfer.setData('text', i);
-                wrap.ondrop = e => { e.preventDefault(); const src = +e.dataTransfer.getData('text'); moveBlock(src, i); };
+                wrap.ondrop = e => { e.preventDefault(); moveBlock(+e.dataTransfer.getData('text'), i); };
                 wrap.ondragover = e => e.preventDefault();
 
-                // content
                 if (b.type === 'note') {
-                    const div = makeEditable(b.text, b);
-                    wrap.appendChild(div);
+                    wrap.append(makeEditable(b.text, v => { b.text = v; debounceSave(); }));
                 }
-                if (b.type === 'check') {
+                else if (b.type === 'check') {
                     const cb = document.createElement('input');
-                    cb.type = 'checkbox'; cb.checked = b.checked || false;
-                    cb.onchange = () => { b.checked = cb.checked; styleCheck(div, cb.checked); save(); };
-                    const div = makeEditable(b.text, b);
-                    styleCheck(div, cb.checked);
+                    cb.type = 'checkbox';
+                    cb.checked = b.checked || false;
+                    cb.onchange = () => { b.checked = cb.checked; debounceSave(); };
+                    const div = makeEditable(b.text, v => { b.text = v; });
+                    styleCheck(div, b.checked);
                     wrap.append(cb, div);
                 }
-                if (b.type === 'code') {
+                else if (b.type === 'code') {
                     const pre = document.createElement('pre');
                     const code = document.createElement('code');
-                    code.className = 'language-' + (b.lang || 'javascript');
+                    code.className = `language-${b.lang || 'javascript'}`;
                     code.contentEditable = true;
                     code.innerText = b.code || '';
-                    code.oninput = _ => { b.code = code.innerText; Prism.highlightElement(code); saveDeb(); };
-                    pre.appendChild(code); wrap.appendChild(pre);
+                    code.oninput = () => { b.code = code.innerText; Prism.highlightElement(code); debounceSave(); };
+                    pre.append(code); wrap.append(pre);
                     Prism.highlightElement(code);
                 }
-                // delete btn
+
+                // Löschen-Button
                 const del = document.createElement('button');
-                del.className = 'btn btn-ghost btn-xs'; del.textContent = '🗑️';
-                del.onclick = _ => { blocks.splice(i, 1); render(); save(); };
-                wrap.appendChild(del);
-                area.appendChild(wrap);
-            });
+                del.className = 'btn btn-ghost btn-xs';
+                del.textContent = '🗑️';
+                del.onclick = () => { blocks.splice(i, 1); renderBlocks(); save(); };
+                wrap.append(del);
+
+                blockArea.append(wrap);
+            }
         }
-        function makeEditable(html, b) {
+
+        function makeEditable(html, onChange) {
             const div = document.createElement('div');
             div.contentEditable = true;
             div.className = 'flex-1 outline-none';
             div.innerHTML = html || '';
-            div.oninput = _ => { b.text = div.innerHTML; saveDeb(); };
+            div.oninput = () => onChange(div.innerHTML);
             return div;
         }
-        function styleCheck(el, checked) { el.classList.toggle('line-through', checked); }
 
-        /* drag reorder */
+        function styleCheck(el, checked) {
+            el.classList.toggle('line-through', checked);
+        }
+
         function moveBlock(src, tgt) {
             if (src === tgt) return;
             blocks.splice(tgt, 0, blocks.splice(src, 1)[0]);
-            render(); save();
+            renderBlocks();
+            save();
         }
 
-        /* create new block with current style */
         function addBlock() {
             let block;
-            if (state.mode === 'note') {
-                block = { type: 'note', text: '', style: { bold: state.bold, color: state.color, size: state.size } };
-            }
-            else if (state.mode === 'check') {
-                block = { type: 'check', text: '', checked: false };
-            }
-            else {
-                block = { type: 'code', code: '', lang: state.lang };
-            }
-            blocks.push(block); render(); save();
+            if (state.mode === 'note') block = { type: 'note', text: '', style: { bold: state.bold, color: state.color, size: state.size } };
+            if (state.mode === 'check') block = { type: 'check', text: '', checked: false };
+            if (state.mode === 'code') block = { type: 'code', code: '', lang: state.lang };
+            blocks.push(block);
+            renderBlocks();
+            save();
         }
 
-        /* ===== Persist ================================================= */
         async function save() {
             if (!currentFile) return;
-            await fetch('/api/file/' + currentFile, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(blocks) });
+            await fetch(`/api/file/${currentFile}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(blocks)
+            });
         }
-        const saveDeb = debounce(save, 700);
-        function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); } }
-
-        /* ===== Live updates via Socket ================================= */
-        socket.on('file-list-changed', refreshList);
-        socket.on('file-updated', id => { if (id === currentFile) openFile(id); });
-
-        /* ===== Info ==================================================== */
-        fetch('/api/info').then(r => r.json()).then(d => {
-            document.getElementById('info').textContent = `📡 ${d.ip}:${d.port}`;
-        });
-
-        /* ===== Init ==================================================== */
-        refreshList();
-
-        /* prevent dblclick from adding while editing */
-        area.addEventListener('dblclick', e => {
-            if (e.target === area) addBlock();
-        });
+        const debounceSave = debounce(save, 700);
+        function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); } }  
     </script>
 
 
-    <!-- <script type="module">
-        /* ==================================================================== */
-        /*  SETTINGS  – Drawer / Persistenz / Live‑Sync                         */
-        /* ==================================================================== */
-
-        // const settings = { theme: 'light', autosave: 1000 };   // Default
-        const settings = {};   // Default
-
-        /* ---- API Helpers --------------------------------------------------- */
-        async function loadSettings() {
-            Object.assign(settings, await fetch('/api/settings').then(r => r.json()));
-            applyTheme(settings.theme);
-            document.getElementById('chkDark').checked = settings.theme === 'dark';
-            document.getElementById('inpAutosave').value = settings.autosave;
-        }
-
-        async function saveSettings() {
-            // settings.theme = document.getElementById('chkDark').checked ? 'dark' : 'light';
-            settings.autosave = document.getElementById('inpAutosave').value || 1000;
-            await fetch('/api/settings', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(settings)
-            });
-        }
-
-        document.getElementById('chkDark').addEventListener('change', e => {
-            const liveTheme = e.target.checked ? 'dark' : 'light';
-            applyTheme(liveTheme);          // <<— UI wechselt unmittelbar
-        });
-
-        /* ---- Theme Anwenden ----------------------------------------------- */
-        function applyTheme(t) {
-            document.documentElement.setAttribute('data-theme', t);
-            settings.theme = t;
-            document.getElementById('chkDark').checked = t === 'dark'
-            saveSettings();
-            // Wenn global gehandelt werden soll
-            // socket.emit('settings-updated', { theme: t });
-        }
-
-        /* ---- Drawer UI ----------------------------------------------------- */
-        document.getElementById('btnSettings').onclick =
-            () => document.getElementById('settingsToggle').checked = true;
-
-        document.getElementById('btnSaveSettings').onclick = async () => {
-            await saveSettings();
-            document.getElementById('settingsToggle').checked = false;
-        };
-
-        /* ---- Socket Live‑Push --------------------------------------------- */
-        // socket.on('settings-updated', s => {
-        //     Object.assign(settings, s);
-        //     applyTheme(settings.theme);
-        //     document.getElementById('chkDark').checked = settings.theme === 'dark';
-        // });
-
-        /* ---- Initial Call -------------------------------------------------- */
-        await loadSettings();
-
-    </script> -->
-    <script type="module">
-        document.addEventListener('DOMContentLoaded', async () => {
-            const isElectron = !!window.electronAPI;
-
-            // 1) Settings-Button öffnet Drawer immer
-            document.getElementById('btnSettings').addEventListener('click', () => {
-                document.getElementById('settingsToggle').checked = true;
-            });
-
-            // 2) Theme‑Initialisierung
-            let currentSettings;
-            if (isElectron) {
-                // Electron: aus Datei laden
-                currentSettings = await window.electronAPI.getSettings();
-            } else {
-                // Browser: localStorage oder prefers-color
-                const ls = localStorage.getItem('theme');
-                const theme = ls || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-                currentSettings = { theme, autosave: null };
-            }
-
-            // Drawer-Kontrollen füllen
-            document.documentElement.setAttribute('data-theme', currentSettings.theme);
-            document.getElementById('chkDark').checked = currentSettings.theme === 'dark';
-            if (currentSettings.autosave !== null) {
-                document.getElementById('inpAutosave').value = currentSettings.autosave;
-            }
-
-            // 3) Browser‑Clients: Autosave‑Controls ausblenden
-            if (!isElectron) {
-                document.getElementById('autosaveControl').classList.add('hidden');
-                document.getElementById('btnSaveSettings').classList.add('hidden');
-            }
-
-            // 4) Event‑Handler
-            document.getElementById('chkDark').addEventListener('change', () => {
-                const t = document.getElementById('chkDark').checked ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-theme', t);
-            });
-
-            if (isElectron) {
-                // Speichern nur in Electron
-                document.getElementById('btnSaveSettings').addEventListener('click', async () => {
-                    const newSettings = {
-                        theme: document.getElementById('chkDark').checked ? 'dark' : 'light',
-                        autosave: Number(document.getElementById('inpAutosave').value) || 5000
-                    };
-                    await window.electronAPI.saveSettings(newSettings);
-                    document.getElementById('settingsToggle').checked = false;
-                });
-            } else {
-                // Browser: Theme direkt in localStorage persistieren
-                document.getElementById('chkDark').addEventListener('change', () => {
-                    const t = document.getElementById('chkDark').checked ? 'dark' : 'light';
-                    localStorage.setItem('theme', t);
-                });
-            }
-
-        });
 
 
-    </script>
+    <script type="module" src="./js/settings.js"></script>
+    <!-- <script type="module" src="./js/toolbarCanvas.js"></script>
+    <script type="module" src="./js/editor.js"></script>
+    <script type="module" src="./js/fileExplorer.js"></script> -->
+
 </body>
 
 </html>
