@@ -1,4 +1,5 @@
 {
   "theme": "dark",
-  "autosave": 5000
+  "autosave": 5000,
+  "primaryColor": "#78FFFF07"
 }

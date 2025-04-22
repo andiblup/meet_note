@@ -173,7 +173,7 @@ app.delete('/api/file/:id', (req, res) => {
 /* =================================================================
  *  SETTINGS  – global persistentes JSON‑Objekt
  * =================================================================*/
-const DEFAULT_SETTINGS = { theme: 'light', autosave: 5000 };
+const DEFAULT_SETTINGS = { theme: 'light', autosave: 5000, primaryColor: '#FF422AD5' };
 
 function readSettings() {
     try { return JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8')); }

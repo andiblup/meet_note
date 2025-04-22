@@ -7,6 +7,7 @@
     <title>Meet Note – Editor</title>
 
     <link rel="stylesheet" href="./styles/output.css">
+    <link rel="stylesheet" href="./styles/overwrite.css">
     <link rel="stylesheet" href="./vendors/prism.min.css">
     <script src="./vendors/prism.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
@@ -95,7 +96,7 @@
                 </select>
 
                 <!-- Schriftgröße -->
-                <select id="selFontSize" class="select select-sm" title="Schriftgröße">
+                <select id="selFontSize" class="select select-sm focus:border-primary" title="Schriftgröße">
                     <option value="1">xs</option>
                     <option value="2">sm</option>
                     <option value="3" selected>base</option>
@@ -371,6 +372,7 @@
                 <div><i class="bx bx-broadcast"></i>
                     <span id="info" class="text-sm opacity-70 ml-auto"></span>
                 </div>
+
                 <div class="form-control">
                     <label class="flex cursor-pointer gap-2 items-center">
                         <span class="label-text">Dark Mode</span>
@@ -379,14 +381,125 @@
                         <i class='bx bx-moon'></i>
                     </label>
                 </div>
+
+                <div class="form-control">
+                    <button onclick="console.log(getComputedStyle(document.documentElement)
+                    .getPropertyValue('--color-primary').trim())" class="btn btn-sm btn-ghost">getP</button>
+                </div>
+
                 <div id="autosaveControl" class="form-control w-full">
                     <div class="label"><span class="label-text"><i class='bx bx-save'></i>Autosave (ms)</span></div>
-                    <!-- <div class="label"><span class="label-text">💾 Autosave (ms)</span></div> -->
+                    
                     <input id="inpAutosave" type="number" step="500" min="500" class="input input-bordered w-full" />
                 </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Primary‑Farbe</span>
+                    </label>
+                    
+                    <button class="btn btn-primary" onclick="primaryColorPickModal.showModal()">Farbe wählen</button>
+                    <button id="btnResetPrimaryColor" class="btn btn-outline btn-warning w-full">Reset Farbe</button>
+
+                </div>
+
                 <button id="btnSaveSettings" class="btn btn-primary w-full mt-4"><i class='bx bxs-save'></i></button>
             </div>
         </div>
+        
+        <dialog id="primaryColorPickModal" class="modal">
+            <form method="dialog" class="modal-box space-y-4">
+                <h3 class="text-lg font-bold">ARGB Picker</h3>
+                
+                <div class="space-y-2">
+                    <div class="flex items-center">
+                        <label class="w-16">Rot:</label>
+                        <input id="r" type="range" min="0" max="255" class="range range-red-500 flex-1">
+                        <span id="rVal" class="w-12 text-right"></span>
+                    </div>
+                    <div class="flex items-center">
+                        <label class="w-16">Grün:</label>
+                        <input id="g" type="range" min="0" max="255" class="range range-green-500 flex-1">
+                        <span id="gVal" class="w-12 text-right"></span>
+                    </div>
+                    <div class="flex items-center">
+                        <label class="w-16">Blau:</label>
+                        <input id="b" type="range" min="0" max="255" class="range range-blue-500 flex-1">
+                        <span id="bVal" class="w-12 text-right"></span>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <label class="w-16">Alpha:</label>
+                    <input id="a" type="range" min="0" max="1" step="0.01" class="range range-primary flex-1">
+                    <span id="aVal" class="w-12 text-right"></span>
+                </div>
+                <div>
+                    <label class="label"><span class="label-text">Vorschau:</span></label>
+                    <div id="preview" style="min-height: 24px;" class="w-full h-16 border rounded"></div>
+                </div>
+                <div>
+                    <label class="label"><span class="label-text">ARGB Hex:</span></label>
+                    <input id="argbOutput" type="text" readonly class="input input-bordered w-full" />
+                </div>
+                <div class="modal-action">
+                    <button id="closeARGBPickerModal" type="submit" class="btn btn-primary">Schließen</button>
+                </div>
+            </form>
+        </dialog>
+                <!-- <div class="form-control">
+                    <button id="btnGetColor" class="btn btn-sm btn-ghost">getP</button>
+                </div>
+
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Primary‑Farbe</span></label>
+                    <button class="btn btn-primary" onclick="primaryColorPickModal.showModal()">Farbe wählen</button>
+                </div>
+
+                <button id="btnResetPrimaryColor" class="btn btn-outline btn-warning w-full">Reset Farbe</button>
+
+                <button id="btnSaveSettings" class="btn btn-primary w-full mt-4"><i class='bx bxs-save'></i>
+                    Speichern</button>
+            </div>
+        </div>
+
+        <dialog id="primaryColorPickModal" class="modal">
+            <form method="dialog" class="modal-box space-y-4">
+                <h3 class="text-lg font-bold">ARGB Picker</h3>
+                <div class="space-y-2">
+                    <div class="flex items-center">
+                        <label class="w-16">Rot:</label>
+                        <input id="r" type="range" min="0" max="255" class="range range-red-500 flex-1">
+                        <span id="rVal" class="w-12 text-right"></span>
+                    </div>
+                    <div class="flex items-center">
+                        <label class="w-16">Grün:</label>
+                        <input id="g" type="range" min="0" max="255" class="range range-green-500 flex-1">
+                        <span id="gVal" class="w-12 text-right"></span>
+                    </div>
+                    <div class="flex items-center">
+                        <label class="w-16">Blau:</label>
+                        <input id="b" type="range" min="0" max="255" class="range range-blue-500 flex-1">
+                        <span id="bVal" class="w-12 text-right"></span>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <label class="w-16">Alpha:</label>
+                    <input id="a" type="range" min="0" max="1" step="0.01" class="range range-primary flex-1">
+                    <span id="aVal" class="w-12 text-right"></span>
+                </div>
+                <div>
+                    <label class="label"><span class="label-text">Vorschau:</span></label>
+                    <div id="preview" class="w-full h-16 border rounded"></div>
+                </div>
+                <div>
+                    <label class="label"><span class="label-text">ARGB Hex:</span></label>
+                    <input id="argbOutput" type="text" readonly class="input input-bordered w-full" />
+                </div>
+                <div class="modal-action">
+                    <button id="closeARGBPickerModal" type="submit" class="btn btn-primary">Schließen</button>
+                </div>
+            </form>
+        </dialog> -->
 
 
         <!-- Editor -->
@@ -412,10 +525,134 @@
                 </form>
             </dialog>
 
+            <!-- <div role="alert" class="alert alert-info">
+                <span>New software update available.</span>
+            </div> -->
 
         </main>
 
+        <!-- <div role="alert" class="alert alert-success">
+            <span>New software update available.</span>
+          </div> -->
+
     </div>
+
+    <script>
+        // ----------- 1) Parse-Funktion für OKLCH-CSS-Syntax -------------
+        function parseOKLCH(css) {
+            const m = /oklch\(\s*([0-9.]+)%\s+([0-9.]+)\s+([0-9.]+)\s*\)/i.exec(css);
+            if (!m) return null;
+            return {
+                L: parseFloat(m[1]),
+                C: parseFloat(m[2]),
+                h: parseFloat(m[3])
+            };
+        }
+
+        // ----------- 2) Farbkonvertierungen wie gehabt ----------------
+        function oklchToOklab(L, C, hDeg) {
+            const h = hDeg * Math.PI / 180;
+            return { L: L / 100, a: C * Math.cos(h), b: C * Math.sin(h) };
+        }
+        function oklabToLinearSRGB({ L, a, b }) {
+            const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+            const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+            const s_ = L - 0.0894841775 * a - 1.2914855480 * b;
+            const l = l_ * l_ * l_, m = m_ * m_ * m_, s = s_ * s_ * s_;
+            return {
+                r: 4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+                g: -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+                b: -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s
+            };
+        }
+        function linearToSRGBChannel(c) {
+            c = Math.min(Math.max(c, 0), 1);
+            return c <= 0.0031308
+                ? 12.92 * c
+                : 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
+        }
+        function toHexChannel(c) {
+            return Math.round(c * 255).toString(16).padStart(2, '0').toUpperCase();
+        }
+
+        // ----------- 3) Gesamtfunktion OKLCH → [r,g,b,a] --------------
+        function oklchToRGBA(L, C, h) {
+            const lab = oklchToOklab(L, C, h);
+            const lin = oklabToLinearSRGB(lab);
+            return {
+                r: linearToSRGBChannel(lin.r),
+                g: linearToSRGBChannel(lin.g),
+                b: linearToSRGBChannel(lin.b),
+                a: 1
+            };
+        }
+
+        // ----------- 4) Initialisierung & Slider-Update ---------------
+        const dialog = document.getElementById('dialog');
+        const [rIn, gIn, bIn, aIn] = ['r', 'g', 'b', 'a'].map(id => document.getElementById(id));
+        const vals = { r: 'rVal', g: 'gVal', b: 'bVal', a: 'aVal' };
+        const preview = document.getElementById('preview');
+        const output = document.getElementById('argbOutput');
+
+
+        [rIn, gIn, bIn, aIn].forEach((el, i) => {
+            el.style.setProperty('--range-progress', `rgb(${i === 0 ? el.value : 0}, ${i === 1 ? el.value : 0}, ${i === 2 ? el.value : 0})`);
+            if (i === 3) {
+                el.style.setProperty('--range-progress', `rgba(0, 0, 0, ${el.value})`);
+            }
+            el.addEventListener('input', () => {
+                el.style.setProperty('--range-progress', `rgb(${i === 0 ? el.value : 0}, ${i === 1 ? el.value : 0}, ${i === 2 ? el.value : 0})`);
+                if (i === 3) {
+                    el.style.setProperty('--range-progress', `rgba(0, 0, 0, ${el.value})`);
+                }
+            });
+        });
+        // rIn.addEventListener('input', () => {
+        //     rIn.style.setProperty('--range-progress', `rgb(${rIn.value}, 0, 0)`);
+        // });
+
+        // gIn.addEventListener('input', () => {
+        //     gIn.style.setProperty('--range-progress', `rgb(0, ${gIn.value}, 0)`);
+        // });
+
+        // bIn.addEventListener('input', () => {
+        //     bIn.style.setProperty('--range-progress', `rgb(0, 0, ${bIn.value})`);
+        // });
+
+        // aIn.addEventListener('input', () => {
+        //     aIn.style.setProperty('--range-progress', `rgba(0, 0, 0, ${aIn.value})`);
+        // });
+        function update() {
+            const r = +rIn.value, g = +gIn.value, b = +bIn.value, a = +aIn.value;
+            Object.entries({ r, g, b, a }).forEach(([k, v]) => {
+                document.getElementById(vals[k]).textContent = k === 'a' ? v.toFixed(2) : v;
+            });
+            preview.style.backgroundColor = `rgba(${r},${g},${b},${a})`;
+            const hex = [a, r, g, b].map((v, i) => toHexChannel(i === 0 ? v : v / 255)).join('');
+            output.value = `#${hex}`;
+        }
+
+        document.querySelectorAll('input[type=range]').forEach(slider =>
+            slider.addEventListener('input', update)
+        );
+
+        // beim Laden einmal OKLCH‑Default holen und als Slider-Werte setzen
+        window.addEventListener('DOMContentLoaded', () => {
+            const css = getComputedStyle(document.documentElement)
+                .getPropertyValue('--color-primary').trim();
+            const o = parseOKLCH(css);
+            if (o) {
+                const rgba = oklchToRGBA(o.L, o.C, o.h);
+                // setze Slider
+                rIn.value = Math.round(rgba.r * 255);
+                gIn.value = Math.round(rgba.g * 255);
+                bIn.value = Math.round(rgba.b * 255);
+                aIn.value = rgba.a;
+                update();
+            }
+        });
+    </script>
+
 
     <script>
         var infoClicked = false;

@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    select.select:focus {
+      @apply outline-none ring-0 border-primary;
+    }
+  }
 
 .sticky {
     position: -webkit-sticky;
