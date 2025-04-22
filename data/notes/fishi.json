@@ -1,0 +1,30 @@
+[
+  {
+    "type": "check",
+    "text": "check",
+    "checked": true
+  },
+  {
+    "type": "note",
+    "text": "asdasdasd<h1><pre class=\"language-javascript\" tabindex=\"0\">let foo = 1;</pre><p></p><br></h1><div><ul><li>asdasd<font color=\"#f97316\">asdasd</font></li></ul></div><div>asdasd<font color=\"#fde68a\">asdasd</font></div>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "sdfsdfasdasd<font color=\"#6b7280\">asd</font><font color=\"#c4b5fd\">asdasd</font>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "check",
+    "text": "asd",
+    "checked": false
+  }
+]

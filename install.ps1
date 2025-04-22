@@ -103,7 +103,9 @@ Write-Host "prism.js muss manuell minifiziert werden!!!!!`nhttps://www.toptal.co
 
 
 
-
+# npm install postcss-url --save-dev
+# npm install -D postcss postcss-cli
+# npm install --save-dev path
 
 
 # Environment.txt

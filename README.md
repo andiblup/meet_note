@@ -119,3 +119,14 @@ Eine moderne, sichere, modulare Netzwerk-Notiz-App für Meetings, Projekte und T
 
 - [ ] Webserver Deployment (Relay Server, CDN, Client selber host Möglichkeit), verbindung über Webserver(Node) URL, ohne Electron node node server.js
 - [ ] SQLite3 statt dokumentenbasiertes Speichern
+
+
+
+altes build css 
+```json
+"build:css": "postcss public/styles/styles.css -o public/styles/output.css --env production"
+```
+neues
+```json
+"build:css": "postcss public/styles/styles.css -o public/styles/output.css --env production"
+```
