@@ -1,468 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="de" data-theme="light">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Meet Note – Editor</title>
-
-    <link rel="stylesheet" href="./styles/output.css">
-    
-    <link rel="stylesheet" href="./vendors/prism.min.css">
-    <script src="./vendors/prism.min.js"></script>
-
-    <script src="/socket.io/socket.io.js"></script>
-
-
-</head>
-
-<body class="bg-base-200 min-h-screen flex">
-
-    <input id="sideToggle" type="checkbox" class="drawer-toggle hidden" />
-
-    <aside class="drawer-side">
-        <label for="sideToggle" class="drawer-overlay"></label>
-        <div class="w-72 bg-base-100 p-4 flex flex-col space-y-4">
-            <h2 class="text-lg font-bold">📂 Dateien</h2>
-
-            <ul id="fileList" class="menu bg-base-200 rounded-box flex-1 overflow-auto"></ul>
-
-            <div class="space-y-2">
-                <input id="newFileName" class="input input-bordered w-full" placeholder="Neuer Dateiname…">
-
-                <div class="flex gap-2">
-                    <button id="btnAdd" class="btn btn-primary btn-sm flex-1">➕</button>
-                    <button id="btnRename" class="btn btn-outline btn-sm">✏️</button>
-                    <button id="btnDelete" class="btn btn-error   btn-sm">🗑️</button>
-                </div>
-
-            </div>
-        </div>
-    </aside>
-
-
-    <div class="flex-1 flex flex-col">
-
-        <nav class="navbar bg-base-100 px-4 shadow">
-
-            <div class="flex flex-wrap gap-2 items-center">
-                <label for="sideToggle" class="btn btn-square btn-ghost">📁</label>
-                <button id="btnNote" class="btn btn-sm btn-ghost btn-active">📝</button>
-                <button id="btnCheck" class="btn btn-sm btn-ghost">☑️</button>
-                <button id="btnCode" class="btn btn-sm btn-ghost">💻</button>
-                <button id="btnAddBlock" class="btn btn-sm btn-ghost">➕</button>
-            </div>
-            <div class="divider divider-horizontal m-0"></div>
-            <div class="flex flex-wrap gap-2 items-center" id="toolbar">
-
-                <button data-cmd="bold" class="btn btn-sm btn-ghost" title="Fett (Ctrl+B)">
-                    <i class="bx bx-bold"></i>
-                </button>
-                <button data-cmd="italic" class="btn btn-sm btn-ghost" title="Kursiv (Ctrl+I)">
-                    <i class="bx bx-italic"></i>
-                </button>
-                <button data-cmd="underline" class="btn btn-sm btn-ghost" title="Unterstrichen">
-                    <i class="bx bx-underline"></i>
-                </button>
-                <button data-cmd="strikeThrough" class="btn btn-sm btn-ghost" title="Durchgestrichen">
-                    <i class="bx bx-strikethrough"></i>
-                </button>
-
-                <select id="selHeading" class="select select-sm" title="Überschrift">
-                    <option value="p">Text</option>
-                    <option value="h1">H1</option>
-                    <option value="h2">H2</option>
-                    <option value="h3">H3</option>
-                </select>
-
-                <button data-cmd="insertUnorderedList" class="btn btn-sm btn-ghost" title="Aufzählung">
-                    <i class="bx bx-list-ul"></i>
-                </button>
-                <button data-cmd="insertOrderedList" class="btn btn-sm btn-ghost" title="Nummerierte Liste">
-                    <i class="bx bx-list-ol"></i>
-                </button>
-                <button data-cmd="insertCheckboxList" class="btn btn-sm btn-ghost" title="Checkbox‑Liste">
-                    <i class="bx bx-checkbox"></i>
-                </button>
-
-                <button data-cmd="justifyLeft" class="btn btn-sm btn-ghost" title="Linksbündig">
-                    <i class="bx bx-align-left"></i>
-                </button>
-                <button data-cmd="justifyCenter" class="btn btn-sm btn-ghost" title="Zentriert">
-                    <i class="bx bx-align-middle"></i>
-                </button>
-                <button data-cmd="justifyRight" class="btn btn-sm btn-ghost" title="Rechtsbündig">
-                    <i class="bx bx-align-right"></i>
-                </button>
-
-                <select id="selFontSize" class="select select-sm" title="Schriftgröße">
-                    <option value="1">XS</option>
-                    <option value="2">SM</option>
-                    <option value="3" selected>MD</option>
-                    <option value="4">LG</option>
-                    <option value="5">XL</option>
-                    <option value="6">2XL</option>
-                </select>
-
-                <select id="selForeColor" class="select select-sm" title="Text‑Farbe">
-                    <option value="">Textfarbe</option>
-                 
-                </select>
-                <select id="selBackColor" class="select select-sm" title="Hintergrund‑Farbe">
-                    <option value="">Hintergrund</option>
-                 
-                </select>
-
-                <button data-cmd="insertHorizontalRule" class="btn btn-sm btn-ghost" title="Horizontale Linie">
-                    <i class="bx bx-minus"></i>
-                </button>
-
-                <select id="selCodeLang" class="select select-sm" title="Code‑Sprache">
-                    <option value="language-javascript" selected>JS</option>
-                    <option value="language-python">Py</option>
-                    <option value="language-java">Java</option>
-                    <option value="language-csharp">C#</option>
-                </select>
-                <button id="btnCodeFence" class="btn btn-sm btn-ghost" title="Code‑Block">
-                    <i class="bx bx-code"></i>
-                </button>
-            </div>
-
-
-
-            <div id="info" class="text-sm opacity-70"></div>
-
-            <button id="btnSettings" class="btn btn-ghost btn-sm ml-auto">⚙️</button>
-        </nav>
-
-        <input id="settingsToggle" type="checkbox" class="drawer-toggle hidden" />
-        <div id="settingsDrawer" class="drawer-side">
-            <label for="settingsToggle" class="drawer-overlay"></label>
-            <div class="w-80 bg-base-100 p-6 space-y-4">
-                <h2 class="text-xl font-bold mb-4">⚙️ Einstellungen</h2>
-
-                <div class="form-control">
-                    <label class="flex cursor-pointer gap-2 items-center">
-                        <span class="label-text">Dark Mode</span>
-                        <input id="chkDark" type="checkbox" class="toggle theme-controller" />
-                    </label>
-                </div>
-
-                <div id="autosaveControl" class="form-control w-full">
-                    <div class="label"><span class="label-text">💾 Autosave (ms)</span></div>
-                    <input id="inpAutosave" type="number" step="500" min="500" class="input input-bordered w-full" />
-                </div>
-                <button id="btnSaveSettings" class="btn btn-primary w-full mt-4">Speichern</button>
-            </div>
-        </div>
-
-
-        <main id="blockArea" class="flex-1 overflow-auto p-6 space-y-3" ondragover="event.preventDefault()"></main>
-    </div>
-
-
-    <script type="module">
-        const socket = window.io(); // globales io()
-        let currentFile = null;
-        let blocks = [];
-
-        // Elemente
-        const fileList = document.getElementById('fileList');
-        const newFileInput = document.getElementById('newFileName');
-        const btnAdd = document.getElementById('btnAdd');
-        const btnDelete = document.getElementById('btnDelete');
-        const infoDisplay = document.getElementById('info');
-        const blockArea = document.getElementById('blockArea');
-
-        // Toolbar-Buttons
-        const btnNote = document.getElementById('btnNote');
-        const btnCheck = document.getElementById('btnCheck');
-        const btnCode = document.getElementById('btnCode');
-        const btnAddBlock = document.getElementById('btnAddBlock');
-        const btnBold = document.getElementById('btnBold');
-        const selColor = document.getElementById('selColor');
-        const selSize = document.getElementById('selSize');
-        const selLang = document.getElementById('selLang');
-        const toolbarBtns = [btnNote, btnCheck, btnCode, btnAddBlock, btnBold];
-
-        // Toolbar-State
-        const state = {
-            mode: 'note',
-            bold: false,
-            color: '',
-            size: '3',
-            lang: 'javascript'
-        };
-
-        // Initialisierung
-        document.addEventListener('DOMContentLoaded', async () => {
-            await refreshFileList();
-            setupToolbar();
-            setupEditor();
-            setupRenameButton()
-            // Server‑Info
-            fetch('/api/info').then(r => r.json()).then(d => {
-                infoDisplay.textContent = `📡 ${d.ip}:${d.port}`;
-            });
-        });
-
-        async function refreshFileList() {
-            const files = await fetch('/api/files').then(r => r.json());
-            fileList.innerHTML = '';
-            for (const name of files) {
-                const li = document.createElement('li');
-                const a = document.createElement('a');
-                a.textContent = name;
-                a.className = 'block truncate cursor-pointer';
-                if (name === currentFile) a.classList.add('active');
-                a.onclick = () => openFile(name);
-                li.append(a);
-                fileList.append(li);
-            }
-        }
-
-        // Button-Handler für Rename
-        function setupRenameButton() {
-            btnRename.onclick = () => {
-                if (!currentFile) {
-                    alert('Kein File ausgewählt!');
-                    return;
-                }
-                // finde das <li> mit der aktiven Datei
-                const activeA = fileList.querySelector('a.active');
-                if (!activeA) return;
-                const li = activeA.parentElement;
-                enableInlineRename(li, currentFile);
-            };
-        }
-
-        async function openFile(name) {
-            currentFile = name;
-            blocks = await fetch(`/api/file/${name}`)
-                .then(r => r.ok ? r.json() : [])
-                .catch(() => []);
-            renderBlocks();
-            await refreshFileList();
-        }
-
-        btnAdd.onclick = async () => {
-            const name = newFileInput.value.trim();
-            if (!name) return;
-            await fetch(`/api/file/${name}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: '[]'
-            });
-            newFileInput.value = '';
-            await refreshFileList();
-        };
-
-        btnDelete.onclick = async () => {
-            if (!currentFile || !confirm('Datei wirklich löschen?')) return;
-            await fetch(`/api/file/${currentFile}`, { method: 'DELETE' });
-            currentFile = null;
-            blocks = [];
-            blockArea.innerHTML = '';
-            await refreshFileList();
-        };
-
-        socket.on('file-updated', name => {
-            if (name === currentFile) openFile(name);
-        });
-        socket.on('file-deleted', name => {
-            if (name === currentFile) {
-                currentFile = null;
-                blocks = [];
-                blockArea.innerHTML = '';
-            }
-            refreshFileList();
-        });
-
-        function enableInlineRename(li, oldName) {
-            if (li.querySelector('input')) return;
-            const a = li.querySelector('a');
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = oldName;
-            input.className = 'input input-bordered w-full';
-            li.replaceChild(input, a);
-            input.select();
-
-            // Enter = umbenennen
-            const onEnter = async e => {
-                if (e.key === 'Enter') {
-                    input.removeEventListener('blur', onBlur);
-                    input.removeEventListener('keydown', onEnter);
-
-                    const newName = input.value.trim() || oldName;
-                    if (newName !== oldName) {
-                        await fetch(`/api/file/${oldName}`, {
-                            method: 'PUT',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ _rename: newName })
-                        });
-                        if (currentFile === oldName) currentFile = newName;
-                    }
-
-                    restoreLink(li, newName);
-                    refreshFileList();
-                }
-                if (e.key === 'Escape') {
-                    input.removeEventListener('blur', onBlur);
-                    input.removeEventListener('keydown', onEnter);
-                    restoreLink(li, oldName);
-                }
-            };
-
-            // Blur = abbrechen (leicht verzögert, damit Enter‑Handler zuerst ran kann)
-            const onBlur = () => {
-                setTimeout(() => {
-                    if (li.contains(input)) {
-                        input.removeEventListener('blur', onBlur);
-                        input.removeEventListener('keydown', onEnter);
-                        restoreLink(li, oldName);
-                    }
-                }, 0);
-            };
-
-            input.addEventListener('keydown', onEnter);
-            input.addEventListener('blur', onBlur);
-        }
-
-
-        function restoreLink(li, name) {
-            const input = li.querySelector('input');
-            const a = document.createElement('a');
-            a.textContent = name;
-            a.className = 'block truncate cursor-pointer';
-            if (name === currentFile) a.classList.add('active');
-            a.onclick = () => openFile(name);
-            li.replaceChild(a, input);
-        }
-
-        // —— Toolbar & Editor —— 
-        function setupToolbar() {
-            btnNote.onclick = () => selectMode('note', btnNote);
-            btnCheck.onclick = () => selectMode('check', btnCheck);
-            btnCode.onclick = () => selectMode('code', btnCode);
-            btnAddBlock.onclick = addBlock;
-
-            btnBold.onclick = () => { state.bold = !state.bold; flash(btnBold); };
-            selColor.onchange = e => state.color = e.target.value;
-            selSize.onchange = e => state.size = e.target.value;
-            selLang.onchange = e => state.lang = e.target.value;
-        }
-
-        function selectMode(mode, btn) {
-            state.mode = mode;
-            toolbarBtns.forEach(b => b.classList.remove('btn-active'));
-            btn.classList.add('btn-active');
-        }
-
-        function flash(btn) {
-            btn.classList.add('btn-active');
-            setTimeout(() => btn.classList.remove('btn-active'), 200);
-        }
-
-        function setupEditor() {
-            // Doppelklick auf leeres Canvas
-            blockArea.addEventListener('dblclick', e => {
-                if (e.target === blockArea) addBlock();
-            });
-        }
-
-        async function renderBlocks() {
-            blockArea.innerHTML = '';
-            for (let i = 0; i < blocks.length; i++) {
-                const b = blocks[i];
-                const wrap = document.createElement('div');
-                wrap.className = 'p-2 bg-base-100 rounded shadow flex gap-2';
-                wrap.draggable = true;
-                wrap.ondragstart = e => e.dataTransfer.setData('text', i);
-                wrap.ondrop = e => { e.preventDefault(); moveBlock(+e.dataTransfer.getData('text'), i); };
-                wrap.ondragover = e => e.preventDefault();
-
-                if (b.type === 'note') {
-                    wrap.append(makeEditable(b.text, v => { b.text = v; debounceSave(); }));
-                }
-                else if (b.type === 'check') {
-                    const cb = document.createElement('input');
-                    cb.type = 'checkbox';
-                    cb.checked = b.checked || false;
-                    cb.onchange = () => { b.checked = cb.checked; debounceSave(); };
-                    const div = makeEditable(b.text, v => { b.text = v; });
-                    styleCheck(div, b.checked);
-                    wrap.append(cb, div);
-                }
-                else if (b.type === 'code') {
-                    const pre = document.createElement('pre');
-                    const code = document.createElement('code');
-                    code.className = `language-${b.lang || 'javascript'}`;
-                    code.contentEditable = true;
-                    code.innerText = b.code || '';
-                    code.oninput = () => { b.code = code.innerText; Prism.highlightElement(code); debounceSave(); };
-                    pre.append(code); wrap.append(pre);
-                    Prism.highlightElement(code);
-                }
-
-                // Löschen-Button
-                const del = document.createElement('button');
-                del.className = 'btn btn-ghost btn-xs';
-                del.textContent = '🗑️';
-                del.onclick = () => { blocks.splice(i, 1); renderBlocks(); save(); };
-                wrap.append(del);
-
-                blockArea.append(wrap);
-            }
-        }
-
-        function makeEditable(html, onChange) {
-            const div = document.createElement('div');
-            div.contentEditable = true;
-            div.className = 'flex-1 outline-none';
-            div.innerHTML = html || '';
-            div.oninput = () => onChange(div.innerHTML);
-            return div;
-        }
-
-        function styleCheck(el, checked) {
-            el.classList.toggle('line-through', checked);
-        }
-
-        function moveBlock(src, tgt) {
-            if (src === tgt) return;
-            blocks.splice(tgt, 0, blocks.splice(src, 1)[0]);
-            renderBlocks();
-            save();
-        }
-
-        function addBlock() {
-            let block;
-            if (state.mode === 'note') block = { type: 'note', text: '', style: { bold: state.bold, color: state.color, size: state.size } };
-            if (state.mode === 'check') block = { type: 'check', text: '', checked: false };
-            if (state.mode === 'code') block = { type: 'code', code: '', lang: state.lang };
-            blocks.push(block);
-            renderBlocks();
-            save();
-        }
-
-        async function save() {
-            if (!currentFile) return;
-            await fetch(`/api/file/${currentFile}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(blocks)
-            });
-        }
-        const debounceSave = debounce(save, 700);
-        function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); } }  
-    </script>
-
-    <script type="module" src="./js/settings.js"></script>
-    
-    <script src="./app/app.js"></script>
-</html> -->
-
 <!DOCTYPE html>
 <html lang="de" data-theme="light">
 
@@ -476,23 +11,36 @@
     <script src="./vendors/prism.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <link href="node_modules/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <!-- <link href="../node_modules/prismjs/components/prism-java.min.js" rel="stylesheet"> -->
+
+
 </head>
 
 <body class="bg-base-200 min-h-screen flex">
 
+
+    <!-- Toast-Container -->
+    <div id="toast-wrapper" class="toast toast-end">
+
+    </div>
+
     <!-- Sidebar -->
     <input id="sideToggle" type="checkbox" class="drawer-toggle hidden" />
-    <aside class="drawer-side">
+    <aside class="drawer-side z-50">
         <label for="sideToggle" class="drawer-overlay"></label>
         <div class="w-72 bg-base-100 p-4 flex flex-col space-y-4">
-            <h2 class="text-lg font-bold">📂 Dateien</h2>
-            <ul id="fileList" class="menu bg-base-200 rounded-box flex-1 overflow-auto"></ul>
+            <h2 class="text-lg font-bold"><i class='bx bx-folder-open'></i> Dateien</h2>
+            <!-- <h2 class="text-lg font-bold">📂 Dateien</h2> -->
+            <ul id="fileList" style="width: 100%;" class="menu w-100 bg-base-200 rounded-box flex-1 overflow-auto"></ul>
             <div class="space-y-2">
                 <input id="newFileName" class="input input-bordered w-full" placeholder="Neuer Dateiname…">
                 <div class="flex gap-2">
-                    <button id="btnAdd" class="btn btn-primary btn-sm flex-1">➕</button>
+                    <button id="btnAdd" class="btn btn-primary btn-sm flex-1"><i class='bx bx-plus'></i></button>
+                    <button id="btnRename" class="btn btn-outline btn-sm"><i class='bx bx-edit'></i></button>
+                    <button id="btnDelete" class="btn btn-error btn-sm"><i class='bx bxs-trash'></i></button>
+                    <!-- <button id="btnAdd" class="btn btn-primary btn-sm flex-1">➕</button>
                     <button id="btnRename" class="btn btn-outline btn-sm">✏️</button>
-                    <button id="btnDelete" class="btn btn-error btn-sm">🗑️</button>
+                    <button id="btnDelete" class="btn btn-error btn-sm">🗑️</button> -->
                 </div>
             </div>
         </div>
@@ -502,14 +50,29 @@
     <div class="flex-1 flex flex-col">
 
         <!-- Toolbar/Header -->
-        <nav class="navbar bg-base-100 px-4 shadow flex flex-wrap items-center gap-2">
-            <label for="sideToggle" class="btn btn-square btn-ghost">📁</label>
+        <!-- <nav class="navbar bg-base-100 sticky top-0 z-50 shadow-md"> -->
+        <nav class="navbar sticky shadow-md bg-base-100 px-4 shadow flex flex-wrap items-center gap-2">
+            <!-- <label for="sideToggle" class="btn btn-square btn-ghost"><i class='bx bx-folder'></i></label>
+            <button id="btnNote" class="btn btn-sm btn-ghost btn-active"><i class='bx bx-note' ></i></button>
+            <button id="btnCheck" class="btn btn-sm btn-ghost"><i class='bx bx-checkbox-checked' ></i></button>
+            <button id="btnAddBlock" class="btn btn-sm btn-ghost"><i class='bx bx-plus' ></i></button> -->
+
+            <!-- <label for="sideToggle" class="btn btn-square btn-ghost">📁</label>
             <button id="btnNote" class="btn btn-sm btn-ghost btn-active">📝</button>
             <button id="btnCheck" class="btn btn-sm btn-ghost">☑️</button>
-            <button id="btnAddBlock" class="btn btn-sm btn-ghost">➕</button>
-            <div class="divider divider-horizontal m-0"></div>
+            <button id="btnCode" class="btn btn-sm btn-ghost">💻</button>
+            <button id="btnAddBlock" class="btn btn-sm btn-ghost">➕</button> -->
+            <!-- <div class="divider divider-horizontal m-0"></div> -->
 
             <div id="toolbar" class="flex flex-wrap gap-2 items-center">
+
+                <label for="sideToggle" class="btn btn-square btn-ghost"><i class='bx bx-folder'></i></label>
+                <button id="btnSettings" class="btn btn-ghost btn-sm"><i class='bx bx-cog'></i></button>
+                <button id="btnNote" class="btn btn-sm btn-ghost btn-active"><i class='bx bx-note'></i></button>
+                <button id="btnCheck" class="btn btn-sm btn-ghost"><i class='bx bx-checkbox-checked'></i></button>
+                <button id="btnAddBlock" class="btn btn-sm btn-ghost"><i class='bx bx-plus'></i></button>
+
+                <div class="divider divider-horizontal m-0"></div>
 
                 <!-- Format -->
                 <button data-cmd="bold" class="btn btn-sm btn-ghost" title="Fett (Ctrl+B)"><i
@@ -521,6 +84,8 @@
                 <button data-cmd="strikeThrough" class="btn btn-sm btn-ghost" title="Durchgestrichen"><i
                         class="bx bx-strikethrough"></i></button>
 
+                <div class="divider divider-horizontal m-0"></div>
+
                 <!-- Headings -->
                 <select id="selHeading" class="select select-sm" title="Überschrift">
                     <option value="p">Text</option>
@@ -528,22 +93,6 @@
                     <option value="h2">H2</option>
                     <option value="h3">H3</option>
                 </select>
-
-                <!-- Listen -->
-                <button data-cmd="insertUnorderedList" class="btn btn-sm btn-ghost" title="Aufzählung"><i
-                        class="bx bx-list-ul"></i></button>
-                <button data-cmd="insertOrderedList" class="btn btn-sm btn-ghost" title="Nummerierte Liste"><i
-                        class="bx bx-list-ol"></i></button>
-                <button id="btnCheckboxList" class="btn btn-sm btn-ghost" title="Checkbox‑Liste"><i
-                        class="bx bx-checkbox"></i></button>
-
-                <!-- Ausrichtung -->
-                <button data-cmd="justifyLeft" class="btn btn-sm btn-ghost" title="Linksbündig"><i
-                        class="bx bx-align-left"></i></button>
-                <button data-cmd="justifyCenter" class="btn btn-sm btn-ghost" title="Zentriert"><i
-                        class="bx bx-align-middle"></i></button>
-                <button data-cmd="justifyRight" class="btn btn-sm btn-ghost" title="Rechtsbündig"><i
-                        class="bx bx-align-right"></i></button>
 
                 <!-- Schriftgröße -->
                 <select id="selFontSize" class="select select-sm" title="Schriftgröße">
@@ -554,6 +103,28 @@
                     <option value="5">xl</option>
                     <option value="6">2xl</option>
                 </select>
+
+                <div class="divider divider-horizontal m-0"></div>
+
+                <!-- Listen -->
+                <button data-cmd="insertUnorderedList" class="btn btn-sm btn-ghost" title="Aufzählung"><i
+                        class="bx bx-list-ul"></i></button>
+                <button data-cmd="insertOrderedList" class="btn btn-sm btn-ghost" title="Nummerierte Liste"><i
+                        class="bx bx-list-ol"></i></button>
+                <button id="btnCheckboxList" class="btn btn-sm btn-ghost" title="Checkbox‑Liste"><i
+                        class="bx bx-checkbox"></i></button>
+
+                <div class="divider divider-horizontal m-0"></div>
+
+                <!-- Ausrichtung -->
+                <button data-cmd="justifyLeft" class="btn btn-sm btn-ghost" title="Linksbündig"><i
+                        class="bx bx-align-left"></i></button>
+                <button data-cmd="justifyCenter" class="btn btn-sm btn-ghost" title="Zentriert"><i
+                        class="bx bx-align-middle"></i></button>
+                <button data-cmd="justifyRight" class="btn btn-sm btn-ghost" title="Rechtsbündig"><i
+                        class="bx bx-align-right"></i></button>
+
+                <div class="divider divider-horizontal m-0"></div>
 
                 <!-- Textfarben -->
                 <select id="selForeColor" class="select select-sm" title="Text‑Farbe">
@@ -755,9 +326,13 @@
                     </optgroup>
                 </select>
 
+                <div class="divider divider-horizontal m-0"></div>
+
                 <!-- Horizontal Rule -->
                 <button data-cmd="insertHorizontalRule" class="btn btn-sm btn-ghost" title="Horizontale Linie"><i
                         class="bx bx-minus"></i></button>
+
+                <div class="divider divider-horizontal m-0"></div>
 
                 <!-- Code‑Fence -->
                 <select id="selCodeLang" class="select select-sm" title="Code‑Sprache">
@@ -773,326 +348,495 @@
                 </select>
                 <button id="btnCodeFence" class="btn btn-sm btn-ghost" title="Code‑Block"><i
                         class="bx bx-code"></i></button>
+
+                <!-- <div class="divider divider-horizontal m-0"></div> -->
+
+
             </div>
 
+            <!-- <div class="divider divider-horizontal m-0"></div>
+
             <div id="info" class="text-sm opacity-70 ml-auto"></div>
-            <button id="btnSettings" class="btn btn-ghost btn-sm">⚙️</button>
+            <button id="btnSettings" class="btn btn-ghost btn-sm"><i class='bx bx-cog'></i></button> -->
+            <!-- <button id="btnSettings" class="btn btn-ghost btn-sm">⚙️</button> -->
         </nav>
 
         <!-- Settings Drawer -->
         <input id="settingsToggle" type="checkbox" class="drawer-toggle hidden" />
-        <div id="settingsDrawer" class="drawer-side">
+        <div id="settingsDrawer" class="drawer-side z-50">
             <label for="settingsToggle" class="drawer-overlay"></label>
-            <div class="w-80 bg-base-100 p-6 space-y-4">
-                <h2 class="text-xl font-bold mb-4">⚙️ Einstellungen</h2>
+            <div class="w-80 bg-base-100 p-6 space-y-4 gap-1">
+                <h2 class="text-xl font-bold mb-4"><i class='bx bx-cog'></i> Einstellungen</h2>
+                <!-- <h2 class="text-xl font-bold mb-4">⚙️ Einstellungen</h2> -->
+                <div><i class="bx bx-broadcast"></i>
+                    <span id="info" class="text-sm opacity-70 ml-auto"></span>
+                </div>
                 <div class="form-control">
                     <label class="flex cursor-pointer gap-2 items-center">
                         <span class="label-text">Dark Mode</span>
+                        <i class='bx bx-sun'></i>
                         <input id="chkDark" type="checkbox" class="toggle theme-controller" />
+                        <i class='bx bx-moon'></i>
                     </label>
                 </div>
                 <div id="autosaveControl" class="form-control w-full">
-                    <div class="label"><span class="label-text">💾 Autosave (ms)</span></div>
+                    <div class="label"><span class="label-text"><i class='bx bx-save'></i>Autosave (ms)</span></div>
+                    <!-- <div class="label"><span class="label-text">💾 Autosave (ms)</span></div> -->
                     <input id="inpAutosave" type="number" step="500" min="500" class="input input-bordered w-full" />
                 </div>
-                <button id="btnSaveSettings" class="btn btn-primary w-full mt-4">Speichern</button>
+                <button id="btnSaveSettings" class="btn btn-primary w-full mt-4"><i class='bx bxs-save'></i></button>
             </div>
         </div>
 
+
         <!-- Editor -->
         <!-- contenteditable="true" -->
-        <main id="blockArea" class="flex-1 overflow-auto p-6 space-y-3"></main>
+        <main id="blockArea" class="flex-1 overflow-auto p-6 space-y-3">
+
+            <!-- Toast-Container -->
+            <div id="toast-wrapper" class="toast toast-end">
+
+            </div>
+
+            <!-- Modal -->
+
+            <!-- Open the modal using ID.showModal() method -->
+            <button class="btn" onclick="my_modal_2.showModal()">open modal</button>
+            <dialog id="my_modal_2" class="modal">
+                <div class="modal-box">
+                    <h3 class="text-lg font-bold">Hello!</h3>
+                    <p class="py-4">Press ESC key or click outside to close</p>
+                </div>
+                <form method="dialog" class="modal-backdrop">
+                    <button>close</button>
+                </form>
+            </dialog>
+
+
+        </main>
 
     </div>
 
+    <script>
+        var infoClicked = false;
+        document.getElementById('info').addEventListener('click', function () {
+            if (!infoClicked) {
+                const el = this;
+                const text = el.textContent.trim();
+                copyToClipboard(text)
+                    .then(() => {
+                        const original = el.textContent;
+                        el.textContent = '✔️ kopiert';
+                        infoClicked = true;
+                        setTimeout(() => { el.textContent = original; infoClicked = false }, 1000);
+                    })
+                    .catch(err => {
+                        console.error('Kopieren fehlgeschlagen:', err);
+                    });
+            } else {
+                showToast('Bereits kopiert!');
+            }
+        });
+    </script>
 
     <script>
         (async () => {
-          const socket = io();
-          let currentFile = null, blocks = [];
-      
-          // STATE
-          const state = { mode: 'note', bold: false, color: '', size: '3', lang: 'javascript' };
-          const sizeClass = { '1':'text-xs','2':'text-sm','3':'text-base','4':'text-lg','5':'text-xl','6':'text-2xl' };
-      
-          // ELEMENTS
-          const fileList      = document.getElementById('fileList');
-          const newFileInput  = document.getElementById('newFileName');
-          const btnAdd        = document.getElementById('btnAdd');
-          const btnRename     = document.getElementById('btnRename');
-          const btnDelete     = document.getElementById('btnDelete');
-          const blockArea     = document.getElementById('blockArea');
-          const btnNote       = document.getElementById('btnNote');
-          const btnCheck      = document.getElementById('btnCheck');
-          const btnCode       = document.getElementById('btnCode');
-          const btnAddBlock   = document.getElementById('btnAddBlock');
-      
-          const toolbarBtns   = document.querySelectorAll('#toolbar [data-cmd]');
-          const selHeading    = document.getElementById('selHeading');
-          const selFontSize   = document.getElementById('selFontSize');
-          const selForeColor  = document.getElementById('selForeColor');
-          const selBackColor  = document.getElementById('selBackColor');
-          const selCodeLang   = document.getElementById('selCodeLang');
-          const btnCodeFence  = document.getElementById('btnCodeFence');
-          const btnCheckboxList = document.getElementById('btnCheckboxList');
-      
-          // ─── Funktionen DEKLARIEREN ────────────────────────────────────────────────────────
-      
-          async function refreshFileList() {
-            const files = await fetch('/api/files').then(r => r.json());
-            fileList.innerHTML = '';
-            files.forEach(name => {
-              const li = document.createElement('li');
-              const a  = document.createElement('a');
-              a.textContent = name; a.className = 'block truncate cursor-pointer';
-              if(name===currentFile) a.classList.add('active');
-              a.onclick = () => openFile(name);
-              li.append(a); fileList.append(li);
-            });
-          }
-      
-          function setupFileExplorer() {
-            btnAdd.onclick    = async () => {
-              const n = newFileInput.value.trim(); if (!n) return;
-              await fetch(`/api/file/${n}`, { method:'POST', headers:{'Content-Type':'application/json'}, body:'[]' });
-              newFileInput.value=''; await refreshFileList();
+            const socket = io();
+            let currentFile = null, blocks = [];
+            let isSaving = false;  // Flag to ignore our own save broadcasts
+
+            // STATE für neue Blocks
+            const state = { mode: 'note', bold: false, color: '', size: '3', lang: 'language-javascript' };
+            const sizeClass = {
+                '1': 'text-xs', '2': 'text-sm', '3': 'text-base',
+                '4': 'text-lg', '5': 'text-xl', '6': 'text-2xl'
             };
-            btnRename.onclick = () => {
-              if(!currentFile) return alert('Keine Datei ausgewählt');
-              const a = fileList.querySelector('a.active');
-              enableInlineRename(a.parentElement, currentFile);
-            };
-            btnDelete.onclick = async () => {
-              if(!currentFile||!confirm('Löschen?')) return;
-              await fetch(`/api/file/${currentFile}`,{method:'DELETE'});
-              currentFile=null; blocks=[]; renderBlocks(); await refreshFileList();
-            };
-            socket.on('file-updated', name => { if(name===currentFile) openFile(name); });
-            socket.on('file-deleted', name => {
-              if(name===currentFile){ currentFile=null; blocks=[]; renderBlocks(); }
-              refreshFileList();
-            });
-          }
-      
-          async function openFile(name) {
-            currentFile = name;
-            blocks = await fetch(`/api/file/${name}`).then(r=>r.ok?r.json():[]);
-            renderBlocks(); await refreshFileList();
-          }
-      
-          function enableInlineRename(li, oldName){
-            if(li.querySelector('input')) return;
-            const a = li.querySelector('a');
-            const input = document.createElement('input');
-            input.type='text'; input.value=oldName;
-            input.className='input input-bordered w-full';
-            li.replaceChild(input,a); input.select();
-      
-            function cleanup(){
-              input.removeEventListener('keydown',onEnter);
-              input.removeEventListener('blur',onBlur);
+
+            // ELEMENT‑REFERENCES
+            const fileList = document.getElementById('fileList');
+            const newFileInput = document.getElementById('newFileName');
+            const btnAdd = document.getElementById('btnAdd');
+            const btnRename = document.getElementById('btnRename');
+            const btnDelete = document.getElementById('btnDelete');
+            const blockArea = document.getElementById('blockArea');
+            const btnNote = document.getElementById('btnNote');
+            const btnCheck = document.getElementById('btnCheck');
+            // const btnCode = document.getElementById('btnCode');
+            const btnAddBlock = document.getElementById('btnAddBlock');
+
+            // TOOLBAR‑ELEMENTS
+            const toolbarBtns = document.querySelectorAll('#toolbar [data-cmd]');
+            const selHeading = document.getElementById('selHeading');
+            const selFontSize = document.getElementById('selFontSize');
+            const selForeColor = document.getElementById('selForeColor');
+            const selBackColor = document.getElementById('selBackColor');
+            const selCodeLang = document.getElementById('selCodeLang');
+            const btnCodeFence = document.getElementById('btnCodeFence');
+            const btnCheckboxList = document.getElementById('btnCheckboxList');
+
+            // ─── FILE‑EXPLORER ─────────────────────────────────────────────────────────
+
+            async function refreshFileList() {
+                const files = await fetch('/api/files').then(r => r.json());
+                fileList.innerHTML = '';
+                files.forEach(name => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.textContent = name;
+                    a.className = 'block truncate cursor-pointer';
+                    if (name === currentFile) a.classList.add('menu-active');
+                    a.onclick = () => openFile(name);
+                    li.append(a);
+                    fileList.append(li);
+                });
             }
-            function restore(name){
-              const a2 = document.createElement('a');
-              a2.textContent=name;
-              a2.className='block truncate cursor-pointer';
-              if(name===currentFile) a2.classList.add('active');
-              a2.onclick=()=>openFile(name);
-              li.replaceChild(a2,input);
+
+            function setupFileExplorer() {
+                btnAdd.onclick = async () => {
+                    const n = newFileInput.value.trim(); if (!n) return;
+                    isSaving = true;
+                    await fetch(`/api/file/${n}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: '[]'
+                    });
+                    isSaving = false;
+                    newFileInput.value = '';
+                    await refreshFileList();
+                };
+                btnRename.onclick = () => {
+                    if (!currentFile) return alert('Keine Datei ausgewählt');
+                    const a = fileList.querySelector('a.active');
+                    enableInlineRename(a.parentElement, currentFile);
+                };
+                btnDelete.onclick = async () => {
+                    if (!currentFile || !confirm('Löschen?')) return;
+                    isSaving = true;
+                    await fetch(`/api/file/${currentFile}`, { method: 'DELETE' });
+                    isSaving = false;
+                    currentFile = null; blocks = []; renderBlocks();
+                    await refreshFileList();
+                };
+                socket.on('file-updated', name => {
+                    if (name === currentFile && !isSaving) {
+                        openFile(name);
+                    }
+                });
+                socket.on('file-deleted', name => {
+                    if (name === currentFile) {
+                        currentFile = null; blocks = []; renderBlocks();
+                    }
+                    refreshFileList();
+                });
             }
-            async function onEnter(e){
-              if(e.key==='Enter'){
-                cleanup();
-                const newName = input.value.trim()||oldName;
-                if(newName!==oldName){
-                  await fetch(`/api/file/${oldName}`,{
-                    method:'PUT', headers:{'Content-Type':'application/json'},
-                    body:JSON.stringify({_rename:newName})
-                  });
-                  if(currentFile===oldName) currentFile=newName;
+
+            async function openFile(name) {
+                currentFile = name;
+                blocks = await fetch(`/api/file/${name}`).then(r => r.ok ? r.json() : []);
+                renderBlocks();
+                await refreshFileList();
+            }
+
+            function enableInlineRename(li, oldName) {
+                if (li.querySelector('input')) return;
+                const a = li.querySelector('a');
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = oldName;
+                input.className = 'input input-bordered w-full';
+                li.replaceChild(input, a);
+                input.select();
+
+                function cleanup() {
+                    input.removeEventListener('keydown', onEnter);
+                    input.removeEventListener('blur', onBlur);
                 }
-                restore(newName);
-                refreshFileList();
-              }
-              if(e.key==='Escape'){
-                cleanup(); restore(oldName);
-              }
-            }
-            function onBlur(){
-              setTimeout(()=>{
-                if(li.contains(input)){
-                  cleanup(); restore(oldName);
+                function restore(name) {
+                    const a2 = document.createElement('a');
+                    a2.textContent = name;
+                    a2.className = 'block truncate cursor-pointer';
+                    if (name === currentFile) a2.classList.add('active');
+                    a2.onclick = () => openFile(name);
+                    li.replaceChild(a2, input);
                 }
-              },0);
+                async function onEnter(e) {
+                    if (e.key === 'Enter') {
+                        cleanup();
+                        const newName = input.value.trim() || oldName;
+                        if (newName !== oldName) {
+                            isSaving = true;
+                            await fetch(`/api/file/${oldName}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ _rename: newName })
+                            });
+                            isSaving = false;
+                            if (currentFile === oldName) currentFile = newName;
+                        }
+                        restore(newName);
+                        refreshFileList();
+                    }
+                    if (e.key === 'Escape') {
+                        cleanup();
+                        restore(oldName);
+                    }
+                }
+                function onBlur() {
+                    setTimeout(() => {
+                        if (li.contains(input)) {
+                            cleanup();
+                            restore(oldName);
+                        }
+                    }, 0);
+                }
+
+                input.addEventListener('keydown', onEnter);
+                input.addEventListener('blur', onBlur);
             }
-            input.addEventListener('keydown',onEnter);
-            input.addEventListener('blur',onBlur);
-          }
-      
-          function setupToolbar(){
-            toolbarBtns.forEach(btn=>{
-              btn.addEventListener('click',()=>{
-                document.execCommand(btn.dataset.cmd,false,null);
+
+            // ─── TOOLBAR (execCommand) ──────────────────────────────────────────────────
+
+            function setupToolbar() {
+                toolbarBtns.forEach(btn => {
+                    btn.addEventListener('mousedown', e => e.preventDefault());
+                    btn.addEventListener('click', () => {
+                        document.execCommand(btn.dataset.cmd, false, null);
+                        updateToolbarState();
+                    });
+                });
+
+                selHeading.addEventListener('change', () => document.execCommand('formatBlock', false, selHeading.value));
+                selFontSize.addEventListener('change', () => document.execCommand('fontSize', false, selFontSize.value));
+                selForeColor.addEventListener('change', () => document.execCommand('foreColor', false, selForeColor.value));
+                selBackColor.addEventListener('change', () => {
+                    const cmd = document.queryCommandSupported('hiliteColor') ? 'hiliteColor' : 'backColor';
+                    document.execCommand(cmd, false, selBackColor.value);
+                });
+
+                btnCheckboxList.addEventListener('click', () => {
+                    document.execCommand('insertHTML', false,
+                        '<ul><li><input type="checkbox"> </li></ul><p></p>');
+                });
+
+                document.querySelector('[data-cmd="insertHorizontalRule"]')
+                    .addEventListener('click', () => document.execCommand('insertHorizontalRule'));
+
+                btnCodeFence.addEventListener('click', () => {
+                    const lang = selCodeLang.value;
+                    const html = `<pre><code contenteditable="true" class="${lang}">\u200B</code></pre><p></p>`;
+                    document.execCommand('insertHTML', false, html);
+                    setTimeout(() => {
+                        Prism.highlightAll();
+                        const codes = Array.from(document.querySelectorAll(`pre code.${lang}`));
+                        const codeEl = codes.find(c => c.textContent.includes('\u200B'));
+                        if (codeEl) {
+                            codeEl.textContent = '';
+                            const range = document.createRange();
+                            range.selectNodeContents(codeEl);
+                            range.collapse(true);
+                            const sel = window.getSelection();
+                            sel.removeAllRanges();
+                            sel.addRange(range);
+                            codeEl.focus();
+                        }
+                    }, 0);
+                });
+
+                // btnCodeFence.addEventListener('click', () => {
+                //     const lang = selCodeLang.value; // z.B. "language-java"
+                //     const html = `
+                //         <pre tabindex="0" class="${lang}">
+                //         <code class="${lang}"></code>
+                //         </pre><p></p>
+                //     `;
+                //     // HTML einfügen
+                //     document.execCommand('insertHTML', false, html);
+
+                //     // Kurz warten, dann highlighten und Cursor setzen
+                //     setTimeout(() => {
+                //         Prism.highlightAll();
+                //         const codes = Array.from(document.querySelectorAll(`pre.${lang} > code.${lang}`));
+                //         const codeEl = codes.find(c => c.textContent.includes('\u200B'));
+                //         if (codeEl) {
+                //             codeEl.textContent = '';
+                //             const range = document.createRange();
+                //             range.selectNodeContents(codeEl);
+                //             range.collapse(true);
+                //             const sel = window.getSelection();
+                //             sel.removeAllRanges();
+                //             sel.addRange(range);
+                //             codeEl.focus();
+                //         }
+                //     }, 0);
+                // });
+
+
+                document.addEventListener('selectionchange', updateToolbarState);
                 updateToolbarState();
-              });
-            });
-            selHeading.addEventListener('change', ()=> document.execCommand('formatBlock',false,selHeading.value));
-            selFontSize.addEventListener('change',() => document.execCommand('fontSize',false,selFontSize.value));
-            selForeColor.addEventListener('change',() => document.execCommand('foreColor',false,selForeColor.value));
-            selBackColor.addEventListener('change', ()=>{
-              const cmd = document.queryCommandSupported('hiliteColor')?'hiliteColor':'backColor';
-              document.execCommand(cmd,false,selBackColor.value);
-            });
-            btnCheckboxList.addEventListener('click', ()=>{
-              document.execCommand('insertHTML',false,'<ul><li><input type="checkbox"> </li></ul><p></p>');
-            });
-            document.querySelector('[data-cmd="insertHorizontalRule"]')
-              .addEventListener('click',()=>document.execCommand('insertHorizontalRule'));
-            btnCodeFence.addEventListener('click', ()=>{
-              const lang = selCodeLang.value,
-                    txt  = window.getSelection().toString();
-              document.execCommand('insertHTML', false,
-                `<pre><code class="${lang}">${txt}</code></pre><p></p>`);
-              setTimeout(()=> document.querySelectorAll('pre code')
-                .forEach(el=>Prism.highlightElement(el)),0);
-            });
-            document.addEventListener('selectionchange', updateToolbarState);
-            updateToolbarState();
-          }
-      
-          function updateToolbarState(){
-            toolbarBtns.forEach(b=>{
-              document.queryCommandState(b.dataset.cmd)
-                ? b.classList.add('btn-active')
-                : b.classList.remove('btn-active');
-            });
-            selHeading.value = (document.queryCommandValue('formatBlock')||'p').toLowerCase();
-            selFontSize.value = document.queryCommandValue('fontSize')||'3';
-          }
-      
-          function setupEditor(){
-            btnNote.onclick     = ()=> selectMode('note', btnNote);
-            btnCheck.onclick    = ()=> selectMode('check', btnCheck);
-            btnCode.onclick     = ()=> selectMode('code', btnCode);
-            btnAddBlock.onclick = addBlock;
-          }
-      
-          function selectMode(m, btn){
-            state.mode = m;
-            [btnNote,btnCheck,btnCode,btnAddBlock].forEach(b=>b.classList.remove('btn-active'));
-            btn.classList.add('btn-active');
-          }
-      
-          function addBlock(){
-            let b;
-            if(state.mode==='note')
-              b={type:'note',text:'',style:{bold:state.bold,color:state.color,size:state.size}};
-            else if(state.mode==='check')
-              b={type:'check',text:'',checked:false};
-            else
-              b={type:'code',code:'',lang:state.lang};
-            blocks.push(b); renderBlocks(); save();
-          }
-      
-          async function save(){
-            if(!currentFile) return;
-            await fetch(`/api/file/${currentFile}`,{
-              method:'POST',headers:{'Content-Type':'application/json'},
-              body:JSON.stringify(blocks)
-            });
-          }
-      
-          function renderBlocks(){
-            blockArea.innerHTML='';
-            blocks.forEach((b,i)=>{
-              const wrap = document.createElement('div');
-              wrap.className='p-2 bg-base-100 rounded shadow flex gap-2';
-              wrap.draggable=true;
-              wrap.ondragstart   = e=> e.dataTransfer.setData('text',i);
-              wrap.ondrop        = e=>{e.preventDefault(); moveBlock(+e.dataTransfer.getData('text'),i)};
-              wrap.ondragover    = e=>e.preventDefault();
-      
-              if(b.type==='note'){
-                const d = makeEditable(b.text,v=>{b.text=v; debounceSave()});
-                if(b.style.bold) d.classList.add('font-bold');
-                if(b.style.color) d.style.color=b.style.color;
-                d.classList.add(sizeClass[b.style.size]||'text-base');
-                wrap.append(d);
-              }
-              else if(b.type==='check'){
-                const cb = document.createElement('input');
-                cb.type='checkbox'; cb.checked=b.checked;
-                cb.onchange=()=>{b.checked=cb.checked; save()};
-                const d = makeEditable(b.text,v=>{b.text=v});
-                if(cb.checked) d.classList.add('line-through');
-                wrap.append(cb,d);
-              }
-              else {
-                const pre = document.createElement('pre');
-                const code = document.createElement('code');
-                code.className=`language-${b.lang}`;
-                code.textContent=b.code||'';
-                code.contentEditable=true;
-                code.oninput=()=>{b.code=code.textContent; Prism.highlightElement(code); debounceSave()};
-                pre.append(code); wrap.append(pre);
-                Prism.highlightElement(code);
-              }
-      
-              const del = document.createElement('button');
-              del.className='btn btn-ghost btn-xs'; del.textContent='🗑️';
-              del.onclick=()=>{blocks.splice(i,1); renderBlocks(); save()};
-              wrap.append(del);
-      
-              blockArea.append(wrap);
-            });
-          }
-      
-          function makeEditable(html,onChange){
-            const d=document.createElement('div');
-            d.contentEditable=true;
-            d.className='flex-1 outline-none';
-            d.innerHTML=html||'';
-            d.oninput=()=>onChange(d.innerHTML);
-            return d;
-          }
-      
-          function moveBlock(src,tgt){
-            if(src===tgt) return;
-            blocks.splice(tgt,0,blocks.splice(src,1)[0]);
-            renderBlocks(); save();
-          }
-      
-          function debounce(fn,ms){
-            let t; return (...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)};
-          }
-        //   const debounceSave = debounce(save,700);
-      
-          // ─── INITIALIZE ───────────────────────────────────────────────────────
-          await refreshFileList();
-          setupFileExplorer();
-          setupToolbar();
-          setupEditor();
-      
-          fetch('/api/info')
-            .then(r=>r.json())
-            .then(d=>document.getElementById('info').textContent=`📡 ${d.ip}:${d.port}`);
+            }
+
+            function updateToolbarState() {
+                toolbarBtns.forEach(b => {
+                    document.queryCommandState(b.dataset.cmd)
+                        ? b.classList.add('btn-active')
+                        : b.classList.remove('btn-active');
+                });
+                selHeading.value = (document.queryCommandValue('formatBlock') || 'p').toLowerCase();
+                selFontSize.value = document.queryCommandValue('fontSize') || '3';
+            }
+
+            // ─── BLOCK EDITOR ──────────────────────────────────────────────────────────
+
+            function setupEditor() {
+                btnNote.onclick = () => selectMode('note', btnNote);
+                btnCheck.onclick = () => selectMode('check', btnCheck);
+                // btnCode.onclick = () => selectMode('code', btnCode);
+                btnAddBlock.onclick = addBlock;
+                blockArea.addEventListener('dblclick', e => {
+                    if (e.target === blockArea) addBlock();
+                });
+            }
+
+            function selectMode(m, btn) {
+                state.mode = m;
+                // [btnNote, btnCheck, btnCode, btnAddBlock]
+                [btnNote, btnCheck, btnAddBlock]
+                    .forEach(b => b.classList.remove('btn-active'));
+                btn.classList.add('btn-active');
+            }
+
+            function addBlock() {
+                let b;
+                if (state.mode === 'note') {
+                    b = { type: 'note', text: '', style: { bold: state.bold, color: state.color, size: state.size } };
+                } else if (state.mode === 'check') {
+                    b = { type: 'check', text: '', checked: false };
+                } else {
+                    b = { type: 'code', code: '', lang: selCodeLang.value };
+                }
+                blocks.push(b);
+                renderBlocks();
+                save();
+            }
+
+            async function save() {
+                if (!currentFile) return;
+                isSaving = true;
+                await fetch(`/api/file/${currentFile}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(blocks)
+                });
+                isSaving = false;
+            }
+
+            function renderBlocks() {
+                blockArea.innerHTML = '';
+                blocks.forEach((b, i) => {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'p-2 bg-base-100 rounded shadow flex gap-2';
+                    wrap.draggable = true;
+                    wrap.ondragstart = e => e.dataTransfer.setData('text', i);
+                    wrap.ondrop = e => { e.preventDefault(); moveBlock(+e.dataTransfer.getData('text'), i); };
+                    wrap.ondragover = e => e.preventDefault();
+
+                    if (b.type === 'note') {
+                        const d = makeEditable(b.text, v => { b.text = v; debounceSave(); });
+                        if (b.style.bold) d.classList.add('font-bold');
+                        if (b.style.color) d.style.color = b.style.color;
+                        d.classList.add(sizeClass[b.style.size] || 'text-base');
+                        wrap.append(d);
+                    }
+                    else if (b.type === 'check') {
+                        const cb = document.createElement('input');
+                        cb.type = 'checkbox';
+                        cb.checked = b.checked;
+                        cb.onchange = () => { b.checked = cb.checked; save(); };
+                        const d = makeEditable(b.text, v => { b.text = v; });
+                        if (b.checked) d.classList.add('line-through');
+                        wrap.append(cb, d);
+                    }
+                    else {
+                        const pre = document.createElement('pre');
+                        const code = document.createElement('code');
+                        code.className = b.lang;
+                        code.textContent = b.code || '';
+                        code.contentEditable = true;
+                        code.oninput = () => { b.code = code.textContent; Prism.highlightElement(code); debounceSave(); };
+                        pre.append(code);
+                        wrap.append(pre);
+                        Prism.highlightElement(code);
+                    }
+
+                    const del = document.createElement('button');
+                    del.className = 'btn btn-ghost btn-xs';
+                    del.innerHTML = '<i class="bx bx-trash"></i>';
+                    // del.textContent = '🗑️';
+                    del.onclick = () => { blocks.splice(i, 1); renderBlocks(); save(); };
+                    wrap.append(del);
+
+                    blockArea.append(wrap);
+                });
+
+                Prism.highlightAll();
+            }
+
+            function makeEditable(html, onChange) {
+                const d = document.createElement('div');
+                d.contentEditable = true;
+                d.className = 'flex-1 outline-none';
+                d.innerHTML = html || '';
+                d.oninput = () => onChange(d.innerHTML);
+                return d;
+            }
+
+            function moveBlock(src, tgt) {
+                if (src === tgt) return;
+                blocks.splice(tgt, 0, blocks.splice(src, 1)[0]);
+                renderBlocks();
+                save();
+            }
+
+            function debounce(fn, ms) {
+                let t;
+                return (...a) => {
+                    clearTimeout(t);
+                    t = setTimeout(() => fn(...a), ms);
+                };
+            }
+            const debounceSave = debounce(save, 700);
+
+            // ─── INITIALIZE ─────────────────────────────────────────────────────────
+
+            await refreshFileList();
+            setupFileExplorer();
+            setupToolbar();
+            setupEditor();
+            fetch('/api/info')
+                .then(r => r.json())
+                .then(d => document.getElementById('info').textContent = `${d.ip}:${d.port}`);
+
         })();
-        </script>
-
-
+    </script>
 
 
     <!-- <script>
         (async () => {
-
             const socket = io();
             let currentFile = null, blocks = [];
 
             // STATE für neue Blocks
-            const state = { mode: 'note', bold: false, color: '', size: '3', lang: 'javascript' };
-            const sizeClass = { '1': 'text-xs', '2': 'text-sm', '3': 'text-base', '4': 'text-lg', '5': 'text-xl', '6': 'text-2xl' };
+            const state = { mode: 'note', bold: false, color: '', size: '3', lang: 'language-javascript' };
+            const sizeClass = {
+                '1': 'text-xs',
+                '2': 'text-sm',
+                '3': 'text-base',
+                '4': 'text-lg',
+                '5': 'text-xl',
+                '6': 'text-2xl'
+            };
 
-            // ELEMENTE
+            // ELEMENT‑REFERENCES
             const fileList = document.getElementById('fileList');
             const newFileInput = document.getElementById('newFileName');
             const btnAdd = document.getElementById('btnAdd');
@@ -1104,7 +848,7 @@
             const btnCode = document.getElementById('btnCode');
             const btnAddBlock = document.getElementById('btnAddBlock');
 
-            // TOOLBAR‑ELEMENTE
+            // TOOLBAR‑ELEMENTS
             const toolbarBtns = document.querySelectorAll('#toolbar [data-cmd]');
             const selHeading = document.getElementById('selHeading');
             const selFontSize = document.getElementById('selFontSize');
@@ -1114,26 +858,352 @@
             const btnCodeFence = document.getElementById('btnCodeFence');
             const btnCheckboxList = document.getElementById('btnCheckboxList');
 
-            // INIT
-            await refreshFileList();
-            setupFileExplorer();
-            setupToolbar();
-            setupEditor();
-            fetch('/api/info').then(r => r.json()).then(d => document.getElementById('info').textContent = `📡 ${d.ip}:${d.port}`);
+            // ─── FILE‑EXPLORER ─────────────────────────────────────────────────────────
 
-            // ===== FILE EXPLORER =====
             async function refreshFileList() {
                 const files = await fetch('/api/files').then(r => r.json());
                 fileList.innerHTML = '';
                 files.forEach(name => {
                     const li = document.createElement('li');
                     const a = document.createElement('a');
-                    a.textContent = name; a.className = 'block truncate cursor-pointer';
+                    a.textContent = name;
+                    a.className = 'block truncate cursor-pointer';
                     if (name === currentFile) a.classList.add('active');
                     a.onclick = () => openFile(name);
-                    li.append(a); fileList.append(li);
+                    li.append(a);
+                    fileList.append(li);
                 });
             }
+
+            function setupFileExplorer() {
+                btnAdd.onclick = async () => {
+                    const n = newFileInput.value.trim(); if (!n) return;
+                    await fetch(`/api/file/${n}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '[]' });
+                    newFileInput.value = '';
+                    await refreshFileList();
+                };
+                btnRename.onclick = () => {
+                    if (!currentFile) return alert('Keine Datei ausgewählt');
+                    const a = fileList.querySelector('a.active');
+                    enableInlineRename(a.parentElement, currentFile);
+                };
+                btnDelete.onclick = async () => {
+                    if (!currentFile || !confirm('Löschen?')) return;
+                    await fetch(`/api/file/${currentFile}`, { method: 'DELETE' });
+                    currentFile = null; blocks = []; renderBlocks();
+                    await refreshFileList();
+                };
+                socket.on('file-updated', name => { if (name === currentFile) openFile(name); });
+                socket.on('file-deleted', name => {
+                    if (name === currentFile) { currentFile = null; blocks = []; renderBlocks(); }
+                    refreshFileList();
+                });
+            }
+
+            async function openFile(name) {
+                currentFile = name;
+                blocks = await fetch(`/api/file/${name}`)
+                    .then(r => r.ok ? r.json() : []);
+                renderBlocks();
+                await refreshFileList();
+            }
+
+            function enableInlineRename(li, oldName) {
+                if (li.querySelector('input')) return;
+                const a = li.querySelector('a');
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = oldName;
+                input.className = 'input input-bordered w-full';
+                li.replaceChild(input, a);
+                input.select();
+
+                function cleanup() {
+                    input.removeEventListener('keydown', onEnter);
+                    input.removeEventListener('blur', onBlur);
+                }
+                function restore(name) {
+                    const a2 = document.createElement('a');
+                    a2.textContent = name;
+                    a2.className = 'block truncate cursor-pointer';
+                    if (name === currentFile) a2.classList.add('active');
+                    a2.onclick = () => openFile(name);
+                    li.replaceChild(a2, input);
+                }
+                async function onEnter(e) {
+                    if (e.key === 'Enter') {
+                        cleanup();
+                        const newName = input.value.trim() || oldName;
+                        if (newName !== oldName) {
+                            await fetch(`/api/file/${oldName}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ _rename: newName })
+                            });
+                            if (currentFile === oldName) currentFile = newName;
+                        }
+                        restore(newName);
+                        refreshFileList();
+                    }
+                    if (e.key === 'Escape') {
+                        cleanup();
+                        restore(oldName);
+                    }
+                }
+                function onBlur() {
+                    setTimeout(() => {
+                        if (li.contains(input)) {
+                            cleanup();
+                            restore(oldName);
+                        }
+                    }, 0);
+                }
+
+                input.addEventListener('keydown', onEnter);
+                input.addEventListener('blur', onBlur);
+            }
+
+            // ─── TOOLBAR (execCommand) ──────────────────────────────────────────────────
+
+            function setupToolbar() {
+                toolbarBtns.forEach(btn => {
+                    // Fokus behalten
+                    btn.addEventListener('mousedown', e => e.preventDefault());
+                    btn.addEventListener('click', () => {
+                        document.execCommand(btn.dataset.cmd, false, null);
+                        updateToolbarState();
+                    });
+                });
+
+                selHeading.addEventListener('change', () => document.execCommand('formatBlock', false, selHeading.value));
+                selFontSize.addEventListener('change', () => document.execCommand('fontSize', false, selFontSize.value));
+                selForeColor.addEventListener('change', () => document.execCommand('foreColor', false, selForeColor.value));
+                selBackColor.addEventListener('change', () => {
+                    const cmd = document.queryCommandSupported('hiliteColor') ? 'hiliteColor' : 'backColor';
+                    document.execCommand(cmd, false, selBackColor.value);
+                });
+
+                btnCheckboxList.addEventListener('click', () => {
+                    document.execCommand('insertHTML', false,
+                        '<ul><li><input type="checkbox"> </li></ul><p></p>');
+                });
+
+                document.querySelector('[data-cmd="insertHorizontalRule"]')
+                    .addEventListener('click', () => document.execCommand('insertHorizontalRule'));
+
+                btnCodeFence.addEventListener('click', () => {
+                    const lang = selCodeLang.value;
+                    const html = `<pre><code contenteditable="true" class="${lang}">\u200B</code></pre><p></p>`;
+                    document.execCommand('insertHTML', false, html);
+                    setTimeout(() => {
+                        Prism.highlightAll();
+                        const codes = Array.from(document.querySelectorAll(`pre code.${lang}`));
+                        const codeEl = codes.find(c => c.textContent.includes('\u200B'));
+                        if (codeEl) {
+                            codeEl.textContent = '';
+                            const range = document.createRange();
+                            range.selectNodeContents(codeEl);
+                            range.collapse(true);
+                            const sel = window.getSelection();
+                            sel.removeAllRanges();
+                            sel.addRange(range);
+                            codeEl.focus();
+                        }
+                    }, 0);
+                });
+
+                document.addEventListener('selectionchange', updateToolbarState);
+                updateToolbarState();
+            }
+
+            function updateToolbarState() {
+                toolbarBtns.forEach(b => {
+                    document.queryCommandState(b.dataset.cmd)
+                        ? b.classList.add('btn-active')
+                        : b.classList.remove('btn-active');
+                });
+                selHeading.value = (document.queryCommandValue('formatBlock') || 'p').toLowerCase();
+                selFontSize.value = document.queryCommandValue('fontSize') || '3';
+            }
+
+            // ─── BLOCK EDITOR ──────────────────────────────────────────────────────────
+
+            function setupEditor() {
+                btnNote.onclick = () => selectMode('note', btnNote);
+                btnCheck.onclick = () => selectMode('check', btnCheck);
+                btnCode.onclick = () => selectMode('code', btnCode);
+                btnAddBlock.onclick = addBlock;
+                blockArea.addEventListener('dblclick', e => {
+                    if (e.target === blockArea) addBlock();
+                });
+            }
+
+            function selectMode(m, btn) {
+                state.mode = m;
+                [btnNote, btnCheck, btnCode, btnAddBlock].forEach(b => b.classList.remove('btn-active'));
+                btn.classList.add('btn-active');
+            }
+
+            function addBlock() {
+                let b;
+                if (state.mode === 'note') {
+                    b = { type: 'note', text: '', style: { bold: state.bold, color: state.color, size: state.size } };
+                } else if (state.mode === 'check') {
+                    b = { type: 'check', text: '', checked: false };
+                } else {
+                    b = { type: 'code', code: '', lang: state.lang = selCodeLang.value };
+                }
+                blocks.push(b);
+                renderBlocks();
+                save();
+            }
+
+            async function save() {
+                if (!currentFile) return;
+                await fetch(`/api/file/${currentFile}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(blocks)
+                });
+            }
+
+            function renderBlocks() {
+                blockArea.innerHTML = '';
+                blocks.forEach((b, i) => {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'p-2 bg-base-100 rounded shadow flex gap-2';
+                    wrap.draggable = true;
+                    wrap.ondragstart = e => e.dataTransfer.setData('text', i);
+                    wrap.ondrop = e => { e.preventDefault(); moveBlock(+e.dataTransfer.getData('text'), i); };
+                    wrap.ondragover = e => e.preventDefault();
+
+                    if (b.type === 'note') {
+                        const d = makeEditable(b.text, v => { b.text = v; debounceSave(); });
+                        if (b.style.bold) d.classList.add('font-bold');
+                        if (b.style.color) d.style.color = b.style.color;
+                        d.classList.add(sizeClass[b.style.size] || 'text-base');
+                        wrap.append(d);
+                    }
+                    else if (b.type === 'check') {
+                        const cb = document.createElement('input');
+                        cb.type = 'checkbox';
+                        cb.checked = b.checked;
+                        cb.onchange = () => { b.checked = cb.checked; save(); };
+                        const d = makeEditable(b.text, v => { b.text = v; });
+                        if (b.checked) d.classList.add('line-through');
+                        wrap.append(cb, d);
+                    }
+                    else {
+                        const pre = document.createElement('pre');
+                        const code = document.createElement('code');
+                        code.className = b.lang;
+                        code.textContent = b.code || '';
+                        code.contentEditable = true;
+                        code.oninput = () => { b.code = code.textContent; Prism.highlightElement(code); debounceSave(); };
+                        pre.append(code);
+                        wrap.append(pre);
+                        Prism.highlightElement(code);
+                    }
+
+                    const del = document.createElement('button');
+                    del.className = 'btn btn-ghost btn-xs';
+                    del.textContent = '🗑️';
+                    del.onclick = () => { blocks.splice(i, 1); renderBlocks(); save(); };
+                    wrap.append(del);
+
+                    blockArea.append(wrap);
+                });
+
+                // Sicherstellen, dass alle Codeblöcke formatiert sind
+                Prism.highlightAll();
+            }
+
+            function makeEditable(html, onChange) {
+                const d = document.createElement('div');
+                d.contentEditable = true;
+                d.className = 'flex-1 outline-none';
+                d.innerHTML = html || '';
+                d.oninput = () => onChange(d.innerHTML);
+                return d;
+            }
+
+            function moveBlock(src, tgt) {
+                if (src === tgt) return;
+                blocks.splice(tgt, 0, blocks.splice(src, 1)[0]);
+                renderBlocks();
+                save();
+            }
+
+            function debounce(fn, ms) {
+                let t;
+                return (...a) => {
+                    clearTimeout(t);
+                    t = setTimeout(() => fn(...a), ms);
+                };
+            }
+            const debounceSave = debounce(save, 700);
+
+            // ─── INITIALIZE ─────────────────────────────────────────────────────────
+
+            await refreshFileList();
+            setupFileExplorer();
+            setupToolbar();
+            setupEditor();
+            fetch('/api/info')
+                .then(r => r.json())
+                .then(d => document.getElementById('info').textContent = `📡 ${d.ip}:${d.port}`);
+
+        })();
+    </script> -->
+
+
+
+
+    <!-- <script>
+        (async () => {
+            const socket = io();
+            let currentFile = null, blocks = [];
+            const state = { mode: 'note', bold: false, color: '', size: '3', lang: 'javascript' };
+            const sizeClass = { '1': 'text-xs', '2': 'text-sm', '3': 'text-base', '4': 'text-lg', '5': 'text-xl', '6': 'text-2xl' };
+
+            // Elemente
+            const fileList = document.getElementById('fileList');
+            const newFileInput = document.getElementById('newFileName');
+            const btnAdd = document.getElementById('btnAdd');
+            const btnRename = document.getElementById('btnRename');
+            const btnDelete = document.getElementById('btnDelete');
+            const blockArea = document.getElementById('blockArea');
+            const btnNote = document.getElementById('btnNote');
+            const btnCheck = document.getElementById('btnCheck');
+            const btnCode = document.getElementById('btnCode');
+            const btnAddBlock = document.getElementById('btnAddBlock');
+
+            const toolbarBtns = document.querySelectorAll('#toolbar [data-cmd]');
+            const selHeading = document.getElementById('selHeading');
+            const selFontSize = document.getElementById('selFontSize');
+            const selForeColor = document.getElementById('selForeColor');
+            const selBackColor = document.getElementById('selBackColor');
+            const selCodeLang = document.getElementById('selCodeLang');
+            const btnCodeFence = document.getElementById('btnCodeFence');
+            const btnCheckboxList = document.getElementById('btnCheckboxList');
+
+            // ─── FILE‑EXPLORER ─────────────────────────────────────────────────────────
+
+            async function refreshFileList() {
+                const files = await fetch('/api/files').then(r => r.json());
+                fileList.innerHTML = '';
+                files.forEach(name => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.textContent = name;
+                    a.className = 'block truncate cursor-pointer';
+                    if (name === currentFile) a.classList.add('active');
+                    a.onclick = () => openFile(name);
+                    li.append(a);
+                    fileList.append(li);
+                });
+            }
+
             function setupFileExplorer() {
                 btnAdd.onclick = async () => {
                     const n = newFileInput.value.trim(); if (!n) return;
@@ -1156,11 +1226,14 @@
                     refreshFileList();
                 });
             }
+
             async function openFile(name) {
                 currentFile = name;
                 blocks = await fetch(`/api/file/${name}`).then(r => r.ok ? r.json() : []);
-                renderBlocks(); await refreshFileList();
+                renderBlocks();
+                await refreshFileList();
             }
+
             function enableInlineRename(li, oldName) {
                 if (li.querySelector('input')) return;
                 const a = li.querySelector('a');
@@ -1171,31 +1244,25 @@
                 li.replaceChild(input, a);
                 input.select();
 
-                // Cleanup-Funktion zum Entfernen der Listener
                 function cleanup() {
                     input.removeEventListener('keydown', onEnter);
                     input.removeEventListener('blur', onBlur);
                 }
-
-                // Restore-Funktion, die das Input wieder in einen Link verwandelt
-                function restore(newName) {
+                function restore(name) {
                     const a2 = document.createElement('a');
-                    a2.textContent = newName;
+                    a2.textContent = name;
                     a2.className = 'block truncate cursor-pointer';
-                    if (newName === currentFile) a2.classList.add('active');
-                    a2.onclick = () => openFile(newName);
+                    if (name === currentFile) a2.classList.add('active');
+                    a2.onclick = () => openFile(name);
                     li.replaceChild(a2, input);
                 }
-
-                // Enter = umbenennen
                 async function onEnter(e) {
                     if (e.key === 'Enter') {
                         cleanup();
                         const newName = input.value.trim() || oldName;
                         if (newName !== oldName) {
                             await fetch(`/api/file/${oldName}`, {
-                                method: 'PUT',
-                                headers: { 'Content-Type': 'application/json' },
+                                method: 'PUT', headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ _rename: newName })
                             });
                             if (currentFile === oldName) currentFile = newName;
@@ -1208,10 +1275,7 @@
                         restore(oldName);
                     }
                 }
-
-                // Blur = abbrechen
                 function onBlur() {
-                    // Timeout, damit onEnter vor Blur ausgeführt wird, falls Enter gedrückt wurde
                     setTimeout(() => {
                         if (li.contains(input)) {
                             cleanup();
@@ -1219,37 +1283,126 @@
                         }
                     }, 0);
                 }
-
                 input.addEventListener('keydown', onEnter);
                 input.addEventListener('blur', onBlur);
             }
 
-            // ===== BLOCK‑EDITOR =====
+            // ─── TOOLBAR (execCommand) ──────────────────────────────────────────────────
+
+            function setupToolbar() {
+                toolbarBtns.forEach(btn => {
+                    // Verhindert, dass Button-Klick den Editor-Fokus klaut
+                    btn.addEventListener('mousedown', e => e.preventDefault());
+                    btn.addEventListener('click', () => {
+                        document.execCommand(btn.dataset.cmd, false, null);
+                        updateToolbarState();
+                    });
+                });
+
+                selHeading.addEventListener('change', () => document.execCommand('formatBlock', false, selHeading.value));
+                selFontSize.addEventListener('change', () => document.execCommand('fontSize', false, selFontSize.value));
+                selForeColor.addEventListener('change', () => document.execCommand('foreColor', false, selForeColor.value));
+                selBackColor.addEventListener('change', () => {
+                    const cmd = document.queryCommandSupported('hiliteColor') ? 'hiliteColor' : 'backColor';
+                    document.execCommand(cmd, false, selBackColor.value);
+                });
+
+                btnCheckboxList.addEventListener('click', () => {
+                    document.execCommand('insertHTML', false,
+                        '<ul><li><input type="checkbox"> </li></ul><p></p>');
+                });
+
+                document.querySelector('[data-cmd="insertHorizontalRule"]')
+                    .addEventListener('click', () => document.execCommand('insertHorizontalRule'));
+
+                btnCodeFence.addEventListener('click', () => {
+                    const lang = selCodeLang.value;
+                    // Erzeuge HTML mit contenteditable + zero‑width space
+                    const html = `<pre><code contenteditable="true" class="${lang}">\u200B</code></pre><p></p>`;
+                    // Mit execCommand einfügen
+                    document.execCommand('insertHTML', false, html);
+
+                    // kurz warten, bis das DOM aktualisiert ist
+                    setTimeout(() => {
+                        // Highlight neu anwenden
+                        Prism.highlightAll();
+                        // Cursor in das neue <code> setzen
+                        // Wir suchen das erste code-Element mit unserer Klasse, das noch ein ZWS enthält
+                        const codes = Array.from(document.querySelectorAll('pre code.' + lang));
+                        const codeEl = codes.find(c => c.textContent.includes('\u200B'));
+                        if (codeEl) {
+                            // ZWS entfernen
+                            codeEl.textContent = '';
+                            // Range anlegen
+                            const range = document.createRange();
+                            range.selectNodeContents(codeEl);
+                            range.collapse(true);
+                            const sel = window.getSelection();
+                            sel.removeAllRanges();
+                            sel.addRange(range);
+                            codeEl.focus();
+                        }
+                    }, 0);
+                });
+
+                document.addEventListener('selectionchange', updateToolbarState);
+                updateToolbarState();
+            }
+
+            function updateToolbarState() {
+                toolbarBtns.forEach(b => {
+                    document.queryCommandState(b.dataset.cmd)
+                        ? b.classList.add('btn-active')
+                        : b.classList.remove('btn-active');
+                });
+                selHeading.value = (document.queryCommandValue('formatBlock') || 'p').toLowerCase();
+                selFontSize.value = document.queryCommandValue('fontSize') || '3';
+            }
+
+            // ─── BLOCK EDITOR ──────────────────────────────────────────────────────────
+
             function setupEditor() {
                 btnNote.onclick = () => selectMode('note', btnNote);
                 btnCheck.onclick = () => selectMode('check', btnCheck);
                 btnCode.onclick = () => selectMode('code', btnCode);
                 btnAddBlock.onclick = addBlock;
+
+                // Doppelklick auf leere Fläche ➝ neuer Block
+                blockArea.addEventListener('dblclick', e => {
+                    if (e.target === blockArea) addBlock();
+                });
             }
 
             function selectMode(m, btn) {
                 state.mode = m;
-                [btnNote, btnCheck, btnCode, btnAddBlock].forEach(b => b.classList.remove('btn-active'));
+                [btnNote, btnCheck, btnCode, btnAddBlock]
+                    .forEach(b => b.classList.remove('btn-active'));
                 btn.classList.add('btn-active');
             }
 
             function addBlock() {
-                const b = state.mode === 'note'
-                    ? { type: 'note', text: '', style: { bold: state.bold, color: state.color, size: state.size } }
-                    : state.mode === 'check'
-                        ? { type: 'check', text: '', checked: false }
-                        : { type: 'code', code: '', lang: state.lang };
-                blocks.push(b); renderBlocks(); save();
+                let b;
+                if (state.mode === 'note') b = {
+                    type: 'note', text: '', style: {
+                        bold: state.bold,
+                        color: state.color,
+                        size: state.size
+                    }
+                };
+                if (state.mode === 'check') b = { type: 'check', text: '', checked: false };
+                if (state.mode === 'code') b = { type: 'code', code: '', lang: state.lang };
+                blocks.push(b);
+                renderBlocks();
+                save();
             }
 
             async function save() {
                 if (!currentFile) return;
-                await fetch(`/api/file/${currentFile}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(blocks) });
+                await fetch(`/api/file/${currentFile}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(blocks)
+                });
             }
 
             function renderBlocks() {
@@ -1263,23 +1416,25 @@
                     wrap.ondragover = e => e.preventDefault();
 
                     if (b.type === 'note') {
-                        const div = makeEditable(b.text, v => { b.text = v; debounceSave(); });
-                        if (b.style.bold) div.classList.add('font-bold');
-                        if (b.style.color) div.style.color = b.style.color;
-                        div.classList.add(sizeClass[b.style.size] || 'text-base');
-                        wrap.append(div);
+                        const d = makeEditable(b.text, v => { b.text = v; debounceSave(); });
+                        if (b.style.bold) d.classList.add('font-bold');
+                        if (b.style.color) d.style.color = b.style.color;
+                        d.classList.add(sizeClass[b.style.size] || 'text-base');
+                        wrap.append(d);
                     }
                     else if (b.type === 'check') {
-                        const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = b.checked;
+                        const cb = document.createElement('input');
+                        cb.type = 'checkbox'; cb.checked = b.checked;
                         cb.onchange = () => { b.checked = cb.checked; save(); };
-                        const div = makeEditable(b.text, v => { b.text = v; });
-                        if (b.checked) div.classList.add('line-through');
-                        wrap.append(cb, div);
+                        const d = makeEditable(b.text, v => { b.text = v; });
+                        if (cb.checked) d.classList.add('line-through');
+                        wrap.append(cb, d);
                     }
                     else {
                         const pre = document.createElement('pre');
                         const code = document.createElement('code');
-                        code.className = `language-${b.lang}`; code.textContent = b.code || '';
+                        code.className = `language-${b.lang}`;
+                        code.textContent = b.code || '';
                         code.contentEditable = true;
                         code.oninput = () => { b.code = code.textContent; Prism.highlightElement(code); debounceSave(); };
                         pre.append(code); wrap.append(pre);
@@ -1293,6 +1448,9 @@
 
                     blockArea.append(wrap);
                 });
+
+                // nach Rendern nochmal alle Codeblöcke highlighten
+                Prism.highlightAll();
             }
 
             function makeEditable(html, onChange) {
@@ -1310,51 +1468,28 @@
                 renderBlocks(); save();
             }
 
-            const debounceSave = (fn, ms => {
-                let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
-            })(save, 700);
-
-            // ===== TOOLBAR (execCommand für Selektionen) =====
-            function updateToolbarState() {
-                toolbarBtns.forEach(b => {
-                    document.queryCommandState(b.dataset.cmd)
-                        ? b.classList.add('btn-active')
-                        : b.classList.remove('btn-active');
-                });
-                selHeading.value = (document.queryCommandValue('formatBlock') || 'p').toLowerCase();
-                selFontSize.value = document.queryCommandValue('fontSize') || '3';
+            function debounce(fn, ms) {
+                let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms) };
             }
+              const debounceSave = debounce(save,700);
 
-            toolbarBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.execCommand(btn.dataset.cmd, false, null);
-                    updateToolbarState();
-                });
-            });
-            selHeading.addEventListener('change', () => document.execCommand('formatBlock', false, selHeading.value));
-            selFontSize.addEventListener('change', () => document.execCommand('fontSize', false, selFontSize.value));
-            selForeColor.addEventListener('change', () => document.execCommand('foreColor', false, selForeColor.value));
-            selBackColor.addEventListener('change', () => {
-                const cmd = document.queryCommandSupported('hiliteColor') ? 'hiliteColor' : 'backColor';
-                document.execCommand(cmd, false, selBackColor.value);
-            });
-            btnCheckboxList.addEventListener('click', () => {
-                document.execCommand('insertHTML', false, '<ul><li><input type="checkbox"> </li></ul><p></p>');
-            });
-            document.querySelector('[data-cmd="insertHorizontalRule"]').addEventListener('click', () => document.execCommand('insertHorizontalRule'));
-            btnCodeFence.addEventListener('click', () => {
-                const lang = selCodeLang.value, txt = window.getSelection().toString();
-                document.execCommand('insertHTML', false, `<pre><code class="${lang}">${txt}</code></pre><p></p>`);
-                setTimeout(() => document.querySelectorAll('pre code').forEach(el => Prism.highlightElement(el)), 0);
-            });
-            document.addEventListener('selectionchange', updateToolbarState);
-            updateToolbarState();
+            // ─── INITIALIZE ─────────────────────────────────────────────────────────
 
+            await refreshFileList();
+            setupFileExplorer();
+            setupToolbar();
+            setupEditor();
+            fetch('/api/info')
+                .then(r => r.json())
+                .then(d => document.getElementById('info').textContent = `📡 ${d.ip}:${d.port}`);
         })();
     </script> -->
 
+
     <script type="module" src="./js/settings.js"></script>
     <script src="./app/app.js"></script>
+
+
 </body>
 
 </html>

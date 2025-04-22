@@ -2,7 +2,16 @@
   {
     "type": "check",
     "text": "check",
-    "checked": true
+    "checked": false
+  },
+  {
+    "type": "note",
+    "text": "sdfsdfasdasd<font color=\"#6b7280\" style=\"\">asd</font><font color=\"#c4b5fd\" style=\"\">asdasd</font>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
   },
   {
     "type": "note",
@@ -14,8 +23,67 @@
     }
   },
   {
+    "type": "check",
+    "text": "asdasd",
+    "checked": true
+  },
+  {
     "type": "note",
-    "text": "sdfsdfasdasd<font color=\"#6b7280\">asd</font><font color=\"#c4b5fd\">asdasd</font>",
+    "text": "<pre class=\"language-javascript\" tabindex=\"0\"><code class=\"language-javascript\">​<span class=\"token keyword\">let</span> foo <span class=\"token operator\">=</span> <span class=\"token number\">1</span><span class=\"token punctuation\">;</span>\nfunction </code></pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<pre class=\"language-python\" tabindex=\"0\"><code class=\"language-python\">​class doSomething</code></pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<pre class=\"language-markup\" tabindex=\"0\">&lt;script&gt;let ananas = 0;&lt;/script&gt;</pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<pre class=\"language-javascript\" tabindex=\"0\"><code class=\"language-javascript\">​let ananas = 0;</code></pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<pre class=\"language-java\" tabindex=\"0\">Integer foo = new Integer();</pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<pre class=\"language-java\" tabindex=\"0\"><font color=\"#fecdd3\">ArrayList</font> arr = new ArrayList&lt;String&gt;();</pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "asd",
     "style": {
       "bold": false,
       "color": "",
@@ -24,7 +92,16 @@
   },
   {
     "type": "check",
-    "text": "asd",
+    "text": "",
     "checked": false
+  },
+  {
+    "type": "note",
+    "text": "",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
   }
 ]

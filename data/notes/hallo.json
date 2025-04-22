@@ -36,5 +36,50 @@
       "color": "",
       "size": "3"
     }
+  },
+  {
+    "type": "note",
+    "text": "<pre tabindex=\"0\" class=\"language-javascript\">                        <code class=\"language-javascript\"></code>\n                        let ananas = 5;</pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<pre tabindex=\"0\" class=\"language-javascript\">                        <code class=\"language-javascript\"></code>\n                        var a = 1;</pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<pre class=\"language-javascript\" tabindex=\"0\">let ananas<code class=\"language-javascript\"></code></pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<pre class=\"language-markup\" tabindex=\"0\">&lt;script&gt;&lt;/script&gt;</pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<pre><code class=\"language-javascript\">​</code></pre><p></p><pre class=\"language-javascript\" tabindex=\"0\"><code class=\"language-javascript\"></code></pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
   }
 ]

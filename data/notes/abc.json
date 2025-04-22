@@ -1,0 +1,65 @@
+[
+  {
+    "type": "note",
+    "text": "<pre class=\"language-python\" tabindex=\"0\"><code class=\"language-python\">​let ananas</code></pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<pre class=\"language-javascript\" tabindex=\"0\"><code class=\"language-javascript\">​let ananas</code></pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "asdasd",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<pre class=\"language-javascript\" tabindex=\"0\"><code class=\"language-javascript\">​let ananas = 5;\n\n</code></pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<pre class=\"language-java\" tabindex=\"0\">public static void main(){\nSystem.out.println(\"ananas\");\n}</pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<pre class=\"language-python\" tabindex=\"0\"><code class=\"language-python\">​def<span style=\"font-family: Consolas, Menlo, &quot;courier new&quot;, monospace; font-size: 15px; white-space: normal; background-color: rgb(255, 255, 255);\">&nbsp;my_function():</span><br style=\"box-sizing: inherit; font-family: Consolas, Menlo, &quot;courier new&quot;, monospace; font-size: 15px; white-space: normal; background-color: rgb(255, 255, 255);\"><span style=\"font-family: Consolas, Menlo, &quot;courier new&quot;, monospace; font-size: 15px; white-space: normal; background-color: rgb(255, 255, 255);\">&nbsp;&nbsp;</span><span class=\"pythonkeywordcolor\" style=\"box-sizing: inherit; color: rgb(0, 92, 197); font-family: Consolas, Menlo, &quot;courier new&quot;, monospace; font-size: 15px; white-space: normal; background-color: rgb(255, 255, 255);\">print</span><span style=\"font-family: Consolas, Menlo, &quot;courier new&quot;, monospace; font-size: 15px; white-space: normal; background-color: rgb(255, 255, 255);\">(</span><span class=\"pythonstringcolor\" style=\"box-sizing: inherit; color: green; font-family: Consolas, Menlo, &quot;courier new&quot;, monospace; font-size: 15px; white-space: normal; background-color: rgb(255, 255, 255);\">\"Hello from a function\"</span><span style=\"font-family: Consolas, Menlo, &quot;courier new&quot;, monospace; font-size: 15px; white-space: normal; background-color: rgb(255, 255, 255);\">)</span> </code></pre><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<span style=\"background-color: rgb(254, 215, 170);\">asd</span>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  }
+]

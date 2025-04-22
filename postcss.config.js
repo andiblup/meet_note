@@ -23,3 +23,27 @@ module.exports = {
     require('autoprefixer'),
   ]
 };
+
+// postcss.config.js
+// const path = require('path');
+
+// module.exports = {
+//   plugins: [
+//     // wenn ihr @import benutzt, sonst weglassen:
+//     // require('postcss-import'),
+
+//     require('postcss-url')({
+//       url: 'copy',
+//       basePath: path.resolve(__dirname, 'node_modules', 'boxicons', 'fonts'),
+//       assetsPath: path.resolve(__dirname, 'public', 'fonts', 'boxicons'),
+//       filter: '**/*',
+//       flatten: true,
+//       useHash: false,
+//     }),
+
+//     // <-- hier tauschen:
+//     require('@tailwindcss/postcss'),
+
+//     require('autoprefixer'),
+//   ]
+// }

@@ -19,7 +19,8 @@ Write-Host "📦 Installing dependencies..." -ForegroundColor Cyan
 npm install express@4 cors@2.8 socket.io@4 dotenv@16 prismjs@1.29
 
 # Dev (Tailwind / DaisyUI / Electron)
-npm install -D tailwindcss@3.4 postcss@8.4 autoprefixer@10.4 daisyui@4.10 electron@28.2
+npm install -D tailwindcss@4.1 postcss@8.4 autoprefixer@10.4 daisyui@latest electron@28.2
+# npm install -D tailwindcss@3.4 postcss@8.4 autoprefixer@10.4 daisyui@4.10 electron@28.2
 
 # Tailwind init (creates tailwind.config.js + postcss.config.js)
 npx tailwindcss init -p
@@ -106,6 +107,9 @@ Write-Host "prism.js muss manuell minifiziert werden!!!!!`nhttps://www.toptal.co
 # npm install postcss-url --save-dev
 # npm install -D postcss postcss-cli
 # npm install --save-dev path
+# npm install tailwindcss@latest @tailwindcss/cli@latest daisyui@latest
+# npm install --save-dev postcss-import
+# npm install --save-dev @tailwindcss/postcss
 
 
 # Environment.txt
