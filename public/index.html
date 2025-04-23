@@ -133,12 +133,20 @@
                 <div class="divider divider-horizontal m-0"></div>
                 <button id="btnTable" class="btn btn-sm btn-ghost" title="Tabelle einfügen"><i
                         class='bx bx-table'></i></button>
-                <button id="btnRowAdd" class="btn btn-xs btn-ghost" title="Zeile +"><i class='bx bx-plus'></i></button>
-                <button id="btnRowDel" class="btn btn-xs btn-ghost" title="Zeile –"><i class='bx bx-minus'></i></button>
+                <input type="number" id="inpTableRows" class="input input-sm w-16" value="3" min="1" max="100"
+                    title="Zeilenanzahl"
+                    oninput="this.reportValidity(); this.addEventListener('blur', e => {e.preventDefault();if (this.valueAsNumber > this.max) this.value = this.max; if (this.valueAsNumber < this.min) this.value = this.min;})">
+                <input type="number" id="inpTableCols" class="input input-sm w-16" value="3" min="1" max="10"
+                    title="Spaltenanzahl"
+                    oninput="this.reportValidity(); this.addEventListener('blur', e => {e.preventDefault();if (this.valueAsNumber > this.max) this.value = this.max; if (this.valueAsNumber < this.min) this.value = this.min;})">
+                <button id="btnRowAdd" class="btn btn-xs btn-ghost" title="Zeile +"><i
+                        class='bx bx-vertical-bottom'></i></button>
+                <button id="btnRowDel" class="btn btn-xs btn-ghost" title="Zeile –"><i
+                        class='bx bx-vertical-top'></i></button>
                 <button id="btnColAdd" class="btn btn-xs btn-ghost" title="Spalte +"><i
-                        class='bx bx-plus-vertical'></i></button>
+                        class='bx bx-horizontal-right'></i></button>
                 <button id="btnColDel" class="btn btn-xs btn-ghost" title="Spalte –"><i
-                        class='bx bx-minus-vertical'></i></button>
+                        class='bx bx-horizontal-left'></i></button>
 
 
                 <div class="divider divider-horizontal m-0"></div>
@@ -411,12 +419,20 @@
 
                 <div class="form-control">
                     <label class="label">
-                        <span class="label-text">Primary‑Farbe</span>
+                        <span class="label-text">Primary-Farbe</span>
                     </label>
 
                     <button class="btn btn-primary" onclick="primaryColorPickModal.showModal()">Farbe wählen</button>
                     <button id="btnResetPrimaryColor" class="btn btn-outline btn-warning w-full">Reset Farbe</button>
 
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Tab-Einrückung (Leerzeichen)</span>
+                    </label>
+                    <input id="inpTabSize" type="number" min="1" max="8" step="1" class="input input-bordered w-20"
+                        value="4" oninput="this.reportValidity(); this.addEventListener('blur', e => {e.preventDefault();if (this.valueAsNumber > this.max) this.value = this.max; if (this.valueAsNumber < this.min) this.value = this.min;})">
                 </div>
 
                 <button id="btnSaveSettings" class="btn btn-primary w-full mt-4"><i class='bx bxs-save'></i></button>
@@ -814,42 +830,284 @@
                         '<ul><li><input type="checkbox"> </li></ul><p></p>');
                 });
 
-                btnTable.onclick = () =>
-                    document.execCommand('insertHTML', false,
-                        '<table class="table table-zebra w-full"><tbody>' +
-                        '<tr><td><br></td><td><br></td><td><br></td></tr>'.repeat(3) +
-                        '</tbody></table><p></p>');
+                // btnTable.onclick = () =>
+                //     document.execCommand('insertHTML', false,
+                //         '<table class="table table-zebra w-full"><tbody>' +
+                //         '<tr><td><br></td><td><br></td><td><br></td></tr>'.repeat(3) +
+                //         '</tbody></table><p></p>');
+
+                // btnTable.onclick = () => {
+                //     const cols = 3;                       // --> Standard 3 Spalten
+                //     const rows = 3;
+                //     let html = `<table class="meet-table table-zebra"><colgroup>`;
+                //     for (let i = 0; i < cols; i++)
+                //         html += `<col style="width:${100 / cols}%">`;
+                //     html += `</colgroup><tbody>`;
+                //     for (let r = 0; r < rows; r++)
+                //         html += `<tr>${'<td><br></td>'.repeat(cols)}</tr>`;
+                //     html += `</tbody></table><p></p>`;
+
+                //     document.execCommand('insertHTML', false, html);
+                // };
+                btnTable.onclick = () => {
+                    let cols = 3, rows = 3;
+                    try {
+                        cols = document.getElementById('inpTableRows').value;
+                        rows = document.getElementById('inpTableCols').value;
+                    } catch (e) { console.error(e); }
+                    let html = `<table class="meet-table table-zebra"><colgroup>`;
+                    for (let i = 0; i < cols; i++) html += `<col style="width:${100 / cols}%">`;
+                    html += `</colgroup><tbody>`;
+                    for (let r = 0; r < rows; r++)
+                        html += `<tr>${'<td><br></td>'.repeat(cols)}</tr>`;
+                    html += '</tbody></table><p></p>';
+
+                    document.execCommand('insertHTML', false, html);
+                };
+
+
 
                 // Hilfs-Funktionen
-                function getCell(sel = window.getSelection()) {
-                    const node = sel.anchorNode?.parentElement;
-                    return node?.tagName === 'TD' || node?.tagName === 'TH' ? node : null;
+                // function getCell(sel = window.getSelection()) {
+                //     const node = sel.anchorNode?.parentElement;
+                //     return node?.tagName === 'TD' || node?.tagName === 'TH' ? node : null;
+                // }
+                let lastCell = null;                       // globale Referenz
+
+                function getCell() {
+                    let node = window.getSelection().anchorNode;
+                    // Anker bis zum nächsten TD/TH hochwandern
+                    while (node && node.nodeType === 1 && !/^(TD|TH)$/i.test(node.tagName))
+                        node = node.parentElement;
+                    // Wenn keine Zelle gefunden → letzte bekannte Zelle nehmen
+                    const cell = node && /^(TD|TH)$/i.test(node.tagName) ? node : lastCell;
+                    return cell || null;
                 }
+
+                blockArea.addEventListener('click', e => {
+                    const td = e.target.closest('td,th');
+                    if (td) lastCell = td;
+                });
+
+                // ─── Zell-Navigation mit der Tab-Taste ────────────────────────────────
+                blockArea.addEventListener('keydown', e => {
+                    if (e.key !== 'Tab') return;
+
+                    const td = getCell();                     // aktuelle Zelle?
+                    if (!td) return;                          // kein Tab-Verhalten außerhalb einer Tabelle
+                    e.preventDefault();                       // Browser-Tab unterdrücken
+
+                    const row = td.parentElement;                   // <tr>
+                    const table = row.closest('table');
+                    const rows = [...table.querySelectorAll('tr')];
+                    const rIdx = rows.indexOf(row);                  // aktuelle Zeile
+                    const cIdx = [...row.children].indexOf(td);      // aktuelle Spalte
+                    const colCount = row.children.length;
+
+                    let nextTd;
+
+                    if (!e.shiftKey) {                                   // Vorwärts (Tab)
+                        if (cIdx < colCount - 1) {                       // nächste Zelle rechts
+                            nextTd = row.children[cIdx + 1];
+                        } else if (rIdx < rows.length - 1) {             // nächster Zeilenanfang
+                            nextTd = rows[rIdx + 1].children[0];
+                        } else {                                         // letzte Zelle → ganz vorne
+                            nextTd = rows[0].children[0];
+                        }
+                    } else {                                             // Rückwärts (Shift+Tab)
+                        if (cIdx > 0) {
+                            nextTd = row.children[cIdx - 1];
+                        } else if (rIdx > 0) {
+                            const prevRow = rows[rIdx - 1];
+                            nextTd = prevRow.children[prevRow.children.length - 1];
+                        } else {                                         // erste Zelle → ganz hinten
+                            const lastRow = rows[rows.length - 1];
+                            nextTd = lastRow.children[lastRow.children.length - 1];
+                        }
+                    }
+
+                    placeCaret(nextTd);                                  // Cursor & Fokus setzen
+                });
+
+
+                function syncColgroup(table) {
+                    const colCnt = table.querySelector('tr')?.children.length || 0;
+                    let colgroup = table.querySelector('colgroup');
+                    if (!colgroup) {
+                        colgroup = document.createElement('colgroup');
+                        table.prepend(colgroup);
+                    }
+                    colgroup.innerHTML = '';
+                    const w = 100 / colCnt;
+                    for (let i = 0; i < colCnt; i++) {
+                        const col = document.createElement('col');
+                        col.style.width = `${w}%`;
+                        colgroup.append(col);
+                    }
+                }
+
                 function eachCell(row, fn) { [...row.children].forEach(fn); }
 
                 // Zeile/Spalte +/–
+
+                function placeCaret(cell) {
+                    const range = document.createRange();
+                    range.selectNodeContents(cell);
+                    range.collapse(true);
+                    const sel = window.getSelection();
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                    cell.focus();
+                    lastCell = cell;              // wichtig für die nächste Aktion
+                }
+
+
+                /* ---------------------------------  Zeile +  */
                 btnRowAdd.onclick = () => {
                     const td = getCell(); if (!td) return;
-                    const row = td.parentElement, clone = row.cloneNode(true);
-                    clone.querySelectorAll('td').forEach(td => td.innerHTML = '<br>');
-                    row.after(clone);
+                    const clone = td.parentElement.cloneNode(true);
+                    clone.querySelectorAll('td,th').forEach(c => c.innerHTML = '<br>');
+                    td.parentElement.after(clone);
                 };
-                btnRowDel.onclick = () => { const td = getCell(); td && td.parentElement.remove(); };
 
-                btnColAdd.onclick = () => {
-                    const td = getCell(); if (!td) return;
-                    const idx = [...td.parentElement.children].indexOf(td);
-                    const table = td.closest('table');
-                    table.querySelectorAll('tr').forEach(tr => {
-                        const clone = tr.children[idx].cloneNode(true);
-                        clone.innerHTML = '<br>'; tr.children[idx].after(clone);
-                    });
+                /* ------------  Zeile –  ------------ */
+                btnRowDel.onclick = () => {
+                    const td = getCell();                  // aktuelle Zelle
+                    if (!td) return;
+
+                    const tr = td.parentElement;
+                    const table = tr.closest('table');
+                    const rows = [...table.querySelectorAll('tr')];
+
+                    if (rows.length === 1) return;         // nie letzte Zeile löschen
+
+                    const idx = rows.indexOf(tr);        // Index der zu löschenden Zeile
+                    tr.remove();                           // löschen
+
+                    // Fokus auf Zeile darüber (oder darunter, falls es keine mehr gibt)
+                    const targetRow = rows[idx - 1] || rows[idx];
+                    const targetCell = targetRow.children[0];
+                    placeCaret(targetCell);
                 };
+
+                /* ------------  Spalte –  ------------ */
                 btnColDel.onclick = () => {
                     const td = getCell(); if (!td) return;
-                    const idx = [...td.parentElement.children].indexOf(td);
-                    td.closest('table').querySelectorAll('tr').forEach(tr => tr.children[idx].remove());
+                    const table = td.closest('table');
+                    const colIdx = [...td.parentElement.children].indexOf(td);
+
+                    const cols = table.querySelector('tr').children.length;
+                    if (cols <= 1) return;                 // nie letzte Spalte löschen
+
+                    table.querySelectorAll('tr').forEach(tr => tr.children[colIdx].remove());
+                    syncColgroup(table);
+
+                    // Fokus auf Zelle links (oder rechts, falls es keine links mehr gibt)
+                    const newIdx = colIdx > 0 ? colIdx - 1 : colIdx;
+                    const targetCell = table.querySelector(`tr:first-child`).children[newIdx];
+                    placeCaret(targetCell);
                 };
+
+                /* ------------  Spalte +  (max 10) --- */
+                btnColAdd.onclick = () => {
+                    const td = getCell(); if (!td) return;
+                    const table = td.closest('table');
+                    const colCnt = table.querySelector('tr').children.length;
+                    if (colCnt >= 10) { showToast('max. 10 Spalten'); return; }
+
+                    const idx = [...td.parentElement.children].indexOf(td);
+
+                    table.querySelectorAll('tr').forEach(tr => {
+                        const clone = tr.children[idx].cloneNode(true);
+                        clone.innerHTML = '<br>';
+                        tr.children[idx].after(clone);
+                    });
+                    syncColgroup(table);
+
+                    // Fokus direkt auf die neue Spalte
+                    const targetCell = td.parentElement.children[idx + 1];
+                    placeCaret(targetCell);
+                };
+
+                // /* ---------------------------------  Zeile –  */
+                // btnRowDel.onclick = () => {
+                //     const td = getCell(); if (!td) return;
+                //     const tr = td.parentElement, table = tr.closest('table');
+                //     if (table.querySelectorAll('tr').length > 1) tr.remove();
+                // };
+
+                // /* ---------------------------------  Spalte +  */
+                // btnColAdd.onclick = () => {
+                //     const td = getCell(); if (!td) return;
+                //     const table = td.closest('table');
+                //     const idx = [...td.parentElement.children].indexOf(td);
+
+                //     table.querySelectorAll('tr').forEach(tr => {
+                //         const clone = tr.children[idx].cloneNode(true);
+                //         clone.innerHTML = '<br>';
+                //         tr.children[idx].after(clone);
+                //     });
+                //     syncColgroup(table);
+                // };
+
+                // /* ---------------------------------  Spalte –  */
+                // btnColDel.onclick = () => {
+                //     const td = getCell(); if (!td) return;
+                //     const table = td.closest('table');
+                //     const idx = [...td.parentElement.children].indexOf(td);
+
+                //     if (table.querySelector('tr').children.length <= 1) return;  // nie letzte Spalte
+                //     table.querySelectorAll('tr').forEach(tr => tr.children[idx].remove());
+                //     syncColgroup(table);
+                // };
+
+
+                // btnColAdd.onclick = () => {
+                //     const td = getCell(); if (!td) return;
+                //     const idx = [...td.parentElement.children].indexOf(td);
+                //     const table = td.closest('table');
+                //     table.querySelectorAll('tr').forEach(tr => {
+                //         const clone = tr.children[idx].cloneNode(true);
+                //         clone.innerHTML = '<br>'; tr.children[idx].after(clone);
+                //     });
+                // };
+                // btnColDel.onclick = () => {
+                //     const td = getCell(); if (!td) return;
+                //     const idx = [...td.parentElement.children].indexOf(td);
+                //     td.closest('table').querySelectorAll('tr').forEach(tr => tr.children[idx].remove());
+                // };       
+
+                // btnRowAdd.onclick = () => {
+                //     const td = getCell(); if (!td) return;
+                //     const row = td.parentElement, clone = row.cloneNode(true);
+                //     clone.querySelectorAll('td').forEach(td => td.innerHTML = '<br>');
+                //     row.after(clone);
+                // };
+                // btnRowDel.onclick = () => { const td = getCell(); td && td.parentElement.remove(); };
+
+
+                function updateColgroup(table) {
+                    const cols = table.querySelector('tr').children.length;
+                    const colgroup = table.querySelector('colgroup') || table.prepend(document.createElement('colgroup'));
+                    colgroup.innerHTML = '';                          // alte cols löschen
+                    for (let i = 0; i < cols; i++) {
+                        const col = document.createElement('col');
+                        col.style.width = `${100 / cols}%`;
+                        colgroup.append(col);
+                    }
+                }
+
+                // btnColAdd.onclick = () => {
+                //     const td = getCell(); if (!td) return;
+                //     /* … Spalte klonen (dein bisheriger Code) … */
+                //     updateColgroup(td.closest('table'));
+                // };
+
+                // btnColDel.onclick = () => {
+                //     const td = getCell(); if (!td) return;
+                //     /* … Spalte löschen … */
+                //     updateColgroup(td.closest('table'));
+                // };
 
                 document.querySelector('[data-cmd="insertHorizontalRule"]')
                     .addEventListener('click', () => document.execCommand('insertHorizontalRule'));
@@ -961,9 +1219,6 @@
                         wrap.append(cb, d);
                     }
                     else if (b.type === 'hr') {
-                        // const hr = document.createElement('hr');
-                        // hr.className = 'border-primary/40 my-4';
-                        // wrap.append(hr);
                         const hr = document.createElement('hr');
                         // sichtbarer Strich (hell ↔︎ dunkel) & etwas Abstand
                         hr.className = 'rounded border-none my-2';
@@ -971,16 +1226,8 @@
                         hr.style.border = '0px solid black';
                         hr.style.backgroundColor = 'var(--color-primary)';
                         wrap.className = 'my-2';
-                        // hr.style.borderTop = '2px solid var(--tw-prose-hr)';
-                        // hr.style.cursor = 'pointer';
-                        // hr.style.height = '10px';
-                        // hr.style.backgroundColor = 'var(--color-base-content)!important';
                         hr.title = 'Doppelklick zum Löschen';
                         hr.ondblclick = () => { blocks.splice(i, 1); renderBlocks(); save(); };
-
-
-                        /*  Lösch-Shortcut: Block doppelklicken
-                            (wir nutzen den bestehenden Wrap → Drag & Drop bleibt)  */
                         wrap.classList.add('cursor-pointer');
                         wrap.append(hr);
 
@@ -988,9 +1235,6 @@
                             blocks.splice(i, 1);
                             renderBlocks(); save();
                         };
-
-                        /*  Der Trash-Button wird NICHT angehängt,
-                            deshalb „continue“ überspringen wir Rest-Code. */
                         blockArea.append(wrap);
                         return;          // !!! wrap ist fertig – nichts mehr hinzufügen
                     }
@@ -1060,22 +1304,6 @@
                 .then(d => document.getElementById('info').textContent = `${d.ip}:${d.port}`);
 
         })();
-    </script>
-
-    <script>
-        // const btnHrBlock = document.getElementById('btnHrBlock');
-        // btnHrBlock.addEventListener('click', () => {
-        //     const hr = document.createElement('hr');
-        //     hr.className = 'my-4 border-t-2 border-base-300 hr-block';
-        //     blockArea.append(hr);
-        // });
-        // const hrBlocks = document.querySelectorAll('.hr-block');
-        // hrBlocks.forEach(hr => {
-        //     hr.addEventListener('dblclick', () => {
-        //         hr.remove();
-
-        //     });
-        // });
     </script>
 
     <script type="module" src="./js/settings.js"></script>

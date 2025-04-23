@@ -7,6 +7,10 @@ const { spawn, execSync } = require('child_process');
 const os = require('os');
 const net = require('net');
 const fs = require('fs');
+// const { log } = require('console');
+const log = require('../utils/logger.js');
+// const ora = require('ora');
+
 
 const SETTINGS_FILE = path.join(__dirname, '..', 'data', 'settings', 'settings.json');
 
@@ -17,11 +21,11 @@ let serverReady = false;    // wurde „🌐 http://…“ ausgegeben?
 
 /* --------------------------------- Helpers ----------------- */
 function getIp() {
-  return (
-    Object.values(os.networkInterfaces())
-      .flat()
-      .find(i => i.family === 'IPv4' && !i.internal)?.address || 'localhost'
-  );
+    return (
+        Object.values(os.networkInterfaces())
+            .flat()
+            .find(i => i.family === 'IPv4' && !i.internal)?.address || 'localhost'
+    );
 }
 
 // const getIp = require('../server/server.js').getRealLocalIp;
@@ -29,41 +33,41 @@ function getIp() {
 // read settings from /data/settings/settings.json
 
 function portFree(port) {
-  return new Promise(res => {
-    const t = net
-      .createServer()
-      .once('error', () => res(false))
-      .once('listening', () => t.close(() => res(true)))
-      .listen(port);
-  });
+    return new Promise(res => {
+        const t = net
+            .createServer()
+            .once('error', () => res(false))
+            .once('listening', () => t.close(() => res(true)))
+            .listen(port);
+    });
 }
 
 /* 🔪  Reste alter server.js‑Prozesse killen (dev‑Modus) */
 function killOldServer() {
-  try {
-    if (process.platform === 'win32') {
-      const pids = execSync(
-        'wmic process where "CommandLine like \'%server\\\\server.js%\'" get ProcessId /format:list'
-      )
-        .toString()
-        .match(/\d+/g) || [];
-      pids.forEach(pid => execSync(`taskkill /PID ${pid} /F`));
-    } else {
-      execSync('pkill -f server/server.js');
+    try {
+        if (process.platform === 'win32') {
+            const pids = execSync(
+                'wmic process where "CommandLine like \'%server\\\\server.js%\'" get ProcessId /format:list'
+            )
+                .toString()
+                .match(/\d+/g) || [];
+            pids.forEach(pid => execSync(`taskkill /PID ${pid} /F`));
+        } else {
+            execSync('pkill -f server/server.js');
+        }
+        if (pids?.length) console.log('🗑️  Alte server.js‑Instanzen beendet:', pids.join(', '));
+    } catch {
+        /* none */
     }
-    if (pids?.length) console.log('🗑️  Alte server.js‑Instanzen beendet:', pids.join(', '));
-  } catch {
-    /* none */
-  }
 }
 
 
 function readSettings() {
-  try {
-    return JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'settings', 'settings.json'), 'utf8'));
-  } catch {
-    return { theme: 'light', autosave: 5000 };
-  }
+    try {
+        return JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'settings', 'settings.json'), 'utf8'));
+    } catch {
+        return { theme: 'light', autosave: 5000 };
+    }
 }
 
 /* --------------------------------- IPC --------------------- */
@@ -81,103 +85,143 @@ function readSettings() {
 // SETTING
 
 ipcMain.handle('get-settings', () => {
-  return readSettings(); // liest settings.json
+    return readSettings(); // liest settings.json
 });
 ipcMain.handle('save-settings', (_evt, settings) => {
-  fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2), 'utf8');
-  return { ok: true };
+    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2), 'utf8');
+    return { ok: true };
 });
 
 // View Handling
 
 ipcMain.handle('goto-home', () => {
-  killOldServer(); // vorher aufräumen
-  serverReady = false; // Server nicht bereit
-  if (serverProc) serverProc.kill(); // alten Prozess kill
-  serverProc = null; // alten Prozess auf null setzen
+    killOldServer(); // vorher aufräumen
+    serverReady = false; // Server nicht bereit
+    if (serverProc) serverProc.kill(); // alten Prozess kill
+    serverProc = null; // alten Prozess auf null setzen
 
-  win.loadFile(path.join(__dirname, '..', 'launcher', 'launcher.html'));
+    win.loadFile(path.join(__dirname, '..', 'launcher', 'launcher.html'));
 });
 
 
 // SERVER
 
 ipcMain.handle('start-server', async () => {
-  killOldServer();                        // vorher aufräumen
+    killOldServer();                        // vorher aufräumen
 
-  if (serverReady) return { ip: getIp(), port: PORT }; // läuft schon
-  if (serverProc) return { ip: getIp(), port: PORT }; // bootet gerade
+    if (serverReady) return { ip: getIp(), port: PORT }; // läuft schon
+    if (serverProc) return { ip: getIp(), port: PORT }; // bootet gerade
 
-  if (!(await portFree(PORT))) {                        // Port wirklich frei?
-    console.log('⚠️  Port 6060 schon belegt – überspringe Spawn');
-    serverReady = true;
-    return { ip: getIp(), port: PORT };
-  }
+    // const spin = ora({
+    //     text: 'Starting Express server …',
+    //     spinner: 'dots'           // oder 'bouncingBar', 'moon', …
+    // }).start();
 
-  /* ---- Spawn ------------------------------------------------ */
-  serverProc = spawn('node', ['server/server.js'], {
-    stdio: ['ignore', 'pipe', 'pipe']      // stdout & stderr als Stream
-  });
-
-  return new Promise((resolve, reject) => {
-    /* stdout überwachen */
-    serverProc.stdout.on('data', buf => {
-      const line = buf.toString().trim();
-      console.log('[Express]', line);
-      if (line.includes('http://')) {
+    if (!(await portFree(PORT))) {                        // Port wirklich frei?
+        // console.log('⚠️  Port 6060 schon belegt – überspringe Spawn');
+        log.warn('Port 6060 schon belegt - überspringe Spawn');
+        // spin.warn('Port 6060 schon belegt - überspringe Spawn');
         serverReady = true;
-        resolve({ ip: getIp(), port: PORT });
-      }
+        return { ip: getIp(), port: PORT };
+    }
+
+
+    /* ---- Spawn ------------------------------------------------ */
+    serverProc = spawn('node', ['server/server.js'], {
+        stdio: ['ignore', 'pipe', 'pipe'],      // stdout & stderr als Stream
+        env: { ...process.env, FORCE_COLOR: '1' }
     });
 
-    /* stderr überwachen */
-    serverProc.stderr.on('data', buf => {
-      const err = buf.toString().trim();
-      console.error('[Express‑ERR]', err);
-      if (err.includes('EADDRINUSE')) {
-        serverProc.kill();
-        serverProc = null;
-        reject(new Error('Port already in use'));
-      }
-    });
+    // serverProc.stdout.pipe(process.stdout);
 
-    serverProc.on('exit', code => {
-      if (!serverReady) reject(new Error('Server exited with code ' + code));
-    });
+    return new Promise((resolve, reject) => {
 
-    /* Timeout (10 s) */
-    setTimeout(() => {
-      if (!serverReady) {
-        serverProc.kill();
-        serverProc = null;
-        reject(new Error('Server start timeout'));
-      }
-    }, 10000);
-  });
+        let readyLogged = false;
+        /* stdout überwachen */
+        serverProc.stdout.on('data', buf => {
+            const line = buf.toString().trim();
+            // console.log('[Express]', line);
+            // log.ok(line.replace('✔', '🌐'));   // z.B. [Express] 20:50:26 🌐 Server started …
+            // log.raw(`[Express] ${line.replace('', '')}`);
+            // if (line.includes('Server started')) {
+            if (!readyLogged && line.includes('Server started')) {
+                // spin.succeed(' Server ready');
+                // spin.succeed(' Server ready');
+                log.raw(`[Express] ${line}`);
+                // log.ok(line.replace('✔', '🌐'))
+
+                serverReady = true;
+                readyLogged = true;
+                resolve({ ip: getIp(), port: PORT });
+                return;
+                // if (line.includes('http://')) {
+                //     serverReady = true;
+                //     resolve({ ip: getIp(), port: PORT });
+                // }
+            }
+            if (readyLogged) {                     // alles danach
+                log.raw(`[Express] ${line}`);
+            }
+        });
+
+        /* stderr überwachen */
+        serverProc.stderr.on('data', buf => {
+            const err = buf.toString().trim();
+            // console.error('[Express‑ERR]', err);
+            // spin.fail('Server error ❌');
+            log.err('Server error ❌');
+            console.error('[Express-ERR]', err);
+            if (err.includes('EADDRINUSE')) {
+                serverProc.kill();
+                serverProc = null;
+                reject(new Error('Port already in use'));
+            }
+        });
+
+        serverProc.on('exit', code => {
+            if (!serverReady) {
+                // spin.fail('Server exited');
+                log.err('Server exited');
+                reject(new Error('Server exited with code ' + code));
+            }
+        });
+
+        /* Timeout (10 s) */
+        setTimeout(() => {
+            if (!serverReady) {
+                serverProc.kill();
+                serverProc = null;
+                // spin.fail('Server start timeout');
+                log.err('Server start timeout');
+                reject(new Error('Server start timeout'));
+            }
+        }, 10000);
+    });
 });
 
 /* URL‑Wechsel */
 ipcMain.handle('open-url', (_e, url) => {
-  if (win) win.loadURL(url);
+    if (win) win.loadURL(url);
 });
 
 /* --------------------------------- Fenster ----------------- */
 function createWin() {
-  win = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true,
-      nodeIntegration: false
-    }
-  });
-  win.loadFile(path.join(__dirname, '../launcher/launcher.html'));
+    win = new BrowserWindow({
+        width: 1200,
+        height: 800,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true,
+            nodeIntegration: false
+        }
+    });
+    win.loadFile(path.join(__dirname, '../launcher/launcher.html'));
 }
 
 app.whenReady().then(createWin);
 
 app.on('window-all-closed', () => {
-  if (serverProc) serverProc.kill();
-  if (process.platform !== 'darwin') app.quit();
+    if (serverProc) serverProc.kill();
+    if (process.platform !== 'darwin') app.quit();
 });
+

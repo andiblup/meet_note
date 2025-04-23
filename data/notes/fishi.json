@@ -37,6 +37,9 @@
     }
   },
   {
+    "type": "hr"
+  },
+  {
     "type": "note",
     "text": "<pre class=\"language-python\" tabindex=\"0\"><code class=\"language-python\">​class doSomething</code></pre><p></p>",
     "style": {
@@ -106,5 +109,8 @@
       "color": "",
       "size": "3"
     }
+  },
+  {
+    "type": "hr"
   }
 ]

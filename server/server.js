@@ -55,8 +55,11 @@
 //   io.emit('settings-updated', req.body);            // Live‑Push
 //   res.json({ status: 'ok' });
 // });
-
-
+// const ora = require('ora');
+// const cliSpinners = require('cli-spinners');
+// const spinner = ora({ text:'Build …', spinner:cliSpinners.dots }).start();
+const log = require('../utils/logger.js');
+// const ora = require('ora');
 /* ------------------------------------------------------------------
  *  Meet_Note ‑ Express + Socket.IO Back‑End  (server/server.js)
  * -----------------------------------------------------------------*/
@@ -86,8 +89,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-const server = http.createServer(app);              // <‑‑ server (nicht srv)
+const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
+
+
 
 /* =================================================================
  *  NOTES  – CRUD  (eine Datei == ein JSON‑Array aus Blöcken)
@@ -173,7 +178,7 @@ app.delete('/api/file/:id', (req, res) => {
 /* =================================================================
  *  SETTINGS  – global persistentes JSON‑Objekt
  * =================================================================*/
-const DEFAULT_SETTINGS = { theme: 'light', autosave: 5000, primaryColor: '#FF422AD5' };
+const DEFAULT_SETTINGS = { theme: 'light', autosave: 5000, primaryColor: '#FF422AD5', tabSize: 4 };
 
 function readSettings() {
     try { return JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8')); }
@@ -200,13 +205,24 @@ app.get('/api/info', (_rq, res) => {
  * =================================================================*/
 io.on('connection', socket => {
     const addr = socket.handshake.address;
-    const time = new Date().toLocaleTimeString();
-    console.log(`[${time}] 🔵 Client joined  ${addr}  id:${socket.id}`);
+    // log.ok(` Client joined 🌐 ${addr}  id:${socket.id}`);
+    log.ok(` Client joined 🌐 ${addr}  id:${socket.id}`);
+    // const spinner = ora({text: ` Client joined 🌐 ${addr}  id:${socket.id}`, spinner: 'dots' }).start() 
+    // spinner.succeed(` Client joined 🌐 ${addr}  id:${socket.id}`);
 
     socket.on('disconnect', reason => {
-        const t = new Date().toLocaleTimeString();
-        console.log(`[${t}] 🔴 Client left    ${addr}  reason:${reason}`);
+        // log.err(` Client left   🚫 ${addr}  reason:${reason}`);
+        log.err(` Client left   🚫 ${addr}  reason:${reason}`);
+        // const spinner = ora({text: ` Client left 🚫 ${addr}  id:${socket.id}`, spinner: 'dots' }).start() 
+        // spinner.fail(` Client left   🚫 ${addr}  id:${socket.id}`);
     });
+    // const time = new Date().toLocaleTimeString();
+    // console.log(`[${time}] 🔵 Client joined  ${addr}  id:${socket.id}`);
+
+    // socket.on('disconnect', reason => {
+    //     const t = new Date().toLocaleTimeString();
+    //     console.log(`[${t}] 🔴 Client left    ${addr}  reason:${reason}`);
+    // });
 });
 
 /* ---------- Hilfs‑Funktionen ----------------------------------- */
@@ -229,8 +245,14 @@ function getRealLocalIp() {
     return any?.address || 'localhost';
 }
 
-/* ---------- Start ---------------------------------------------- */
-server.listen(PORT, '0.0.0.0', () =>
-    console.log(`🌐 http://${getRealLocalIp()}:${PORT}`)
-);
 
+/* ---------- Start ---------------------------------------------- */
+server.listen(PORT, '0.0.0.0', () => {
+    // console.log(`Server started at: http://${getRealLocalIp()}:${PORT}`)
+    // log.ok(` Server started at: http://${getRealLocalIp()}:${PORT}`)
+    log.ok(` Server started at: http://${getRealLocalIp()}:${PORT}`)
+    // console.log(` Server started at: http://${getRealLocalIp()}:${PORT}`)
+    // log.info(`ANANAS`)
+
+
+});

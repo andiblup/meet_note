@@ -30,6 +30,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+
+
     // 2) Theme‑Initialisierung
     let currentSettings;
     if (isElectron) {
@@ -39,8 +41,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Browser: localStorage oder prefers-color
         const ls = localStorage.getItem('theme');
         const theme = ls || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        currentSettings = { theme, autosave: null, primaryColor: '#FF422AD5' };
+        const tabSize = Number(localStorage.getItem('tabSize') ?? 4);
+        const primaryColor = localStorage.getItem('primaryColor') || '#FF422AD5';
+        document.documentElement.style.setProperty('--color-primary', primaryColor);
+        currentSettings = { theme, autosave: null, primaryColor: primaryColor, tabSize: tabSize };
     }
+
+    // x) Tabgröße
+    const tabSize = isElectron
+        ? (currentSettings.tabSize ?? 4)
+        : Number(localStorage.getItem('tabSize') ?? 4);
+    document.getElementById('inpTabSize').value = tabSize;
+
+
+
+    // Speichern in Electron
+    // if (isElectron) {
+    //     document.getElementById('btnSaveSettings')
+    //         .addEventListener('click', async () => {
+    //             const newSettings = {
+    //                 // … vorhandene Felder …
+    //                 tabSize: Number(document.getElementById('inpTabSize').value) || 4
+    //             };
+    //             await window.electronAPI.saveSettings(newSettings);
+    //             document.getElementById('settingsToggle').checked = false;
+    //         });
+    // }
 
     // Drawer-Kontrollen füllen
     document.documentElement.setAttribute('data-theme', currentSettings.theme);
@@ -61,13 +87,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.documentElement.setAttribute('data-theme', t);
     });
 
+
     if (isElectron) {
         // Speichern nur in Electron
         document.getElementById('btnSaveSettings').addEventListener('click', async () => {
             const newSettings = {
                 theme: document.getElementById('chkDark').checked ? 'dark' : 'light',
                 autosave: Number(document.getElementById('inpAutosave').value) || 5000,
-                primaryColor: document.getElementById('argbOutput').value
+                primaryColor: document.getElementById('argbOutput').value || currentSettings.primaryColor,
+                tabSize: Number(document.getElementById('inpTabSize').value) || 4
             };
             await window.electronAPI.saveSettings(newSettings);
             document.getElementById('settingsToggle').checked = false;
@@ -85,6 +113,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             localStorage.setItem('primaryColor', document.getElementById('argbOutput').value);
             getComputedStyle(document.documentElement).setProperty('--color-primary', document.getElementById('argbOutput').value);
         });
+        // Event-Handler  ➜  sofortige Persistenz im Browser
+        document.getElementById('inpTabSize').addEventListener('input', e => {
+            const v = Math.max(1, Math.min(8, +e.target.value || 4));
+            if (!isElectron) localStorage.setItem('tabSize', v);
+        });
+
     }
 
 });

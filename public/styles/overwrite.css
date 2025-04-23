@@ -1,4 +1,18 @@
-
 .select {
-    max-width: 160px!important;
+    max-width: 160px !important;
+}
+
+/* Tabellen */
+.meet-table {
+    table-layout: fixed;
+    width: 100%;
+}
+.meet-table td,
+.meet-table th {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+.meet-table td:focus,
+.meet-table th:focus {
+    outline: 2px solid var(--color-primary);
 }
