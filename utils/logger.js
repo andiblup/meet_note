@@ -1,11 +1,47 @@
-const chalk   = require('chalk');
+const chalk = require('chalk');
 const symbols = require('log-symbols');
 
-const ts = () => chalk.gray(new Date().toLocaleTimeString());
-
-function base(colorFn, icon, args) {
-    console.log(`${ts()} ${icon} ${colorFn(...args)}`);
+// const ts = () => chalk.gray(new Date().toLocaleTimeString());
+function ts() {
+    const raw = new Date().toLocaleTimeString();        // 22:20:42
+    return raw
+        .replace(/\d+/g, d => chalk.magenta(d))          // Ziffern pink
+        .replace(/:/g, ':' + chalk.gray(''));           // ':' grau (wirkt nur einmal)
 }
+
+function workaround(arguments){
+    return arguments.replace(/\b(Server|Client)\b/gi, t => chalk.keyword('orange')(t)) // Server / Client orange
+    .replace(/\b\d{1,3}(?:\.\d{1,3}){3}\b/g, ip => chalk.magenta(ip)); // IPv4-Adressen pink
+}
+
+let onceFullColored = false;
+function base(colorFn, icon, args) {
+
+
+    // console.log("newArgs");
+    // console.log(newArgs);
+
+
+    // console.log(`${ts()} ${icon} ${colorFn(...args)}`);
+    if (!onceFullColored) {
+        //! BUG: First arg cant be modified, this line needs to get executed
+        console.log(`${ts()} ${icon} ${colorFn(...args)}`);
+        // const nA = args.join(' ');
+        // console.log(`${ts()} ${icon} ${workaround(args)}`);
+
+
+        onceFullColored = true;
+    }
+    else {
+
+        let newArgs = args.join(' ')
+            .replace(/\b(Server|Client)\b/gi, t => chalk.keyword('orange')(t)) // Server / Client orange
+            .replace(/\b\d{1,3}(?:\.\d{1,3}){3}\b/g, ip => chalk.magenta(ip)); // IPv4-Adressen pink
+        console.log(`${ts()} ${icon} ${newArgs}`);
+        // console.log(`${ts()} ${colorFn(icon)} ${newArgs}`);
+    }
+}
+
 
 module.exports = {
     ok: (...m) => base(chalk.green, symbols.success, m),
@@ -14,7 +50,8 @@ module.exports = {
     err: (...m) => base(chalk.red, symbols.error, m),
 
     /** Zeile unverändert durchreichen (bereits formatiert) */
-    raw: line => console.log(line)
+    raw: line => console.log(line),
+    // special: line => baseMod(chalk.green, symbols.success, line),
 };
 
 // // utils/logger.js  – CommonJS, Color-Mix

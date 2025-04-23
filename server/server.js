@@ -250,6 +250,7 @@ function getRealLocalIp() {
 server.listen(PORT, '0.0.0.0', () => {
     // console.log(`Server started at: http://${getRealLocalIp()}:${PORT}`)
     // log.ok(` Server started at: http://${getRealLocalIp()}:${PORT}`)
+    // log.ok(` Server started at: http://${getRealLocalIp()}:${PORT}`)
     log.ok(` Server started at: http://${getRealLocalIp()}:${PORT}`)
     // console.log(` Server started at: http://${getRealLocalIp()}:${PORT}`)
     // log.info(`ANANAS`)
