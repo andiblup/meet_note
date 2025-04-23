@@ -14,4 +14,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   openURL:      url => ipcRenderer.invoke('open-url', url),
   getSettings:  () => ipcRenderer.invoke('get-settings'),
   saveSettings: settings => ipcRenderer.invoke('save-settings', settings),
+  gotoHome: () => ipcRenderer.invoke('goto-home'),
 });

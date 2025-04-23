@@ -78,6 +78,8 @@ function readSettings() {
 //   return { ok:true };
 // });
 
+// SETTING
+
 ipcMain.handle('get-settings', () => {
   return readSettings(); // liest settings.json
 });
@@ -86,6 +88,19 @@ ipcMain.handle('save-settings', (_evt, settings) => {
   return { ok: true };
 });
 
+// View Handling
+
+ipcMain.handle('goto-home', () => {
+  killOldServer(); // vorher aufräumen
+  serverReady = false; // Server nicht bereit
+  if (serverProc) serverProc.kill(); // alten Prozess kill
+  serverProc = null; // alten Prozess auf null setzen
+
+  win.loadFile(path.join(__dirname, '..', 'launcher', 'launcher.html'));
+});
+
+
+// SERVER
 
 ipcMain.handle('start-server', async () => {
   killOldServer();                        // vorher aufräumen

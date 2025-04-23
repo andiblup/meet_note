@@ -68,6 +68,7 @@
 
             <div id="toolbar" class="flex flex-wrap gap-2 items-center">
 
+                <button id="btnLeave" class="btn btn-sm btn-ghost hidden"><i class="bx bx-exit"></i></button>
                 <label for="sideToggle" class="btn btn-square btn-ghost"><i class='bx bx-folder'></i></label>
                 <button id="btnSettings" class="btn btn-ghost btn-sm"><i class='bx bx-cog'></i></button>
                 <button id="btnNote" class="btn btn-sm btn-ghost btn-active"><i class='bx bx-note'></i></button>
@@ -467,6 +468,18 @@
 
     </div>
 
+    <!-- If is Electron calls -->
+    <script>
+        const isElectron = !!window.electronAPI;
+        if (isElectron) document.getElementById('btnLeave').classList.remove('hidden');
+
+        document.getElementById('btnLeave')?.addEventListener('click', () => {
+            if (confirm('Session beenden und zurück zum Startmenü?')) {
+                window.electronAPI.gotoHome();        // ipcMain-Handler in main.js
+            }
+        });
+    </script>
+
     <script>
         // ----------- 1) Parse-Funktion für OKLCH-CSS-Syntax -------------
         function parseOKLCH(css) {
@@ -593,7 +606,7 @@
     </script>
 
 
-<!-- EDITOR & Toolbar Verhalten -->
+    <!-- EDITOR & Toolbar Verhalten -->
     <script>
         (async () => {
             const socket = io();
