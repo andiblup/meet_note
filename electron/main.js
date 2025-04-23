@@ -144,7 +144,7 @@ ipcMain.handle('start-server', async () => {
             // log.ok(line.replace('✔', '🌐'));   // z.B. [Express] 20:50:26 🌐 Server started …
             // log.raw(`[Express] ${line.replace('', '')}`);
             // if (line.includes('Server started')) {
-            if (!readyLogged && line.includes('Server started')) {
+            if (!readyLogged) {
                 // spin.succeed(' Server ready');
                 // spin.succeed(' Server ready');
                 log.raw(`[Express] ${line}`);

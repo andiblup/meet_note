@@ -9,12 +9,21 @@ function ts() {
         .replace(/:/g, ':' + chalk.gray(''));           // ':' grau (wirkt nur einmal)
 }
 
-function workaround(arguments){
+function colorize(arguments){
     return arguments.replace(/\b(Server|Client)\b/gi, t => chalk.keyword('orange')(t)) // Server / Client orange
-    .replace(/\b\d{1,3}(?:\.\d{1,3}){3}\b/g, ip => chalk.magenta(ip)); // IPv4-Adressen pink
+    .replace(/\b\d{1,3}(?:\.\d{1,3}){3}\b/g, ip => chalk.magenta(ip)) // IPv4-Adressen pink
+    .replace('reason:', chalk.cyan('reason:'))
+    .replace('http://', chalk.grey('http://'))
+    .replace(/:\d+/g, t => chalk.grey(t))
+    .replace('started at:', chalk.white('started at:'))
+    .replace('joined', chalk.green('joined'))
+    .replace('left', chalk.red('left'))
+    .replace('id:', chalk.cyan('id:'));
+    // num_dash after id: or reason:
 }
 
-let onceFullColored = false;
+// let onceFullColored = false;
+let onceFullColored = true;
 function base(colorFn, icon, args) {
 
 
@@ -22,24 +31,21 @@ function base(colorFn, icon, args) {
     // console.log(newArgs);
 
 
-    // console.log(`${ts()} ${icon} ${colorFn(...args)}`);
-    if (!onceFullColored) {
-        //! BUG: First arg cant be modified, this line needs to get executed
-        console.log(`${ts()} ${icon} ${colorFn(...args)}`);
-        // const nA = args.join(' ');
-        // console.log(`${ts()} ${icon} ${workaround(args)}`);
+    // if (!onceFullColored) {
+    //     //! BUG: First arg cant be modified, this line needs to get executed
+    //     console.log(`${ts()} ${icon} ${colorFn(...args)}`);
 
 
-        onceFullColored = true;
-    }
-    else {
+    //     onceFullColored = true;
+    // }
+    // else {
 
-        let newArgs = args.join(' ')
-            .replace(/\b(Server|Client)\b/gi, t => chalk.keyword('orange')(t)) // Server / Client orange
-            .replace(/\b\d{1,3}(?:\.\d{1,3}){3}\b/g, ip => chalk.magenta(ip)); // IPv4-Adressen pink
-        console.log(`${ts()} ${icon} ${newArgs}`);
-        // console.log(`${ts()} ${colorFn(icon)} ${newArgs}`);
-    }
+        // let newArgs = args.join(' ')
+        //     .replace(/\b(Server|Client)\b/gi, t => chalk.keyword('orange')(t)) // Server / Client orange
+        //     .replace(/\b\d{1,3}(?:\.\d{1,3}){3}\b/g, ip => chalk.magenta(ip)); // IPv4-Adressen pink
+        // console.log(`${ts()} ${icon} ${newArgs}`);
+        console.log(`${ts()} ${icon} ${colorize(args.join(' '))}`);
+    // }
 }
 
 
