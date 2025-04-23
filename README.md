@@ -75,22 +75,32 @@ Eine moderne, sichere, modulare Netzwerk-Notiz-App für Meetings, Projekte und T
 
 ### Phase 2: Editor-Funktionalität
 
-- [ ] File Explorer & Dokumentbasierte Speicherung
+- [x] File Explorer & Dokumentbasierte Speicherung
 - [ ] Responsive/Fluid Design
-- [ ] Basis Editor (Bold, Italic, etc.)
-- [ ] Code-Block + Prism.js Syntax Highlighting
+- [x] Basis Editor (Bold, Italic, etc.)
+- [~] Code-Block + Prism.js Syntax Highlighting
 - [x] Theme Switching Light/Dark
 - [~] Settings System
-- [ ] Persistente Einstellungen
-- [ ] Live-Autosave
+- [x] Persistente Einstellungen
+- [x] Live-Autosave
 - [ ] Feedback dass ein User gerade diese Notiz bearbeitet
 - [ ] UI/UX Verbesserungen, Accessability und Text Bearbeitung
+- [ ] App, Session beenden zurück zum Hauptmenü
+- [ ] Tabellen-Editor (Einfügen, Zeilen/Spalten hinzufügen/löschen)
+- [ ] unordered und ordered list einfügen implementieren
+- [ ] Fullscreen
+- [ ] Modifikation Top Electron bar oder disable
+- [ ] einbetten Von Inhalten, IFrame, Bild, Gif
+- [ ] hr in note und hr block
+- [ ] Emoji-Paneel
 
 ### Phase 3: Sicherheit & Rollen
 
 - [ ] Passwortgeschützter Zugang
 - [ ] Benutzer-/Dateiverwaltung
 - [ ] Verschlüsselte Übertragung (WSS/HTTPS)
+- [ ] Impressum und Privacy Policy
+- [ ] Zulassen blockieren app zugang zu normalem web? Derweil kann man in electron jede webseite aufsuchen
 
 ### Phase 4: Export/Backup
 
@@ -112,15 +122,66 @@ Eine moderne, sichere, modulare Netzwerk-Notiz-App für Meetings, Projekte und T
 
 ### Phase Agil: UI/UX
 
-- [ ] Icon System
+- [x] Icon System :arrow_right: Boxicons
 - [ ] UI/UX Verbesserungen :arrow_right: Frontend/Design Finalisierung
+
+### Phase: Lizenzierung
+
+- [ ] Logik für Aufteilung und Freischaltung der Por und Free Version
+- [ ] In App implementierung zu Zahlungsmitteln, evtl. Routing zu Produkt Webside
+- [ ] Account System, ein User zahlt im Monat für Account (Pro auf jedem Gerät) (Monatlich)
+- [ ] Key System für Profreischaltung pro Gerät (Einmalig) 
+- [ ] Spendensystem, Firmenbanner Einbettung auf Homepage
 
 ### Phase Experimentell: Nice to haves
 
-- [ ] Webserver Deployment (Relay Server, CDN, Client selber host Möglichkeit), verbindung über Webserver(Node) URL, ohne Electron node node server.js
+- [ ] Webserver Deployment (Relay Server, CDN, Client selber host Möglichkeit), verbindung über Webserver(Node) URL, ohne Electron launch nur server.js
 - [ ] SQLite3 statt dokumentenbasiertes Speichern
 
+### UI Erweiterungen nach view
 
+#### Hauptmenü
+- [ ] Über Meet Note
+- [ ] Auf Updates prüfen (erst spät)
+- [ ] Plugins (erst spät, wenn überhaupt)
+
+
+---
+
+## Lizenzmodell und Releaseplan
+
+### Möglichkeit 1: Free und Premiumware
+
+#### Freeware
+
+- Kein Export
+  - Kein OneNote Export
+  - Kein PDF Export?
+- 
+
+#### Premium
+
+- Zusätzliche UI Funktionen
+  - 
+- Backup/Restore
+- Passwortgeschützter Zugang
+- Passwortschutz und ausblenden von Files
+- LAN-Scan (automatische Suche nach laufenden Meet-Note-Instanzen)
+- Deploy mit URL statt IP:PORT + Firewall-Test / Port-Forwarding-Hilfe
+- Suchen und Ersetzen in File und allen Files
+- Installation spezifischer Version
+- Export OneNote, Markdown, PDF?
+- Import Markdown
+- Änderungsverfolgung (Track Changes)
+- Kommentarfunktion (In-Text Kommentare, To-Dos)
+- Cloud-Sync (Dropbox, Google Drive, OneDrive)
+
+#### Freie Firmenlizenz
+- Einmalige hohe Bezahlung
+- Sourcecode Zugang
+- Erlauben der Weiterentwicklung
+- Dokumentation
+- Weitervergabe der Software innerhalb des Unternehmens
 
 altes build css 
 ```json

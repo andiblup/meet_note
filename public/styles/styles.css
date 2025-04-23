@@ -5,9 +5,22 @@
 
 @layer components {
     select.select:focus {
-      @apply outline-none ring-0 border-primary;
+        @apply outline-none ring-0 border-primary;
     }
-  }
+}
+
+@layer utilities {
+    .swatch-ring {
+        @apply ring-2 ring-offset-1 ring-primary;
+    } /* Auswahl-Markierung   */
+    .swatch-size {
+        @apply w-6 h-6;
+    } /* 1,5 rem × 1,5 rem     */
+    .swatch-base {
+        @apply rounded-none border border-base-200
+                               cursor-pointer inline-block p-0;
+    } /* Grundoptik            */
+}
 
 .sticky {
     position: -webkit-sticky;

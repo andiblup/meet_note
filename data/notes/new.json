@@ -1,0 +1,20 @@
+[
+  {
+    "type": "note",
+    "text": "<b>ananas</b><div><b><br></b></div>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  }
+]

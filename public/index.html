@@ -15,6 +15,7 @@
     <!-- <link href="../node_modules/prismjs/components/prism-java.min.js" rel="stylesheet"> -->
 
 
+
 </head>
 
 <body class="bg-base-200 min-h-screen flex">
@@ -231,7 +232,7 @@
                 <select id="selBackColor" class="select select-sm" title="Hintergrund‑Farbe">
                     <option value="">Hintergrund</option>
                     <optgroup label="slate">
-                        <option value="#cbd5e1">■ slate-300</option>
+                        <option value="#cbd5e1" style="background:#cbd5e1; color:#111827">■ slate-300</option>
                         <option value="#64748b">■ slate-500</option>
                         <option value="#0f172a">■ slate-700</option>
                     </optgroup>
@@ -321,11 +322,12 @@
                         <option value="#9d174d">■ pink-700</option>
                     </optgroup>
                     <optgroup label="rose">
-                        <option value="#fecdd3">■ rose-300</option>
+                        <option value="#fecdd3"><span>rose-300</span></option>
                         <option value="#f43f5e">■ rose-500</option>
                         <option value="#881337">■ rose-700</option>
                     </optgroup>
                 </select>
+
 
                 <div class="divider divider-horizontal m-0"></div>
 
@@ -350,16 +352,7 @@
                 <button id="btnCodeFence" class="btn btn-sm btn-ghost" title="Code‑Block"><i
                         class="bx bx-code"></i></button>
 
-                <!-- <div class="divider divider-horizontal m-0"></div> -->
-
-
             </div>
-
-            <!-- <div class="divider divider-horizontal m-0"></div>
-
-            <div id="info" class="text-sm opacity-70 ml-auto"></div>
-            <button id="btnSettings" class="btn btn-ghost btn-sm"><i class='bx bx-cog'></i></button> -->
-            <!-- <button id="btnSettings" class="btn btn-ghost btn-sm">⚙️</button> -->
         </nav>
 
         <!-- Settings Drawer -->
@@ -389,7 +382,7 @@
 
                 <div id="autosaveControl" class="form-control w-full">
                     <div class="label"><span class="label-text"><i class='bx bx-save'></i>Autosave (ms)</span></div>
-                    
+
                     <input id="inpAutosave" type="number" step="500" min="500" class="input input-bordered w-full" />
                 </div>
 
@@ -397,7 +390,7 @@
                     <label class="label">
                         <span class="label-text">Primary‑Farbe</span>
                     </label>
-                    
+
                     <button class="btn btn-primary" onclick="primaryColorPickModal.showModal()">Farbe wählen</button>
                     <button id="btnResetPrimaryColor" class="btn btn-outline btn-warning w-full">Reset Farbe</button>
 
@@ -406,11 +399,11 @@
                 <button id="btnSaveSettings" class="btn btn-primary w-full mt-4"><i class='bx bxs-save'></i></button>
             </div>
         </div>
-        
+
         <dialog id="primaryColorPickModal" class="modal">
             <form method="dialog" class="modal-box space-y-4">
                 <h3 class="text-lg font-bold">ARGB Picker</h3>
-                
+
                 <div class="space-y-2">
                     <div class="flex items-center">
                         <label class="w-16">Rot:</label>
@@ -446,61 +439,6 @@
                 </div>
             </form>
         </dialog>
-                <!-- <div class="form-control">
-                    <button id="btnGetColor" class="btn btn-sm btn-ghost">getP</button>
-                </div>
-
-                <div class="form-control">
-                    <label class="label"><span class="label-text">Primary‑Farbe</span></label>
-                    <button class="btn btn-primary" onclick="primaryColorPickModal.showModal()">Farbe wählen</button>
-                </div>
-
-                <button id="btnResetPrimaryColor" class="btn btn-outline btn-warning w-full">Reset Farbe</button>
-
-                <button id="btnSaveSettings" class="btn btn-primary w-full mt-4"><i class='bx bxs-save'></i>
-                    Speichern</button>
-            </div>
-        </div>
-
-        <dialog id="primaryColorPickModal" class="modal">
-            <form method="dialog" class="modal-box space-y-4">
-                <h3 class="text-lg font-bold">ARGB Picker</h3>
-                <div class="space-y-2">
-                    <div class="flex items-center">
-                        <label class="w-16">Rot:</label>
-                        <input id="r" type="range" min="0" max="255" class="range range-red-500 flex-1">
-                        <span id="rVal" class="w-12 text-right"></span>
-                    </div>
-                    <div class="flex items-center">
-                        <label class="w-16">Grün:</label>
-                        <input id="g" type="range" min="0" max="255" class="range range-green-500 flex-1">
-                        <span id="gVal" class="w-12 text-right"></span>
-                    </div>
-                    <div class="flex items-center">
-                        <label class="w-16">Blau:</label>
-                        <input id="b" type="range" min="0" max="255" class="range range-blue-500 flex-1">
-                        <span id="bVal" class="w-12 text-right"></span>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <label class="w-16">Alpha:</label>
-                    <input id="a" type="range" min="0" max="1" step="0.01" class="range range-primary flex-1">
-                    <span id="aVal" class="w-12 text-right"></span>
-                </div>
-                <div>
-                    <label class="label"><span class="label-text">Vorschau:</span></label>
-                    <div id="preview" class="w-full h-16 border rounded"></div>
-                </div>
-                <div>
-                    <label class="label"><span class="label-text">ARGB Hex:</span></label>
-                    <input id="argbOutput" type="text" readonly class="input input-bordered w-full" />
-                </div>
-                <div class="modal-action">
-                    <button id="closeARGBPickerModal" type="submit" class="btn btn-primary">Schließen</button>
-                </div>
-            </form>
-        </dialog> -->
-
 
         <!-- Editor -->
         <!-- contenteditable="true" -->
@@ -525,15 +463,7 @@
                 </form>
             </dialog>
 
-            <!-- <div role="alert" class="alert alert-info">
-                <span>New software update available.</span>
-            </div> -->
-
         </main>
-
-        <!-- <div role="alert" class="alert alert-success">
-            <span>New software update available.</span>
-          </div> -->
 
     </div>
 
@@ -607,21 +537,7 @@
                 }
             });
         });
-        // rIn.addEventListener('input', () => {
-        //     rIn.style.setProperty('--range-progress', `rgb(${rIn.value}, 0, 0)`);
-        // });
 
-        // gIn.addEventListener('input', () => {
-        //     gIn.style.setProperty('--range-progress', `rgb(0, ${gIn.value}, 0)`);
-        // });
-
-        // bIn.addEventListener('input', () => {
-        //     bIn.style.setProperty('--range-progress', `rgb(0, 0, ${bIn.value})`);
-        // });
-
-        // aIn.addEventListener('input', () => {
-        //     aIn.style.setProperty('--range-progress', `rgba(0, 0, 0, ${aIn.value})`);
-        // });
         function update() {
             const r = +rIn.value, g = +gIn.value, b = +bIn.value, a = +aIn.value;
             Object.entries({ r, g, b, a }).forEach(([k, v]) => {
@@ -676,6 +592,8 @@
         });
     </script>
 
+
+<!-- EDITOR & Toolbar Verhalten -->
     <script>
         (async () => {
             const socket = io();
@@ -879,35 +797,6 @@
                     }, 0);
                 });
 
-                // btnCodeFence.addEventListener('click', () => {
-                //     const lang = selCodeLang.value; // z.B. "language-java"
-                //     const html = `
-                //         <pre tabindex="0" class="${lang}">
-                //         <code class="${lang}"></code>
-                //         </pre><p></p>
-                //     `;
-                //     // HTML einfügen
-                //     document.execCommand('insertHTML', false, html);
-
-                //     // Kurz warten, dann highlighten und Cursor setzen
-                //     setTimeout(() => {
-                //         Prism.highlightAll();
-                //         const codes = Array.from(document.querySelectorAll(`pre.${lang} > code.${lang}`));
-                //         const codeEl = codes.find(c => c.textContent.includes('\u200B'));
-                //         if (codeEl) {
-                //             codeEl.textContent = '';
-                //             const range = document.createRange();
-                //             range.selectNodeContents(codeEl);
-                //             range.collapse(true);
-                //             const sel = window.getSelection();
-                //             sel.removeAllRanges();
-                //             sel.addRange(range);
-                //             codeEl.focus();
-                //         }
-                //     }, 0);
-                // });
-
-
                 document.addEventListener('selectionchange', updateToolbarState);
                 updateToolbarState();
             }
@@ -1055,673 +944,6 @@
 
         })();
     </script>
-
-
-    <!-- <script>
-        (async () => {
-            const socket = io();
-            let currentFile = null, blocks = [];
-
-            // STATE für neue Blocks
-            const state = { mode: 'note', bold: false, color: '', size: '3', lang: 'language-javascript' };
-            const sizeClass = {
-                '1': 'text-xs',
-                '2': 'text-sm',
-                '3': 'text-base',
-                '4': 'text-lg',
-                '5': 'text-xl',
-                '6': 'text-2xl'
-            };
-
-            // ELEMENT‑REFERENCES
-            const fileList = document.getElementById('fileList');
-            const newFileInput = document.getElementById('newFileName');
-            const btnAdd = document.getElementById('btnAdd');
-            const btnRename = document.getElementById('btnRename');
-            const btnDelete = document.getElementById('btnDelete');
-            const blockArea = document.getElementById('blockArea');
-            const btnNote = document.getElementById('btnNote');
-            const btnCheck = document.getElementById('btnCheck');
-            const btnCode = document.getElementById('btnCode');
-            const btnAddBlock = document.getElementById('btnAddBlock');
-
-            // TOOLBAR‑ELEMENTS
-            const toolbarBtns = document.querySelectorAll('#toolbar [data-cmd]');
-            const selHeading = document.getElementById('selHeading');
-            const selFontSize = document.getElementById('selFontSize');
-            const selForeColor = document.getElementById('selForeColor');
-            const selBackColor = document.getElementById('selBackColor');
-            const selCodeLang = document.getElementById('selCodeLang');
-            const btnCodeFence = document.getElementById('btnCodeFence');
-            const btnCheckboxList = document.getElementById('btnCheckboxList');
-
-            // ─── FILE‑EXPLORER ─────────────────────────────────────────────────────────
-
-            async function refreshFileList() {
-                const files = await fetch('/api/files').then(r => r.json());
-                fileList.innerHTML = '';
-                files.forEach(name => {
-                    const li = document.createElement('li');
-                    const a = document.createElement('a');
-                    a.textContent = name;
-                    a.className = 'block truncate cursor-pointer';
-                    if (name === currentFile) a.classList.add('active');
-                    a.onclick = () => openFile(name);
-                    li.append(a);
-                    fileList.append(li);
-                });
-            }
-
-            function setupFileExplorer() {
-                btnAdd.onclick = async () => {
-                    const n = newFileInput.value.trim(); if (!n) return;
-                    await fetch(`/api/file/${n}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '[]' });
-                    newFileInput.value = '';
-                    await refreshFileList();
-                };
-                btnRename.onclick = () => {
-                    if (!currentFile) return alert('Keine Datei ausgewählt');
-                    const a = fileList.querySelector('a.active');
-                    enableInlineRename(a.parentElement, currentFile);
-                };
-                btnDelete.onclick = async () => {
-                    if (!currentFile || !confirm('Löschen?')) return;
-                    await fetch(`/api/file/${currentFile}`, { method: 'DELETE' });
-                    currentFile = null; blocks = []; renderBlocks();
-                    await refreshFileList();
-                };
-                socket.on('file-updated', name => { if (name === currentFile) openFile(name); });
-                socket.on('file-deleted', name => {
-                    if (name === currentFile) { currentFile = null; blocks = []; renderBlocks(); }
-                    refreshFileList();
-                });
-            }
-
-            async function openFile(name) {
-                currentFile = name;
-                blocks = await fetch(`/api/file/${name}`)
-                    .then(r => r.ok ? r.json() : []);
-                renderBlocks();
-                await refreshFileList();
-            }
-
-            function enableInlineRename(li, oldName) {
-                if (li.querySelector('input')) return;
-                const a = li.querySelector('a');
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.value = oldName;
-                input.className = 'input input-bordered w-full';
-                li.replaceChild(input, a);
-                input.select();
-
-                function cleanup() {
-                    input.removeEventListener('keydown', onEnter);
-                    input.removeEventListener('blur', onBlur);
-                }
-                function restore(name) {
-                    const a2 = document.createElement('a');
-                    a2.textContent = name;
-                    a2.className = 'block truncate cursor-pointer';
-                    if (name === currentFile) a2.classList.add('active');
-                    a2.onclick = () => openFile(name);
-                    li.replaceChild(a2, input);
-                }
-                async function onEnter(e) {
-                    if (e.key === 'Enter') {
-                        cleanup();
-                        const newName = input.value.trim() || oldName;
-                        if (newName !== oldName) {
-                            await fetch(`/api/file/${oldName}`, {
-                                method: 'PUT',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ _rename: newName })
-                            });
-                            if (currentFile === oldName) currentFile = newName;
-                        }
-                        restore(newName);
-                        refreshFileList();
-                    }
-                    if (e.key === 'Escape') {
-                        cleanup();
-                        restore(oldName);
-                    }
-                }
-                function onBlur() {
-                    setTimeout(() => {
-                        if (li.contains(input)) {
-                            cleanup();
-                            restore(oldName);
-                        }
-                    }, 0);
-                }
-
-                input.addEventListener('keydown', onEnter);
-                input.addEventListener('blur', onBlur);
-            }
-
-            // ─── TOOLBAR (execCommand) ──────────────────────────────────────────────────
-
-            function setupToolbar() {
-                toolbarBtns.forEach(btn => {
-                    // Fokus behalten
-                    btn.addEventListener('mousedown', e => e.preventDefault());
-                    btn.addEventListener('click', () => {
-                        document.execCommand(btn.dataset.cmd, false, null);
-                        updateToolbarState();
-                    });
-                });
-
-                selHeading.addEventListener('change', () => document.execCommand('formatBlock', false, selHeading.value));
-                selFontSize.addEventListener('change', () => document.execCommand('fontSize', false, selFontSize.value));
-                selForeColor.addEventListener('change', () => document.execCommand('foreColor', false, selForeColor.value));
-                selBackColor.addEventListener('change', () => {
-                    const cmd = document.queryCommandSupported('hiliteColor') ? 'hiliteColor' : 'backColor';
-                    document.execCommand(cmd, false, selBackColor.value);
-                });
-
-                btnCheckboxList.addEventListener('click', () => {
-                    document.execCommand('insertHTML', false,
-                        '<ul><li><input type="checkbox"> </li></ul><p></p>');
-                });
-
-                document.querySelector('[data-cmd="insertHorizontalRule"]')
-                    .addEventListener('click', () => document.execCommand('insertHorizontalRule'));
-
-                btnCodeFence.addEventListener('click', () => {
-                    const lang = selCodeLang.value;
-                    const html = `<pre><code contenteditable="true" class="${lang}">\u200B</code></pre><p></p>`;
-                    document.execCommand('insertHTML', false, html);
-                    setTimeout(() => {
-                        Prism.highlightAll();
-                        const codes = Array.from(document.querySelectorAll(`pre code.${lang}`));
-                        const codeEl = codes.find(c => c.textContent.includes('\u200B'));
-                        if (codeEl) {
-                            codeEl.textContent = '';
-                            const range = document.createRange();
-                            range.selectNodeContents(codeEl);
-                            range.collapse(true);
-                            const sel = window.getSelection();
-                            sel.removeAllRanges();
-                            sel.addRange(range);
-                            codeEl.focus();
-                        }
-                    }, 0);
-                });
-
-                document.addEventListener('selectionchange', updateToolbarState);
-                updateToolbarState();
-            }
-
-            function updateToolbarState() {
-                toolbarBtns.forEach(b => {
-                    document.queryCommandState(b.dataset.cmd)
-                        ? b.classList.add('btn-active')
-                        : b.classList.remove('btn-active');
-                });
-                selHeading.value = (document.queryCommandValue('formatBlock') || 'p').toLowerCase();
-                selFontSize.value = document.queryCommandValue('fontSize') || '3';
-            }
-
-            // ─── BLOCK EDITOR ──────────────────────────────────────────────────────────
-
-            function setupEditor() {
-                btnNote.onclick = () => selectMode('note', btnNote);
-                btnCheck.onclick = () => selectMode('check', btnCheck);
-                btnCode.onclick = () => selectMode('code', btnCode);
-                btnAddBlock.onclick = addBlock;
-                blockArea.addEventListener('dblclick', e => {
-                    if (e.target === blockArea) addBlock();
-                });
-            }
-
-            function selectMode(m, btn) {
-                state.mode = m;
-                [btnNote, btnCheck, btnCode, btnAddBlock].forEach(b => b.classList.remove('btn-active'));
-                btn.classList.add('btn-active');
-            }
-
-            function addBlock() {
-                let b;
-                if (state.mode === 'note') {
-                    b = { type: 'note', text: '', style: { bold: state.bold, color: state.color, size: state.size } };
-                } else if (state.mode === 'check') {
-                    b = { type: 'check', text: '', checked: false };
-                } else {
-                    b = { type: 'code', code: '', lang: state.lang = selCodeLang.value };
-                }
-                blocks.push(b);
-                renderBlocks();
-                save();
-            }
-
-            async function save() {
-                if (!currentFile) return;
-                await fetch(`/api/file/${currentFile}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(blocks)
-                });
-            }
-
-            function renderBlocks() {
-                blockArea.innerHTML = '';
-                blocks.forEach((b, i) => {
-                    const wrap = document.createElement('div');
-                    wrap.className = 'p-2 bg-base-100 rounded shadow flex gap-2';
-                    wrap.draggable = true;
-                    wrap.ondragstart = e => e.dataTransfer.setData('text', i);
-                    wrap.ondrop = e => { e.preventDefault(); moveBlock(+e.dataTransfer.getData('text'), i); };
-                    wrap.ondragover = e => e.preventDefault();
-
-                    if (b.type === 'note') {
-                        const d = makeEditable(b.text, v => { b.text = v; debounceSave(); });
-                        if (b.style.bold) d.classList.add('font-bold');
-                        if (b.style.color) d.style.color = b.style.color;
-                        d.classList.add(sizeClass[b.style.size] || 'text-base');
-                        wrap.append(d);
-                    }
-                    else if (b.type === 'check') {
-                        const cb = document.createElement('input');
-                        cb.type = 'checkbox';
-                        cb.checked = b.checked;
-                        cb.onchange = () => { b.checked = cb.checked; save(); };
-                        const d = makeEditable(b.text, v => { b.text = v; });
-                        if (b.checked) d.classList.add('line-through');
-                        wrap.append(cb, d);
-                    }
-                    else {
-                        const pre = document.createElement('pre');
-                        const code = document.createElement('code');
-                        code.className = b.lang;
-                        code.textContent = b.code || '';
-                        code.contentEditable = true;
-                        code.oninput = () => { b.code = code.textContent; Prism.highlightElement(code); debounceSave(); };
-                        pre.append(code);
-                        wrap.append(pre);
-                        Prism.highlightElement(code);
-                    }
-
-                    const del = document.createElement('button');
-                    del.className = 'btn btn-ghost btn-xs';
-                    del.textContent = '🗑️';
-                    del.onclick = () => { blocks.splice(i, 1); renderBlocks(); save(); };
-                    wrap.append(del);
-
-                    blockArea.append(wrap);
-                });
-
-                // Sicherstellen, dass alle Codeblöcke formatiert sind
-                Prism.highlightAll();
-            }
-
-            function makeEditable(html, onChange) {
-                const d = document.createElement('div');
-                d.contentEditable = true;
-                d.className = 'flex-1 outline-none';
-                d.innerHTML = html || '';
-                d.oninput = () => onChange(d.innerHTML);
-                return d;
-            }
-
-            function moveBlock(src, tgt) {
-                if (src === tgt) return;
-                blocks.splice(tgt, 0, blocks.splice(src, 1)[0]);
-                renderBlocks();
-                save();
-            }
-
-            function debounce(fn, ms) {
-                let t;
-                return (...a) => {
-                    clearTimeout(t);
-                    t = setTimeout(() => fn(...a), ms);
-                };
-            }
-            const debounceSave = debounce(save, 700);
-
-            // ─── INITIALIZE ─────────────────────────────────────────────────────────
-
-            await refreshFileList();
-            setupFileExplorer();
-            setupToolbar();
-            setupEditor();
-            fetch('/api/info')
-                .then(r => r.json())
-                .then(d => document.getElementById('info').textContent = `📡 ${d.ip}:${d.port}`);
-
-        })();
-    </script> -->
-
-
-
-
-    <!-- <script>
-        (async () => {
-            const socket = io();
-            let currentFile = null, blocks = [];
-            const state = { mode: 'note', bold: false, color: '', size: '3', lang: 'javascript' };
-            const sizeClass = { '1': 'text-xs', '2': 'text-sm', '3': 'text-base', '4': 'text-lg', '5': 'text-xl', '6': 'text-2xl' };
-
-            // Elemente
-            const fileList = document.getElementById('fileList');
-            const newFileInput = document.getElementById('newFileName');
-            const btnAdd = document.getElementById('btnAdd');
-            const btnRename = document.getElementById('btnRename');
-            const btnDelete = document.getElementById('btnDelete');
-            const blockArea = document.getElementById('blockArea');
-            const btnNote = document.getElementById('btnNote');
-            const btnCheck = document.getElementById('btnCheck');
-            const btnCode = document.getElementById('btnCode');
-            const btnAddBlock = document.getElementById('btnAddBlock');
-
-            const toolbarBtns = document.querySelectorAll('#toolbar [data-cmd]');
-            const selHeading = document.getElementById('selHeading');
-            const selFontSize = document.getElementById('selFontSize');
-            const selForeColor = document.getElementById('selForeColor');
-            const selBackColor = document.getElementById('selBackColor');
-            const selCodeLang = document.getElementById('selCodeLang');
-            const btnCodeFence = document.getElementById('btnCodeFence');
-            const btnCheckboxList = document.getElementById('btnCheckboxList');
-
-            // ─── FILE‑EXPLORER ─────────────────────────────────────────────────────────
-
-            async function refreshFileList() {
-                const files = await fetch('/api/files').then(r => r.json());
-                fileList.innerHTML = '';
-                files.forEach(name => {
-                    const li = document.createElement('li');
-                    const a = document.createElement('a');
-                    a.textContent = name;
-                    a.className = 'block truncate cursor-pointer';
-                    if (name === currentFile) a.classList.add('active');
-                    a.onclick = () => openFile(name);
-                    li.append(a);
-                    fileList.append(li);
-                });
-            }
-
-            function setupFileExplorer() {
-                btnAdd.onclick = async () => {
-                    const n = newFileInput.value.trim(); if (!n) return;
-                    await fetch(`/api/file/${n}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '[]' });
-                    newFileInput.value = ''; await refreshFileList();
-                };
-                btnRename.onclick = () => {
-                    if (!currentFile) return alert('Keine Datei ausgewählt');
-                    const a = fileList.querySelector('a.active');
-                    enableInlineRename(a.parentElement, currentFile);
-                };
-                btnDelete.onclick = async () => {
-                    if (!currentFile || !confirm('Löschen?')) return;
-                    await fetch(`/api/file/${currentFile}`, { method: 'DELETE' });
-                    currentFile = null; blocks = []; renderBlocks(); await refreshFileList();
-                };
-                socket.on('file-updated', name => { if (name === currentFile) openFile(name); });
-                socket.on('file-deleted', name => {
-                    if (name === currentFile) { currentFile = null; blocks = []; renderBlocks(); }
-                    refreshFileList();
-                });
-            }
-
-            async function openFile(name) {
-                currentFile = name;
-                blocks = await fetch(`/api/file/${name}`).then(r => r.ok ? r.json() : []);
-                renderBlocks();
-                await refreshFileList();
-            }
-
-            function enableInlineRename(li, oldName) {
-                if (li.querySelector('input')) return;
-                const a = li.querySelector('a');
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.value = oldName;
-                input.className = 'input input-bordered w-full';
-                li.replaceChild(input, a);
-                input.select();
-
-                function cleanup() {
-                    input.removeEventListener('keydown', onEnter);
-                    input.removeEventListener('blur', onBlur);
-                }
-                function restore(name) {
-                    const a2 = document.createElement('a');
-                    a2.textContent = name;
-                    a2.className = 'block truncate cursor-pointer';
-                    if (name === currentFile) a2.classList.add('active');
-                    a2.onclick = () => openFile(name);
-                    li.replaceChild(a2, input);
-                }
-                async function onEnter(e) {
-                    if (e.key === 'Enter') {
-                        cleanup();
-                        const newName = input.value.trim() || oldName;
-                        if (newName !== oldName) {
-                            await fetch(`/api/file/${oldName}`, {
-                                method: 'PUT', headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ _rename: newName })
-                            });
-                            if (currentFile === oldName) currentFile = newName;
-                        }
-                        restore(newName);
-                        refreshFileList();
-                    }
-                    if (e.key === 'Escape') {
-                        cleanup();
-                        restore(oldName);
-                    }
-                }
-                function onBlur() {
-                    setTimeout(() => {
-                        if (li.contains(input)) {
-                            cleanup();
-                            restore(oldName);
-                        }
-                    }, 0);
-                }
-                input.addEventListener('keydown', onEnter);
-                input.addEventListener('blur', onBlur);
-            }
-
-            // ─── TOOLBAR (execCommand) ──────────────────────────────────────────────────
-
-            function setupToolbar() {
-                toolbarBtns.forEach(btn => {
-                    // Verhindert, dass Button-Klick den Editor-Fokus klaut
-                    btn.addEventListener('mousedown', e => e.preventDefault());
-                    btn.addEventListener('click', () => {
-                        document.execCommand(btn.dataset.cmd, false, null);
-                        updateToolbarState();
-                    });
-                });
-
-                selHeading.addEventListener('change', () => document.execCommand('formatBlock', false, selHeading.value));
-                selFontSize.addEventListener('change', () => document.execCommand('fontSize', false, selFontSize.value));
-                selForeColor.addEventListener('change', () => document.execCommand('foreColor', false, selForeColor.value));
-                selBackColor.addEventListener('change', () => {
-                    const cmd = document.queryCommandSupported('hiliteColor') ? 'hiliteColor' : 'backColor';
-                    document.execCommand(cmd, false, selBackColor.value);
-                });
-
-                btnCheckboxList.addEventListener('click', () => {
-                    document.execCommand('insertHTML', false,
-                        '<ul><li><input type="checkbox"> </li></ul><p></p>');
-                });
-
-                document.querySelector('[data-cmd="insertHorizontalRule"]')
-                    .addEventListener('click', () => document.execCommand('insertHorizontalRule'));
-
-                btnCodeFence.addEventListener('click', () => {
-                    const lang = selCodeLang.value;
-                    // Erzeuge HTML mit contenteditable + zero‑width space
-                    const html = `<pre><code contenteditable="true" class="${lang}">\u200B</code></pre><p></p>`;
-                    // Mit execCommand einfügen
-                    document.execCommand('insertHTML', false, html);
-
-                    // kurz warten, bis das DOM aktualisiert ist
-                    setTimeout(() => {
-                        // Highlight neu anwenden
-                        Prism.highlightAll();
-                        // Cursor in das neue <code> setzen
-                        // Wir suchen das erste code-Element mit unserer Klasse, das noch ein ZWS enthält
-                        const codes = Array.from(document.querySelectorAll('pre code.' + lang));
-                        const codeEl = codes.find(c => c.textContent.includes('\u200B'));
-                        if (codeEl) {
-                            // ZWS entfernen
-                            codeEl.textContent = '';
-                            // Range anlegen
-                            const range = document.createRange();
-                            range.selectNodeContents(codeEl);
-                            range.collapse(true);
-                            const sel = window.getSelection();
-                            sel.removeAllRanges();
-                            sel.addRange(range);
-                            codeEl.focus();
-                        }
-                    }, 0);
-                });
-
-                document.addEventListener('selectionchange', updateToolbarState);
-                updateToolbarState();
-            }
-
-            function updateToolbarState() {
-                toolbarBtns.forEach(b => {
-                    document.queryCommandState(b.dataset.cmd)
-                        ? b.classList.add('btn-active')
-                        : b.classList.remove('btn-active');
-                });
-                selHeading.value = (document.queryCommandValue('formatBlock') || 'p').toLowerCase();
-                selFontSize.value = document.queryCommandValue('fontSize') || '3';
-            }
-
-            // ─── BLOCK EDITOR ──────────────────────────────────────────────────────────
-
-            function setupEditor() {
-                btnNote.onclick = () => selectMode('note', btnNote);
-                btnCheck.onclick = () => selectMode('check', btnCheck);
-                btnCode.onclick = () => selectMode('code', btnCode);
-                btnAddBlock.onclick = addBlock;
-
-                // Doppelklick auf leere Fläche ➝ neuer Block
-                blockArea.addEventListener('dblclick', e => {
-                    if (e.target === blockArea) addBlock();
-                });
-            }
-
-            function selectMode(m, btn) {
-                state.mode = m;
-                [btnNote, btnCheck, btnCode, btnAddBlock]
-                    .forEach(b => b.classList.remove('btn-active'));
-                btn.classList.add('btn-active');
-            }
-
-            function addBlock() {
-                let b;
-                if (state.mode === 'note') b = {
-                    type: 'note', text: '', style: {
-                        bold: state.bold,
-                        color: state.color,
-                        size: state.size
-                    }
-                };
-                if (state.mode === 'check') b = { type: 'check', text: '', checked: false };
-                if (state.mode === 'code') b = { type: 'code', code: '', lang: state.lang };
-                blocks.push(b);
-                renderBlocks();
-                save();
-            }
-
-            async function save() {
-                if (!currentFile) return;
-                await fetch(`/api/file/${currentFile}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(blocks)
-                });
-            }
-
-            function renderBlocks() {
-                blockArea.innerHTML = '';
-                blocks.forEach((b, i) => {
-                    const wrap = document.createElement('div');
-                    wrap.className = 'p-2 bg-base-100 rounded shadow flex gap-2';
-                    wrap.draggable = true;
-                    wrap.ondragstart = e => e.dataTransfer.setData('text', i);
-                    wrap.ondrop = e => { e.preventDefault(); moveBlock(+e.dataTransfer.getData('text'), i); };
-                    wrap.ondragover = e => e.preventDefault();
-
-                    if (b.type === 'note') {
-                        const d = makeEditable(b.text, v => { b.text = v; debounceSave(); });
-                        if (b.style.bold) d.classList.add('font-bold');
-                        if (b.style.color) d.style.color = b.style.color;
-                        d.classList.add(sizeClass[b.style.size] || 'text-base');
-                        wrap.append(d);
-                    }
-                    else if (b.type === 'check') {
-                        const cb = document.createElement('input');
-                        cb.type = 'checkbox'; cb.checked = b.checked;
-                        cb.onchange = () => { b.checked = cb.checked; save(); };
-                        const d = makeEditable(b.text, v => { b.text = v; });
-                        if (cb.checked) d.classList.add('line-through');
-                        wrap.append(cb, d);
-                    }
-                    else {
-                        const pre = document.createElement('pre');
-                        const code = document.createElement('code');
-                        code.className = `language-${b.lang}`;
-                        code.textContent = b.code || '';
-                        code.contentEditable = true;
-                        code.oninput = () => { b.code = code.textContent; Prism.highlightElement(code); debounceSave(); };
-                        pre.append(code); wrap.append(pre);
-                        Prism.highlightElement(code);
-                    }
-
-                    const del = document.createElement('button');
-                    del.className = 'btn btn-ghost btn-xs'; del.textContent = '🗑️';
-                    del.onclick = () => { blocks.splice(i, 1); renderBlocks(); save(); };
-                    wrap.append(del);
-
-                    blockArea.append(wrap);
-                });
-
-                // nach Rendern nochmal alle Codeblöcke highlighten
-                Prism.highlightAll();
-            }
-
-            function makeEditable(html, onChange) {
-                const d = document.createElement('div');
-                d.contentEditable = true;
-                d.className = 'flex-1 outline-none';
-                d.innerHTML = html || '';
-                d.oninput = () => onChange(d.innerHTML);
-                return d;
-            }
-
-            function moveBlock(src, tgt) {
-                if (src === tgt) return;
-                blocks.splice(tgt, 0, blocks.splice(src, 1)[0]);
-                renderBlocks(); save();
-            }
-
-            function debounce(fn, ms) {
-                let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms) };
-            }
-              const debounceSave = debounce(save,700);
-
-            // ─── INITIALIZE ─────────────────────────────────────────────────────────
-
-            await refreshFileList();
-            setupFileExplorer();
-            setupToolbar();
-            setupEditor();
-            fetch('/api/info')
-                .then(r => r.json())
-                .then(d => document.getElementById('info').textContent = `📡 ${d.ip}:${d.port}`);
-        })();
-    </script> -->
-
 
     <script type="module" src="./js/settings.js"></script>
     <script src="./app/app.js"></script>
