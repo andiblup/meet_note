@@ -6,6 +6,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('settingsToggle').checked = true;
     });
 
+    // x) Fullscreen
+    const btnFull = document.getElementById('btnFull');
+    if (document.fullscreenElement) {
+        btnFull.firstElementChild.className = 'bx bx-exit-fullscreen';
+    } else {
+        btnFull.firstElementChild.className = 'bx bx-fullscreen';
+    }
+    btnFull.onclick = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+            btnFull.firstElementChild.className = 'bx bx-exit-fullscreen';
+        } else {
+            document.exitFullscreen();
+            btnFull.firstElementChild.className = 'bx bx-fullscreen';
+        }
+    };
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) {
+            btnFull.firstElementChild.className = 'bx bx-exit-fullscreen';
+        } else {
+            btnFull.firstElementChild.className = 'bx bx-fullscreen';
+        }
+    });
+
     // 2) Theme‑Initialisierung
     let currentSettings;
     if (isElectron) {
@@ -53,11 +77,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('chkDark').addEventListener('change', () => {
             const t = document.getElementById('chkDark').checked ? 'dark' : 'light';
             localStorage.setItem('theme', t);
-                // .getPropertyValue('--color-primary')
+            // .getPropertyValue('--color-primary')
         });
         document.getElementById('closeARGBPickerModal').addEventListener('click', e => {
             console.log("ananas");
-            
+
             localStorage.setItem('primaryColor', document.getElementById('argbOutput').value);
             getComputedStyle(document.documentElement).setProperty('--color-primary', document.getElementById('argbOutput').value);
         });

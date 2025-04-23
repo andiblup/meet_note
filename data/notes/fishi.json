@@ -64,6 +64,9 @@
     }
   },
   {
+    "type": "hr"
+  },
+  {
     "type": "note",
     "text": "<pre class=\"language-java\" tabindex=\"0\">Integer foo = new Integer();</pre><p></p>",
     "style": {

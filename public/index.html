@@ -73,6 +73,8 @@
                 <button id="btnSettings" class="btn btn-ghost btn-sm"><i class='bx bx-cog'></i></button>
                 <button id="btnNote" class="btn btn-sm btn-ghost btn-active"><i class='bx bx-note'></i></button>
                 <button id="btnCheck" class="btn btn-sm btn-ghost"><i class='bx bx-checkbox-checked'></i></button>
+                <button id="btnHrBlock" class="btn btn-sm btn-ghost" title="HR-Block"><i
+                        class='bx bx-minus'></i></button>
                 <button id="btnAddBlock" class="btn btn-sm btn-ghost"><i class='bx bx-plus'></i></button>
 
                 <div class="divider divider-horizontal m-0"></div>
@@ -126,6 +128,18 @@
                         class="bx bx-align-middle"></i></button>
                 <button data-cmd="justifyRight" class="btn btn-sm btn-ghost" title="Rechtsbündig"><i
                         class="bx bx-align-right"></i></button>
+
+                <!-- Tabellen -->
+                <div class="divider divider-horizontal m-0"></div>
+                <button id="btnTable" class="btn btn-sm btn-ghost" title="Tabelle einfügen"><i
+                        class='bx bx-table'></i></button>
+                <button id="btnRowAdd" class="btn btn-xs btn-ghost" title="Zeile +"><i class='bx bx-plus'></i></button>
+                <button id="btnRowDel" class="btn btn-xs btn-ghost" title="Zeile –"><i class='bx bx-minus'></i></button>
+                <button id="btnColAdd" class="btn btn-xs btn-ghost" title="Spalte +"><i
+                        class='bx bx-plus-vertical'></i></button>
+                <button id="btnColDel" class="btn btn-xs btn-ghost" title="Spalte –"><i
+                        class='bx bx-minus-vertical'></i></button>
+
 
                 <div class="divider divider-horizontal m-0"></div>
 
@@ -365,6 +379,14 @@
                 <!-- <h2 class="text-xl font-bold mb-4">⚙️ Einstellungen</h2> -->
                 <div><i class="bx bx-broadcast"></i>
                     <span id="info" class="text-sm opacity-70 ml-auto"></span>
+                </div>
+
+                <div class="form-control">
+                    <label class="flex cursor-pointer gap-2 items-center">
+                        <span class="label-text">Fullscreen</span>
+                        <button id="btnFull" class="btn btn-sm btn-ghost" title="Fullscreen"><i
+                                class='bx bx-fullscreen'></i></button>
+                    </label>
                 </div>
 
                 <div class="form-control">
@@ -766,10 +788,16 @@
 
             function setupToolbar() {
                 toolbarBtns.forEach(btn => {
+                    // btn.addEventListener('mousedown', e => e.preventDefault());
+                    // btn.addEventListener('click', () => {
+                    //     document.execCommand(btn.dataset.cmd, false, null);
+                    //     updateToolbarState();
+                    // });
                     btn.addEventListener('mousedown', e => e.preventDefault());
                     btn.addEventListener('click', () => {
                         document.execCommand(btn.dataset.cmd, false, null);
                         updateToolbarState();
+                        blockArea.querySelector('[contenteditable="true"]')?.focus(); // 🔧
                     });
                 });
 
@@ -785,6 +813,43 @@
                     document.execCommand('insertHTML', false,
                         '<ul><li><input type="checkbox"> </li></ul><p></p>');
                 });
+
+                btnTable.onclick = () =>
+                    document.execCommand('insertHTML', false,
+                        '<table class="table table-zebra w-full"><tbody>' +
+                        '<tr><td><br></td><td><br></td><td><br></td></tr>'.repeat(3) +
+                        '</tbody></table><p></p>');
+
+                // Hilfs-Funktionen
+                function getCell(sel = window.getSelection()) {
+                    const node = sel.anchorNode?.parentElement;
+                    return node?.tagName === 'TD' || node?.tagName === 'TH' ? node : null;
+                }
+                function eachCell(row, fn) { [...row.children].forEach(fn); }
+
+                // Zeile/Spalte +/–
+                btnRowAdd.onclick = () => {
+                    const td = getCell(); if (!td) return;
+                    const row = td.parentElement, clone = row.cloneNode(true);
+                    clone.querySelectorAll('td').forEach(td => td.innerHTML = '<br>');
+                    row.after(clone);
+                };
+                btnRowDel.onclick = () => { const td = getCell(); td && td.parentElement.remove(); };
+
+                btnColAdd.onclick = () => {
+                    const td = getCell(); if (!td) return;
+                    const idx = [...td.parentElement.children].indexOf(td);
+                    const table = td.closest('table');
+                    table.querySelectorAll('tr').forEach(tr => {
+                        const clone = tr.children[idx].cloneNode(true);
+                        clone.innerHTML = '<br>'; tr.children[idx].after(clone);
+                    });
+                };
+                btnColDel.onclick = () => {
+                    const td = getCell(); if (!td) return;
+                    const idx = [...td.parentElement.children].indexOf(td);
+                    td.closest('table').querySelectorAll('tr').forEach(tr => tr.children[idx].remove());
+                };
 
                 document.querySelector('[data-cmd="insertHorizontalRule"]')
                     .addEventListener('click', () => document.execCommand('insertHorizontalRule'));
@@ -895,6 +960,40 @@
                         if (b.checked) d.classList.add('line-through');
                         wrap.append(cb, d);
                     }
+                    else if (b.type === 'hr') {
+                        // const hr = document.createElement('hr');
+                        // hr.className = 'border-primary/40 my-4';
+                        // wrap.append(hr);
+                        const hr = document.createElement('hr');
+                        // sichtbarer Strich (hell ↔︎ dunkel) & etwas Abstand
+                        hr.className = 'rounded border-none my-2';
+                        hr.style.height = '2px';
+                        hr.style.border = '0px solid black';
+                        hr.style.backgroundColor = 'var(--color-primary)';
+                        wrap.className = 'my-2';
+                        // hr.style.borderTop = '2px solid var(--tw-prose-hr)';
+                        // hr.style.cursor = 'pointer';
+                        // hr.style.height = '10px';
+                        // hr.style.backgroundColor = 'var(--color-base-content)!important';
+                        hr.title = 'Doppelklick zum Löschen';
+                        hr.ondblclick = () => { blocks.splice(i, 1); renderBlocks(); save(); };
+
+
+                        /*  Lösch-Shortcut: Block doppelklicken
+                            (wir nutzen den bestehenden Wrap → Drag & Drop bleibt)  */
+                        wrap.classList.add('cursor-pointer');
+                        wrap.append(hr);
+
+                        wrap.ondblclick = () => {                // ⚡ neuer Handler
+                            blocks.splice(i, 1);
+                            renderBlocks(); save();
+                        };
+
+                        /*  Der Trash-Button wird NICHT angehängt,
+                            deshalb „continue“ überspringen wir Rest-Code. */
+                        blockArea.append(wrap);
+                        return;          // !!! wrap ist fertig – nichts mehr hinzufügen
+                    }
                     else {
                         const pre = document.createElement('pre');
                         const code = document.createElement('code');
@@ -936,6 +1035,11 @@
                 save();
             }
 
+            btnHrBlock.onclick = () => {
+                blocks.push({ type: 'hr' });
+                renderBlocks(); save();
+            };
+
             function debounce(fn, ms) {
                 let t;
                 return (...a) => {
@@ -956,6 +1060,22 @@
                 .then(d => document.getElementById('info').textContent = `${d.ip}:${d.port}`);
 
         })();
+    </script>
+
+    <script>
+        // const btnHrBlock = document.getElementById('btnHrBlock');
+        // btnHrBlock.addEventListener('click', () => {
+        //     const hr = document.createElement('hr');
+        //     hr.className = 'my-4 border-t-2 border-base-300 hr-block';
+        //     blockArea.append(hr);
+        // });
+        // const hrBlocks = document.querySelectorAll('.hr-block');
+        // hrBlocks.forEach(hr => {
+        //     hr.addEventListener('dblclick', () => {
+        //         hr.remove();
+
+        //     });
+        // });
     </script>
 
     <script type="module" src="./js/settings.js"></script>
