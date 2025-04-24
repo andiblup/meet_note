@@ -16,3 +16,25 @@
 .meet-table th:focus {
     outline: 2px solid var(--color-primary);
 }
+
+/* Mach das Header-Container-Element draggable */
+.header-wrapper {
+    -webkit-app-region: drag;
+  }
+  
+  /* Alle Buttons/Controls wieder klickbar machen */
+  .header-wrapper .btn,
+  .header-wrapper .controls > button,
+  .header-wrapper label {
+    -webkit-app-region: no-drag;
+  }
+
+  
+  /* Titel mittig leicht größer */
+  .header-wrapper .title {
+    pointer-events: none;        /* darf nicht draggable sein */
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-base-content);
+  }
+  

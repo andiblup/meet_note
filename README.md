@@ -88,11 +88,13 @@ Eine moderne, sichere, modulare Netzwerk-Notiz-App für Meetings, Projekte und T
 - [ ] App, Session beenden zurück zum Hauptmenü
 - [ ] Tabellen-Editor (Einfügen, Zeilen/Spalten hinzufügen/löschen)
 - [ ] unordered und ordered list einfügen implementieren
-- [ ] Fullscreen
+- [x] Fullscreen
 - [ ] Modifikation Top Electron bar oder disable
 - [ ] einbetten Von Inhalten, IFrame, Bild, Gif
 - [ ] hr in note und hr block
 - [ ] Emoji-Paneel
+- [x] Besseres Logging
+- [ ] HTML interpretation
 
 ### Phase 3: Sicherheit & Rollen
 

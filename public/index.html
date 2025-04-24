@@ -18,7 +18,33 @@
 
 </head>
 
-<body class="bg-base-200 min-h-screen flex">
+<!-- <body class="bg-base-200 min-h-screen flex"> -->
+<body class="bg-base-200 min-h-screen">
+
+<!-- <body class="min-h-screen"> -->
+
+    <div class="header-wrapper shadow-xl" style="display: flex; align-items: center; justify-content: center; margin-bottom: 2px;">
+        <header style="width: 100%; display: flex; align-items: center;">
+            <div style="width: 33%;">
+                <button title="Close Session" id="btnLeave" class="btn btn-sm btn-ghost hidden"><i class="bx bx-exit"></i></button>
+                <label title="File Explorer" for="sideToggle" class="btn btn-square btn-ghost"><i class='bx bx-folder'></i></label>
+                <button title="Einstellungen" id="btnSettings" class="btn btn-ghost btn-sm"><i class='bx bx-cog'></i></button>
+                <button title="Text Notiz hinzufügen" id="btnNote" class="btn btn-sm btn-ghost btn-active"><i class='bx bx-note'></i></button>
+                <button title="Check Notiz hinzufügen" id="btnCheck" class="btn btn-sm btn-ghost"><i class='bx bx-checkbox-checked'></i></button>
+                <button title="Trennleiste" id="btnHrBlock" class="btn btn-sm btn-ghost" title="HR-Block"><i
+                        class='bx bx-minus'></i></button>
+                <button title="Neue Notiz hinzufügen" id="btnAddBlock" class="btn btn-sm btn-ghost"><i class='bx bx-plus'></i></button>
+            </div>
+
+            <div class="title" style="width: 33%;text-align: center;">Meet Note</div>
+            <div class="controls flex space-x-1" style="width: 33%;justify-content: end;">
+                <button style="padding-top: 10px;" id="btnMinimize" class="btn btn-ghost btn-sm hidden"><i class="bx bx-minus"></i></button>
+                <button id="btnMaxRestore" class="btn btn-ghost btn-sm hidden"><i class="bx bx-square"></i></button>
+                <button id="btnClose" class="btn btn-ghost btn-sm hidden"><i class="bx bx-x"></i></button>
+            </div>
+
+        </header>
+    </div>
 
 
     <!-- Toast-Container -->
@@ -68,7 +94,7 @@
 
             <div id="toolbar" class="flex flex-wrap gap-2 items-center">
 
-                <button id="btnLeave" class="btn btn-sm btn-ghost hidden"><i class="bx bx-exit"></i></button>
+                <!-- <button id="btnLeave" class="btn btn-sm btn-ghost hidden"><i class="bx bx-exit"></i></button>
                 <label for="sideToggle" class="btn btn-square btn-ghost"><i class='bx bx-folder'></i></label>
                 <button id="btnSettings" class="btn btn-ghost btn-sm"><i class='bx bx-cog'></i></button>
                 <button id="btnNote" class="btn btn-sm btn-ghost btn-active"><i class='bx bx-note'></i></button>
@@ -77,7 +103,7 @@
                         class='bx bx-minus'></i></button>
                 <button id="btnAddBlock" class="btn btn-sm btn-ghost"><i class='bx bx-plus'></i></button>
 
-                <div class="divider divider-horizontal m-0"></div>
+                <div class="divider divider-horizontal m-0"></div> -->
 
                 <!-- Format -->
                 <button data-cmd="bold" class="btn btn-sm btn-ghost" title="Fett (Ctrl+B)"><i
@@ -432,7 +458,8 @@
                         <span class="label-text">Tab-Einrückung (Leerzeichen)</span>
                     </label>
                     <input id="inpTabSize" type="number" min="1" max="8" step="1" class="input input-bordered w-20"
-                        value="4" oninput="this.reportValidity(); this.addEventListener('blur', e => {e.preventDefault();if (this.valueAsNumber > this.max) this.value = this.max; if (this.valueAsNumber < this.min) this.value = this.min;})">
+                        value="4"
+                        oninput="this.reportValidity(); this.addEventListener('blur', e => {e.preventDefault();if (this.valueAsNumber > this.max) this.value = this.max; if (this.valueAsNumber < this.min) this.value = this.min;})">
                 </div>
 
                 <button id="btnSaveSettings" class="btn btn-primary w-full mt-4"><i class='bx bxs-save'></i></button>
@@ -509,13 +536,24 @@
     <!-- If is Electron calls -->
     <script>
         const isElectron = !!window.electronAPI;
-        if (isElectron) document.getElementById('btnLeave').classList.remove('hidden');
+        if (isElectron) {
+            document.getElementById('btnLeave').classList.remove('hidden');
+            document.getElementById('btnMinimize').classList.remove('hidden');
+            document.getElementById('btnMaxRestore').classList.remove('hidden');
+            document.getElementById('btnClose').classList.remove('hidden');
 
-        document.getElementById('btnLeave')?.addEventListener('click', () => {
-            if (confirm('Session beenden und zurück zum Startmenü?')) {
-                window.electronAPI.gotoHome();        // ipcMain-Handler in main.js
-            }
-        });
+
+
+            document.getElementById('btnMinimize')?.addEventListener('click', () => window.electronAPI.minimize());
+            document.getElementById('btnMaxRestore')?.addEventListener('click', () => window.electronAPI.toggleMax());
+            document.getElementById('btnClose')?.addEventListener('click', () => window.electronAPI.close());
+
+            document.getElementById('btnLeave')?.addEventListener('click', () => {
+                if (confirm('Session beenden und zurück zum Startmenü?')) {
+                    window.electronAPI.gotoHome();        // ipcMain-Handler in main.js
+                }
+            });
+        }
     </script>
 
     <script>
@@ -1306,8 +1344,11 @@
         })();
     </script>
 
+
+
     <script type="module" src="./js/settings.js"></script>
     <script src="./app/app.js"></script>
+
 
 
 </body>

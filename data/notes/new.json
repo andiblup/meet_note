@@ -10,6 +10,51 @@
   },
   {
     "type": "note",
+    "text": "<table class=\"meet-table table-zebra\"><colgroup><col style=\"width:33.333333333333336%\"><col style=\"width:33.333333333333336%\"><col style=\"width:33.333333333333336%\"></colgroup><tbody><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td></tr><tr><td><br></td><td><br></td><td><br></td></tr></tbody></table><p></p>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
     "text": "",
     "style": {
       "bold": false,

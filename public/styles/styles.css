@@ -2,6 +2,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@plugin "daisyui" {
+    logs: false;
+  }
+
 
 @layer components {
     select.select:focus {
@@ -32,10 +36,50 @@
     } /* Grundoptik            */
 }
 
+
+/* .header-wrapper .btn:hover,
+.btn-active {
+  @apply bg-base-300 dark:bg-base-200;
+  transition: background-color 0.15s;
+} */
+
+
+.titlebar {
+    -webkit-app-region: drag;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    /* background-color: var(--color-base-100); */
+    background-color: var(--color-slate-500);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.titlebar .btn {
+    -webkit-app-region: no-drag; /* Buttons sollen klickbar sein */
+}
+
+.titlebar .title {
+    flex: 1;
+    text-align: center;
+    font-weight: bold;
+}
+
+.titlebar .controls > button {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .sticky {
     position: -webkit-sticky;
     position: sticky;
-    top: 0;
+    top: 40;
     z-index: 10;
 }
 
@@ -45,5 +89,10 @@
 
 input:invalid {
     outline: 2px solid #e11d48;
-  }
-  
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 40px);
+}

@@ -9,43 +9,28 @@ function ts() {
         .replace(/:/g, ':' + chalk.gray(''));           // ':' grau (wirkt nur einmal)
 }
 
-function colorize(arguments){
+function colorize(arguments) {
     return arguments.replace(/\b(Server|Client)\b/gi, t => chalk.keyword('orange')(t)) // Server / Client orange
-    .replace(/\b\d{1,3}(?:\.\d{1,3}){3}\b/g, ip => chalk.magenta(ip)) // IPv4-Adressen pink
-    .replace('reason:', chalk.cyan('reason:'))
-    .replace('http://', chalk.grey('http://'))
-    .replace(/:\d+/g, t => chalk.grey(t))
-    .replace('started at:', chalk.white('started at:'))
-    .replace('joined', chalk.green('joined'))
-    .replace('left', chalk.red('left'))
-    .replace('id:', chalk.cyan('id:'));
+        .replace(/\b\d{1,3}(?:\.\d{1,3}){3}\b/g, ip => chalk.magenta(ip)) // IPv4-Adressen pink
+        .replace('reason:', chalk.cyan('reason:'))
+        .replace('http://', chalk.grey('http://'))
+        .replace(/:\d+/g, t => chalk.grey(t))
+        .replace('started at:', chalk.white('started at:'))
+        .replace('joined', chalk.green('joined'))
+        .replace('left', chalk.red('left'))
+        .replace('id:', chalk.cyan('id:'));
     // num_dash after id: or reason:
 }
 
-// let onceFullColored = false;
-let onceFullColored = true;
 function base(colorFn, icon, args) {
 
+    console.log(`${ts()} ${icon} ${colorize(args.join(' '))}`);
 
-    // console.log("newArgs");
-    // console.log(newArgs);
+}
+function base_no_time(colorFn, icon, args) {
 
+    console.log(`${icon} ${colorize(args.join(' '))}`);
 
-    // if (!onceFullColored) {
-    //     //! BUG: First arg cant be modified, this line needs to get executed
-    //     console.log(`${ts()} ${icon} ${colorFn(...args)}`);
-
-
-    //     onceFullColored = true;
-    // }
-    // else {
-
-        // let newArgs = args.join(' ')
-        //     .replace(/\b(Server|Client)\b/gi, t => chalk.keyword('orange')(t)) // Server / Client orange
-        //     .replace(/\b\d{1,3}(?:\.\d{1,3}){3}\b/g, ip => chalk.magenta(ip)); // IPv4-Adressen pink
-        // console.log(`${ts()} ${icon} ${newArgs}`);
-        console.log(`${ts()} ${icon} ${colorize(args.join(' '))}`);
-    // }
 }
 
 
@@ -58,6 +43,11 @@ module.exports = {
     /** Zeile unverändert durchreichen (bereits formatiert) */
     raw: line => console.log(line),
     // special: line => baseMod(chalk.green, symbols.success, line),
+
+    ok_no_time: (...m) => base_no_time(chalk.green, symbols.success, m),
+    info_no_time: (...m) => base_no_time(chalk.cyan, symbols.info, m),
+    warn_no_time: (...m) => base_no_time(chalk.keyword('orange'), symbols.warning, m),
+    err_no_time: (...m) => base_no_time(chalk.red, symbols.error, m),
 };
 
 // // utils/logger.js  – CommonJS, Color-Mix

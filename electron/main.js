@@ -209,6 +209,9 @@ function createWin() {
     win = new BrowserWindow({
         width: 1200,
         height: 800,
+        frame: false,
+        resizable: true,
+        // autoHideMenuBar: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
@@ -225,3 +228,14 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
 
+
+ipcMain.on('window-minimize',   e => e.sender.getOwnerBrowserWindow().minimize());
+ipcMain.on('window-toggle-max', e => {
+  const w = e.sender.getOwnerBrowserWindow();
+  w.isMaximized() ? w.unmaximize() : w.maximize();
+});
+ipcMain.on('window-close',      e => e.sender.getOwnerBrowserWindow().close());
+ipcMain.on('window-toggle-full',e => {
+  const w = e.sender.getOwnerBrowserWindow();
+  w.setFullScreen(!w.isFullScreen());
+});

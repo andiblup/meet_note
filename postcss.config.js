@@ -24,26 +24,36 @@ module.exports = {
   ]
 };
 
-// postcss.config.js
+// // postcss.config.js
 // const path = require('path');
+// const postcssImport = require('postcss-import');
+// const postcssUrl    = require('postcss-url');
+// const tailwindcss   = require('tailwindcss');
+// const autoprefixer  = require('autoprefixer');
 
-// module.exports = {
-//   plugins: [
-//     // wenn ihr @import benutzt, sonst weglassen:
-//     // require('postcss-import'),
+// module.exports = async () => {
+//   // dynamic import of the ESM-only daisyUI
+//   const { default: daisyui } = await import('daisyui');
 
-//     require('postcss-url')({
-//       url: 'copy',
-//       basePath: path.resolve(__dirname, 'node_modules', 'boxicons', 'fonts'),
-//       assetsPath: path.resolve(__dirname, 'public', 'fonts', 'boxicons'),
-//       filter: '**/*',
-//       flatten: true,
-//       useHash: false,
-//     }),
+//   return {
+//     plugins: [
+//       postcssImport(),
+//       postcssUrl({
+//         url:      'copy',
+//         basePath: path.resolve(__dirname, 'node_modules/boxicons/fonts'),
+//         assetsPath: path.resolve(__dirname, 'public/fonts/boxicons'),
+//         filter:   '**/*',
+//         flatten:  true,
+//         useHash:  false
+//       }),
+//       tailwindcss(),
+//       daisyui({
+//         themes: ['light','dark'],
+//         logs:   false
+//       }),
+//       autoprefixer()
+//     ]
+//   };
+// };
 
-//     // <-- hier tauschen:
-//     require('@tailwindcss/postcss'),
 
-//     require('autoprefixer'),
-//   ]
-// }
