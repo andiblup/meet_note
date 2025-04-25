@@ -22,6 +22,7 @@
 <!-- <body class="bg-base-200 min-h-screen"> -->
 
 <!-- <body class="bg-base-200 h-screen"> -->
+
 <body class="bg-base-200 h-screen flex flex-col">
 
     <!-- <body class="min-h-screen"> -->
@@ -761,7 +762,9 @@
                 };
                 btnRename.onclick = () => {
                     if (!currentFile) return alert('Keine Datei ausgewählt');
-                    const a = fileList.querySelector('a.active');
+                    // const a = fileList.querySelector('a.active');
+                    const a = fileList.querySelector('a.menu-active');
+
                     enableInlineRename(a.parentElement, currentFile);
                 };
                 btnDelete.onclick = async () => {
@@ -772,16 +775,34 @@
                     currentFile = null; blocks = []; renderBlocks();
                     await refreshFileList();
                 };
-                socket.on('file-updated', name => {
-                    if (name === currentFile && !isSaving) {
-                        openFile(name);
-                    }
+                // socket.on('file-updated', name => {
+                //     if (name === currentFile && !isSaving) {
+                //         openFile(name);
+                //     }
+                // });
+                // socket.on('file-deleted', name => {
+                //     if (name === currentFile) {
+                //         currentFile = null; blocks = []; renderBlocks();
+                //     }
+                //     refreshFileList();
+                // });
+
+                // live‐update when others change the list:
+                socket.on('file-list-changed', () => {
+                    refreshFileList();
                 });
+
+                // you still have these to keep open-file logic working:
+                socket.on('file-updated', name => {
+                    if (name === currentFile && !isSaving) openFile(name);
+                });
+
                 socket.on('file-deleted', name => {
                     if (name === currentFile) {
-                        currentFile = null; blocks = []; renderBlocks();
+                        currentFile = null;
+                        blocks = [];
+                        renderBlocks();
                     }
-                    refreshFileList();
                 });
             }
 
@@ -810,7 +831,9 @@
                     const a2 = document.createElement('a');
                     a2.textContent = name;
                     a2.className = 'block truncate cursor-pointer';
-                    if (name === currentFile) a2.classList.add('active');
+                    // if (name === currentFile) a2.classList.add('active');
+                    if (name === currentFile) a2.classList.add('menu-active');
+
                     a2.onclick = () => openFile(name);
                     li.replaceChild(a2, input);
                 }

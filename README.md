@@ -38,10 +38,10 @@ Eine moderne, sichere, modulare Netzwerk-Notiz-App für Meetings, Projekte und T
 - Node.js (aktuelle LTS Version)
 - npm
 - Git
-- VSCode oder anderer Editor
-- (Optional für Mobile Builds: Android Studio, Xcode)
 
 ---
+## Dynamic Debug
+- [ ] File explorer realtime sync, (express cors)
 
 ## ✨ Hauptfunktionen
 
@@ -146,7 +146,6 @@ Eine moderne, sichere, modulare Netzwerk-Notiz-App für Meetings, Projekte und T
 - [ ] Über Meet Note
 - [ ] Auf Updates prüfen (erst spät)
 - [ ] Plugins (erst spät, wenn überhaupt)
-
 
 ---
 

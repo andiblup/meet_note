@@ -45,6 +45,11 @@
     .btn:focus-visible {
         @apply outline-none ring-0 border-transparent shadow-none;
     }
+
+    header div .btn:hover {
+        background-color: var(--color-red-300)!important;
+        transition: background-color 0.15s;
+    }
 }
 
 .btn:focus,

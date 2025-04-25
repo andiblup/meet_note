@@ -137,6 +137,9 @@ app.post('/api/file/:id', (req, res) => {
         JSON.stringify(req.body, null, 2)
     );
     io.emit('file-updated', req.params.id);
+
+    // RTP: alle Clients benachrichtigen
+    io.emit('file-list-changed');
     res.json({ status: 'ok' });
 });
 
@@ -164,6 +167,9 @@ app.put('/api/file/:id', (req, res) => {
     // Benachrichtige Clients
     io.emit('file-updated', newId);
     io.emit('file-deleted', oldId);
+    
+    // RTP: alle Clients benachrichtigen
+    io.emit('file-list-changed');
     res.json({ status: 'renamed', from: oldId, to: newId });
 });
 
@@ -172,6 +178,9 @@ app.delete('/api/file/:id', (req, res) => {
     if (!fs.existsSync(file)) return res.status(404).json({ error: 'not found' });
     fs.unlinkSync(file);
     io.emit('file-deleted', req.params.id);
+    
+    // RTP: alle Clients benachrichtigen
+    io.emit('file-list-changed');
     res.json({ status: 'deleted' });
 });
 
