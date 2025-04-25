@@ -1,7 +1,7 @@
 /* -----------------------------------------------------------
  *  Electron main‑process  •  Meet_Note
  * ----------------------------------------------------------- */
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, globalShortcut } = require('electron');
 const path = require('path');
 const { spawn, execSync } = require('child_process');
 const os = require('os');
@@ -209,7 +209,7 @@ function createWin() {
     win = new BrowserWindow({
         width: 1200,
         height: 800,
-        // frame: false,
+        frame: false,
         resizable: true,
         // autoHideMenuBar: true,
         webPreferences: {
@@ -219,9 +219,66 @@ function createWin() {
         }
     });
     win.loadFile(path.join(__dirname, '../launcher/launcher.html'));
+
+    // const template = [
+    //     {
+    //       label: 'Datei',
+    //       submenu: [
+    //         { label: 'Neu', accelerator: 'CmdOrCtrl+N', click: () => win.webContents.send('menu-new') },
+    //         { label: 'Öffnen…', accelerator: 'CmdOrCtrl+O', click: () => win.webContents.send('menu-open') },
+    //         { label: 'Speichern', accelerator: 'CmdOrCtrl+S', click: () => win.webContents.send('menu-save') },
+    //         { label: 'Alle speichern', accelerator: 'CmdOrCtrl+Shift+S', click: () => win.webContents.send('menu-save-all') },
+    //         { type: 'separator' },
+    //         { role: 'close', accelerator: 'CmdOrCtrl+W' }
+    //       ]
+    //     },
+    //     {
+    //       label: 'Bearbeiten',
+    //       submenu: [
+    //         { role: 'undo',       accelerator: 'CmdOrCtrl+Z' },
+    //         { role: 'redo',       accelerator: 'CmdOrCtrl+Y' },
+    //         { type: 'separator' },
+    //         { role: 'cut',        accelerator: 'CmdOrCtrl+X' },
+    //         { role: 'copy',       accelerator: 'CmdOrCtrl+C' },
+    //         { role: 'paste',      accelerator: 'CmdOrCtrl+V' },
+    //         { role: 'selectAll',  accelerator: 'CmdOrCtrl+A' },
+    //         { type: 'separator' },
+    //         { label: 'Finden',    accelerator: 'CmdOrCtrl+F', click: () => win.webContents.send('menu-find') },
+    //       ]
+    //     },
+    //     {
+    //       label: 'Ansicht',
+    //       submenu: [
+    //         { role: 'togglefullscreen', accelerator: 'F11' },
+    //         { role: 'toggledevtools',   accelerator: 'F12' },
+    //         { role: 'reload',           accelerator: 'CmdOrCtrl+R' }
+    //       ]
+    //     }
+    //   ];
+    //   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+
+    win.webContents.on('before-input-event', (event, input) => {
+        if (input.key === 'F12' && input.type === 'keyDown') {
+            win.webContents.toggleDevTools();
+            event.preventDefault();
+        }
+    });
 }
 
-app.whenReady().then(createWin);
+// app.whenReady().then(createWin);
+app.whenReady().then(() => {
+    createWin();
+
+    // Variante B: als globalShortcut
+    globalShortcut.register('F12', () => {
+        const currWin = BrowserWindow.getFocusedWindow();
+        if (currWin) currWin.webContents.toggleDevTools();
+    });
+});
+
+// app.on('will-quit', () => {
+//     globalShortcut.unregisterAll();
+// });
 
 app.on('window-all-closed', () => {
     if (serverProc) serverProc.kill();
@@ -229,13 +286,13 @@ app.on('window-all-closed', () => {
 });
 
 
-ipcMain.on('window-minimize',   e => e.sender.getOwnerBrowserWindow().minimize());
+ipcMain.on('window-minimize', e => e.sender.getOwnerBrowserWindow().minimize());
 ipcMain.on('window-toggle-max', e => {
-  const w = e.sender.getOwnerBrowserWindow();
-  w.isMaximized() ? w.unmaximize() : w.maximize();
+    const w = e.sender.getOwnerBrowserWindow();
+    w.isMaximized() ? w.unmaximize() : w.maximize();
 });
-ipcMain.on('window-close',      e => e.sender.getOwnerBrowserWindow().close());
-ipcMain.on('window-toggle-full',e => {
-  const w = e.sender.getOwnerBrowserWindow();
-  w.setFullScreen(!w.isFullScreen());
+ipcMain.on('window-close', e => e.sender.getOwnerBrowserWindow().close());
+ipcMain.on('window-toggle-full', e => {
+    const w = e.sender.getOwnerBrowserWindow();
+    w.setFullScreen(!w.isFullScreen());
 });
