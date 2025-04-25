@@ -209,7 +209,7 @@ function createWin() {
     win = new BrowserWindow({
         width: 1200,
         height: 800,
-        frame: false,
+        // frame: false,
         resizable: true,
         // autoHideMenuBar: true,
         webPreferences: {
