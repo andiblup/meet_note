@@ -95,6 +95,7 @@ Eine moderne, sichere, modulare Netzwerk-Notiz-App für Meetings, Projekte und T
 - [ ] Emoji-Paneel
 - [x] Besseres Logging
 - [ ] HTML interpretation
+- [ ] Offline Funktionalität
 
 ### Phase 3: Sicherheit & Rollen
 

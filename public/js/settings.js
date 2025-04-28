@@ -91,10 +91,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (isElectron) {
         // Speichern nur in Electron
         document.getElementById('btnSaveSettings').addEventListener('click', async () => {
+            document.documentElement.style.setProperty('--color-primary', document.getElementById('rgbOutput').value);
             const newSettings = {
                 theme: document.getElementById('chkDark').checked ? 'dark' : 'light',
                 autosave: Number(document.getElementById('inpAutosave').value) || 5000,
-                primaryColor: document.getElementById('argbOutput').value || currentSettings.primaryColor,
+                // primaryColor: document.getElementById('argbOutput').value || currentSettings.primaryColor,
+                primaryColor: document.getElementById('rgbOutput').value || currentSettings.primaryColor,
                 tabSize: Number(document.getElementById('inpTabSize').value) || 4
             };
             await window.electronAPI.saveSettings(newSettings);
@@ -110,8 +112,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('closeARGBPickerModal').addEventListener('click', e => {
             console.log("ananas");
 
-            localStorage.setItem('primaryColor', document.getElementById('argbOutput').value);
-            getComputedStyle(document.documentElement).setProperty('--color-primary', document.getElementById('argbOutput').value);
+            // localStorage.setItem('primaryColor', document.getElementById('argbOutput').value);
+            localStorage.setItem('primaryColor', document.getElementById('rgbOutput').value);
+            // getComputedStyle(document.documentElement).setProperty('--color-primary', document.getElementById('argbOutput').value);
+            console.log(document.documentElement.style.getPropertyValue('--color-primary'));
+            // document.documentElement.style.setProperty('--color-primary', document.getElementById('argbOutput').value);
+            document.documentElement.style.setProperty('--color-primary', document.getElementById('rgbOutput').value);
+            console.log(document.documentElement.style.getPropertyValue('--color-primary'));
+            
         });
         // Event-Handler  ➜  sofortige Persistenz im Browser
         document.getElementById('inpTabSize').addEventListener('input', e => {

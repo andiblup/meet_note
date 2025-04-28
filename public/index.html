@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Meet Note – Editor</title>
+    <title>Meet Note - Editor</title>
 
     <link rel="stylesheet" href="./styles/output.css">
     <link rel="stylesheet" href="./styles/overwrite.css">
@@ -137,6 +137,31 @@
                     <option value="h3">H3</option>
                 </select>
 
+                <div class="dropdown dropdown-bottom dropdown-center">
+                    <select tabindex="0" role="button" class="btn m-1">Überschrift</select>
+                    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                        <option value="p">Text</option>
+                        <option value="h1">H1</option>
+                        <option value="h2">H2</option>
+                        <option value="h3">H3</option>
+                    </ul>
+                </div>
+
+
+                <!-- <button id="btnHeading" class="btn btn-sm btn-ghost flex-1 justify-between"
+                    popovertarget="popover-heading" style="anchor-name:--anchor-heading">
+                    <span id="currentHeading">Text</span>
+                    <i class="bx bx-chevron-down"></i>
+                </button>
+
+                <ul id="popover-heading" class="dropdown menu w-32 rounded-box bg-base-100 shadow-sm" popover
+                    style="position-anchor:--anchor-heading">
+                    <li data-value="p"><a>Text</a></li>
+                    <li data-value="h1"><a>H1</a></li>
+                    <li data-value="h2"><a>H2</a></li>
+                    <li data-value="h3"><a>H3</a></li>
+                </ul> -->
+
                 <!-- Schriftgröße -->
                 <select id="selFontSize" class="select select-sm focus:border-primary" title="Schriftgröße">
                     <option value="1">xs</option>
@@ -154,7 +179,7 @@
                         class="bx bx-list-ul"></i></button>
                 <button data-cmd="insertOrderedList" class="btn btn-sm btn-ghost" title="Nummerierte Liste"><i
                         class="bx bx-list-ol"></i></button>
-                <button id="btnCheckboxList" class="btn btn-sm btn-ghost" title="Checkbox‑Liste"><i
+                <button id="btnCheckboxList" class="btn btn-sm btn-ghost" title="Checkbox-Liste"><i
                         class="bx bx-checkbox"></i></button>
 
                 <div class="divider divider-horizontal m-0"></div>
@@ -190,202 +215,202 @@
                 <div class="divider divider-horizontal m-0"></div>
 
                 <!-- Textfarben -->
-                <select id="selForeColor" class="select select-sm" title="Text‑Farbe">
-                    <option value="">Textfarbe</option>
+                <select id="selForeColor" class="select select-sm" title="Text-Farbe">
+                    <option value="">Standard</option>
                     <optgroup label="slate">
-                        <option value="#cbd5e1">■ slate-300</option>
-                        <option value="#64748b">■ slate-500</option>
-                        <option value="#0f172a">■ slate-700</option>
+                        <option class="bg-slate-300" value="#cbd5e1"></option>
+                        <option class="bg-slate-500" value="#64748b"></option>
+                        <option class="bg-slate-700" value="#0f172a"></option>
                     </optgroup>
                     <optgroup label="gray">
-                        <option value="#d1d5db">■ gray-300</option>
-                        <option value="#6b7280">■ gray-500</option>
-                        <option value="#111827">■ gray-700</option>
+                        <option class="bg-gray-300" value="#d1d5db"></option>
+                        <option class="bg-gray-500" value="#6b7280"></option>
+                        <option class="bg-gray-700" value="#111827"></option>
                     </optgroup>
                     <optgroup label="red">
-                        <option value="#fecdd3">■ red-300</option>
-                        <option value="#ef4444">■ red-500</option>
-                        <option value="#991b1b">■ red-700</option>
+                        <option class="bg-red-300" value="#fecdd3"></option>
+                        <option class="bg-red-500" value="#ef4444"></option>
+                        <option class="bg-red-700" value="#991b1b"></option>
                     </optgroup>
                     <optgroup label="orange">
-                        <option value="#fed7aa">■ orange-300</option>
-                        <option value="#f97316">■ orange-500</option>
-                        <option value="#c2410c">■ orange-700</option>
+                        <option class="bg-orange-300" value="#fed7aa"></option>
+                        <option class="bg-orange-500" value="#f97316"></option>
+                        <option class="bg-orange-700" value="#c2410c"></option>
                     </optgroup>
                     <optgroup label="amber">
-                        <option value="#fde68a">■ amber-300</option>
-                        <option value="#f59e0b">■ amber-500</option>
-                        <option value="#92400e">■ amber-700</option>
+                        <option class="bg-amber-300" value="#fde68a"></option>
+                        <option class="bg-amber-500" value="#f59e0b"></option>
+                        <option class="bg-amber-700" value="#92400e"></option>
                     </optgroup>
                     <optgroup label="yellow">
-                        <option value="#fef08a">■ yellow-300</option>
-                        <option value="#eab308">■ yellow-500</option>
-                        <option value="#713f12">■ yellow-700</option>
+                        <option class="bg-yellow-300" value="#fef08a"></option>
+                        <option class="bg-yellow-500" value="#eab308"></option>
+                        <option class="bg-yellow-700" value="#713f12"></option>
                     </optgroup>
                     <optgroup label="lime">
-                        <option value="#d9f99d">■ lime-300</option>
-                        <option value="#84cc16">■ lime-500</option>
-                        <option value="#365314">■ lime-700</option>
+                        <option class="bg-lime-300" value="#d9f99d"></option>
+                        <option class="bg-lime-500" value="#84cc16"></option>
+                        <option class="bg-lime-700" value="#365314"></option>
                     </optgroup>
                     <optgroup label="green">
-                        <option value="#bbf7d0">■ green-300</option>
-                        <option value="#22c55e">■ green-500</option>
-                        <option value="#166534">■ green-700</option>
+                        <option class="bg-green-300" value="#bbf7d0"></option>
+                        <option class="bg-green-500" value="#22c55e"></option>
+                        <option class="bg-green-700" value="#166534"></option>
                     </optgroup>
                     <optgroup label="emerald">
-                        <option value="#6ee7b7">■ emerald-300</option>
-                        <option value="#10b981">■ emerald-500</option>
-                        <option value="#064e3b">■ emerald-700</option>
+                        <option class="bg-emerald-300" value="#6ee7b7"></option>
+                        <option class="bg-emerald-500" value="#10b981"></option>
+                        <option class="bg-emerald-700" value="#064e3b"></option>
                     </optgroup>
                     <optgroup label="teal">
-                        <option value="#5eead4">■ teal-300</option>
-                        <option value="#14b8a6">■ teal-500</option>
-                        <option value="#0f766e">■ teal-700</option>
+                        <option class="bg-teal-300" value="#5eead4"></option>
+                        <option class="bg-teal-500" value="#14b8a6"></option>
+                        <option class="bg-teal-700" value="#0f766e"></option>
                     </optgroup>
                     <optgroup label="cyan">
-                        <option value="#67e8f9">■ cyan-300</option>
-                        <option value="#06b6d4">■ cyan-500</option>
-                        <option value="#164e63">■ cyan-700</option>
+                        <option class="bg-cyan-300" value="#67e8f9"></option>
+                        <option class="bg-cyan-500" value="#06b6d4"></option>
+                        <option class="bg-cyan-700" value="#164e63"></option>
                     </optgroup>
                     <optgroup label="sky">
-                        <option value="#7dd3fc">■ sky-300</option>
-                        <option value="#0ea5e9">■ sky-500</option>
-                        <option value="#075985">■ sky-700</option>
+                        <option class="bg-sky-300" value="#7dd3fc"></option>
+                        <option class="bg-sky-500" value="#0ea5e9"></option>
+                        <option class="bg-sky-700" value="#075985"></option>
                     </optgroup>
                     <optgroup label="blue">
-                        <option value="#93c5fd">■ blue-300</option>
-                        <option value="#3b82f6">■ blue-500</option>
-                        <option value="#1e40af">■ blue-700</option>
+                        <option class="bg-blue-300" value="#93c5fd"></option>
+                        <option class="bg-blue-500" value="#3b82f6"></option>
+                        <option class="bg-blue-700" value="#1e40af"></option>
                     </optgroup>
                     <optgroup label="indigo">
-                        <option value="#a5b4fc">■ indigo-300</option>
-                        <option value="#6366f1">■ indigo-500</option>
-                        <option value="#312e81">■ indigo-700</option>
+                        <option class="bg-indigo-300" value="#a5b4fc"></option>
+                        <option class="bg-indigo-500" value="#6366f1"></option>
+                        <option class="bg-indigo-700" value="#312e81"></option>
                     </optgroup>
                     <optgroup label="violet">
-                        <option value="#c4b5fd">■ violet-300</option>
-                        <option value="#8b5cf6">■ violet-500</option>
-                        <option value="#5b21b6">■ violet-700</option>
+                        <option class="bg-violet-300" value="#c4b5fd"></option>
+                        <option class="bg-violet-500" value="#8b5cf6"></option>
+                        <option class="bg-violet-700" value="#5b21b6"></option>
                     </optgroup>
                     <optgroup label="purple">
-                        <option value="#d8b4fe">■ purple-300</option>
-                        <option value="#a855f7">■ purple-500</option>
-                        <option value="#6b21a8">■ purple-700</option>
+                        <option class="bg-purple-300" value="#d8b4fe"></option>
+                        <option class="bg-purple-500" value="#a855f7"></option>
+                        <option class="bg-purple-700" value="#6b21a8"></option>
                     </optgroup>
                     <optgroup label="fuchsia">
-                        <option value="#fbcfe8">■ fuchsia-300</option>
-                        <option value="#d946ef">■ fuchsia-500</option>
-                        <option value="#831843">■ fuchsia-700</option>
+                        <option class="bg-fuchsia-300" value="#fbcfe8"></option>
+                        <option class="bg-fuchsia-500" value="#d946ef"></option>
+                        <option class="bg-fuchsia-700" value="#831843"></option>
                     </optgroup>
                     <optgroup label="pink">
-                        <option value="#f9a8d4">■ pink-300</option>
-                        <option value="#ec4899">■ pink-500</option>
-                        <option value="#9d174d">■ pink-700</option>
+                        <option class="bg-pink-300" value="#f9a8d4"></option>
+                        <option class="bg-pink-500" value="#ec4899"></option>
+                        <option class="bg-pink-700" value="#9d174d"></option>
                     </optgroup>
                     <optgroup label="rose">
-                        <option value="#fecdd3">■ rose-300</option>
-                        <option value="#f43f5e">■ rose-500</option>
-                        <option value="#881337">■ rose-700</option>
+                        <option class="bg-rose-300" value="#fecdd3"></option>
+                        <option class="bg-rose-500" value="#f43f5e"></option>
+                        <option class="bg-rose-700" value="#881337"></option>
                     </optgroup>
                 </select>
 
                 <!-- Hintergrund -->
-                <select id="selBackColor" class="select select-sm" title="Hintergrund‑Farbe">
-                    <option value="">Hintergrund</option>
+                <select id="selBackColor" class="select select-sm" title="Hintergrund-Farbe">
+                    <option value="">Standard</option>
                     <optgroup label="slate">
-                        <option value="#cbd5e1" style="background:#cbd5e1; color:#111827">■ slate-300</option>
-                        <option value="#64748b">■ slate-500</option>
-                        <option value="#0f172a">■ slate-700</option>
+                        <option class="bg-slate-300" value="#cbd5e1"></option>
+                        <option class="bg-slate-500" value="#64748b"></option>
+                        <option class="bg-slate-700" value="#0f172a"></option>
                     </optgroup>
                     <optgroup label="gray">
-                        <option value="#d1d5db">■ gray-300</option>
-                        <option value="#6b7280">■ gray-500</option>
-                        <option value="#111827">■ gray-700</option>
+                        <option class="bg-gray-300" value="#d1d5db"></option>
+                        <option class="bg-gray-500" value="#6b7280"></option>
+                        <option class="bg-gray-700" value="#111827"></option>
                     </optgroup>
                     <optgroup label="red">
-                        <option value="#fecdd3">■ red-300</option>
-                        <option value="#ef4444">■ red-500</option>
-                        <option value="#991b1b">■ red-700</option>
+                        <option class="bg-red-300" value="#fecdd3"></option>
+                        <option class="bg-red-500" value="#ef4444"></option>
+                        <option class="bg-red-700" value="#991b1b"></option>
                     </optgroup>
                     <optgroup label="orange">
-                        <option value="#fed7aa">■ orange-300</option>
-                        <option value="#f97316">■ orange-500</option>
-                        <option value="#c2410c">■ orange-700</option>
+                        <option class="bg-orange-300" value="#fed7aa"></option>
+                        <option class="bg-orange-500" value="#f97316"></option>
+                        <option class="bg-orange-700" value="#c2410c"></option>
                     </optgroup>
                     <optgroup label="amber">
-                        <option value="#fde68a">■ amber-300</option>
-                        <option value="#f59e0b">■ amber-500</option>
-                        <option value="#92400e">■ amber-700</option>
+                        <option class="bg-amber-300" value="#fde68a"></option>
+                        <option class="bg-amber-500" value="#f59e0b"></option>
+                        <option class="bg-amber-700" value="#92400e"></option>
                     </optgroup>
                     <optgroup label="yellow">
-                        <option value="#fef08a">■ yellow-300</option>
-                        <option value="#eab308">■ yellow-500</option>
-                        <option value="#713f12">■ yellow-700</option>
+                        <option class="bg-yellow-300" value="#fef08a"></option>
+                        <option class="bg-yellow-500" value="#eab308"></option>
+                        <option class="bg-yellow-700" value="#713f12"></option>
                     </optgroup>
                     <optgroup label="lime">
-                        <option value="#d9f99d">■ lime-300</option>
-                        <option value="#84cc16">■ lime-500</option>
-                        <option value="#365314">■ lime-700</option>
+                        <option class="bg-lime-300" value="#d9f99d"></option>
+                        <option class="bg-lime-500" value="#84cc16"></option>
+                        <option class="bg-lime-700" value="#365314"></option>
                     </optgroup>
                     <optgroup label="green">
-                        <option value="#bbf7d0">■ green-300</option>
-                        <option value="#22c55e">■ green-500</option>
-                        <option value="#166534">■ green-700</option>
+                        <option class="bg-green-300" value="#bbf7d0"></option>
+                        <option class="bg-green-500" value="#22c55e"></option>
+                        <option class="bg-green-700" value="#166534"></option>
                     </optgroup>
                     <optgroup label="emerald">
-                        <option value="#6ee7b7">■ emerald-300</option>
-                        <option value="#10b981">■ emerald-500</option>
-                        <option value="#064e3b">■ emerald-700</option>
+                        <option class="bg-emerald-300" value="#6ee7b7"></option>
+                        <option class="bg-emerald-500" value="#10b981"></option>
+                        <option class="bg-emerald-700" value="#064e3b"></option>
                     </optgroup>
                     <optgroup label="teal">
-                        <option value="#5eead4">■ teal-300</option>
-                        <option value="#14b8a6">■ teal-500</option>
-                        <option value="#0f766e">■ teal-700</option>
+                        <option class="bg-teal-300" value="#5eead4"></option>
+                        <option class="bg-teal-500" value="#14b8a6"></option>
+                        <option class="bg-teal-700" value="#0f766e"></option>
                     </optgroup>
                     <optgroup label="cyan">
-                        <option value="#67e8f9">■ cyan-300</option>
-                        <option value="#06b6d4">■ cyan-500</option>
-                        <option value="#164e63">■ cyan-700</option>
+                        <option class="bg-cyan-300" value="#67e8f9"></option>
+                        <option class="bg-cyan-500" value="#06b6d4"></option>
+                        <option class="bg-cyan-700" value="#164e63"></option>
                     </optgroup>
                     <optgroup label="sky">
-                        <option value="#7dd3fc">■ sky-300</option>
-                        <option value="#0ea5e9">■ sky-500</option>
-                        <option value="#075985">■ sky-700</option>
+                        <option class="bg-sky-300" value="#7dd3fc"></option>
+                        <option class="bg-sky-500" value="#0ea5e9"></option>
+                        <option class="bg-sky-700" value="#075985"></option>
                     </optgroup>
                     <optgroup label="blue">
-                        <option value="#93c5fd">■ blue-300</option>
-                        <option value="#3b82f6">■ blue-500</option>
-                        <option value="#1e40af">■ blue-700</option>
+                        <option class="bg-blue-300" value="#93c5fd"></option>
+                        <option class="bg-blue-500" value="#3b82f6"></option>
+                        <option class="bg-blue-700" value="#1e40af"></option>
                     </optgroup>
                     <optgroup label="indigo">
-                        <option value="#a5b4fc">■ indigo-300</option>
-                        <option value="#6366f1">■ indigo-500</option>
-                        <option value="#312e81">■ indigo-700</option>
+                        <option class="bg-indigo-300" value="#a5b4fc"></option>
+                        <option class="bg-indigo-500" value="#6366f1"></option>
+                        <option class="bg-indigo-700" value="#312e81"></option>
                     </optgroup>
                     <optgroup label="violet">
-                        <option value="#c4b5fd">■ violet-300</option>
-                        <option value="#8b5cf6">■ violet-500</option>
-                        <option value="#5b21b6">■ violet-700</option>
+                        <option class="bg-violet-300" value="#c4b5fd"></option>
+                        <option class="bg-violet-500" value="#8b5cf6"></option>
+                        <option class="bg-violet-700" value="#5b21b6"></option>
                     </optgroup>
                     <optgroup label="purple">
-                        <option value="#d8b4fe">■ purple-300</option>
-                        <option value="#a855f7">■ purple-500</option>
-                        <option value="#6b21a8">■ purple-700</option>
+                        <option class="bg-purple-300" value="#d8b4fe"></option>
+                        <option class="bg-purple-500" value="#a855f7"></option>
+                        <option class="bg-purple-700" value="#6b21a8"></option>
                     </optgroup>
                     <optgroup label="fuchsia">
-                        <option value="#fbcfe8">■ fuchsia-300</option>
-                        <option value="#d946ef">■ fuchsia-500</option>
-                        <option value="#831843">■ fuchsia-700</option>
+                        <option class="bg-fuchsia-300" value="#fbcfe8"></option>
+                        <option class="bg-fuchsia-500" value="#d946ef"></option>
+                        <option class="bg-fuchsia-700" value="#831843"></option>
                     </optgroup>
                     <optgroup label="pink">
-                        <option value="#f9a8d4">■ pink-300</option>
-                        <option value="#ec4899">■ pink-500</option>
-                        <option value="#9d174d">■ pink-700</option>
+                        <option class="bg-pink-300" value="#f9a8d4"></option>
+                        <option class="bg-pink-500" value="#ec4899"></option>
+                        <option class="bg-pink-700" value="#9d174d"></option>
                     </optgroup>
                     <optgroup label="rose">
-                        <option value="#fecdd3"><span>rose-300</span></option>
-                        <option value="#f43f5e">■ rose-500</option>
-                        <option value="#881337">■ rose-700</option>
+                        <option class="bg-rose-300" value="#fecdd3"></option>
+                        <option class="bg-rose-500" value="#f43f5e"></option>
+                        <option class="bg-rose-700" value="#881337"></option>
                     </optgroup>
                 </select>
 
@@ -398,8 +423,8 @@
 
                 <div class="divider divider-horizontal m-0"></div>
 
-                <!-- Code‑Fence -->
-                <select id="selCodeLang" class="select select-sm" title="Code‑Sprache">
+                <!-- Code-Fence -->
+                <select id="selCodeLang" class="select select-sm" title="Code-Sprache">
                     <option value="language-javascript" selected>JS</option>
                     <option value="language-css">CSS</option>
                     <option value="language-markup">HTML</option>
@@ -408,9 +433,9 @@
                     <option value="language-csharp">C#</option>
                     <option value="language-go">Go</option>
                     <option value="language-ruby">Ruby</option>
-                    <!-- … weitere Prism‑Sprachen … -->
+                    <!-- … weitere Prism-Sprachen … -->
                 </select>
-                <button id="btnCodeFence" class="btn btn-sm btn-ghost" title="Code‑Block"><i
+                <button id="btnCodeFence" class="btn btn-sm btn-ghost" title="Code-Block"><i
                         class="bx bx-code"></i></button>
 
             </div>
@@ -499,21 +524,22 @@
                         <span id="bVal" class="w-12 text-right"></span>
                     </div>
                 </div>
-                <div class="flex items-center">
+                <!-- <div class="flex items-center">
                     <label class="w-16">Alpha:</label>
                     <input id="a" type="range" min="0" max="1" step="0.01" class="range range-primary flex-1">
                     <span id="aVal" class="w-12 text-right"></span>
-                </div>
+                </div> -->
                 <div>
                     <label class="label"><span class="label-text">Vorschau:</span></label>
                     <div id="preview" style="min-height: 24px;" class="w-full h-16 border rounded"></div>
                 </div>
                 <div>
                     <label class="label"><span class="label-text">ARGB Hex:</span></label>
-                    <input id="argbOutput" type="text" readonly class="input input-bordered w-full" />
+                    <!-- <input id="argbOutput" type="text" readonly class="input input-bordered w-full" /> -->
+                    <input id="rgbOutput" type="text" readonly class="input input-bordered w-full" />
                 </div>
                 <div class="modal-action">
-                    <button id="closeARGBPickerModal" type="submit" class="btn btn-primary">Schließen</button>
+                    <button id="closeARGBPickerModal" type="submit" class="btn btn-primary">Speichern</button>
                 </div>
             </form>
         </dialog>
@@ -568,7 +594,10 @@
         }
     </script>
 
-    <script>
+
+
+    <!-- OLD ARGB -->
+    <!-- <script>
         // ----------- 1) Parse-Funktion für OKLCH-CSS-Syntax -------------
         function parseOKLCH(css) {
             const m = /oklch\(\s*([0-9.]+)%\s+([0-9.]+)\s+([0-9.]+)\s*\)/i.exec(css);
@@ -653,7 +682,7 @@
             slider.addEventListener('input', update)
         );
 
-        // beim Laden einmal OKLCH‑Default holen und als Slider-Werte setzen
+        // beim Laden einmal OKLCH-Default holen und als Slider-Werte setzen
         window.addEventListener('DOMContentLoaded', () => {
             const css = getComputedStyle(document.documentElement)
                 .getPropertyValue('--color-primary').trim();
@@ -668,7 +697,7 @@
                 update();
             }
         });
-    </script>
+    </script> -->
 
 
     <script>
@@ -708,7 +737,7 @@
                 '4': 'text-lg', '5': 'text-xl', '6': 'text-2xl'
             };
 
-            // ELEMENT‑REFERENCES
+            // ELEMENT-REFERENCES
             const fileList = document.getElementById('fileList');
             const newFileInput = document.getElementById('newFileName');
             const btnAdd = document.getElementById('btnAdd');
@@ -720,7 +749,7 @@
             // const btnCode = document.getElementById('btnCode');
             const btnAddBlock = document.getElementById('btnAddBlock');
 
-            // TOOLBAR‑ELEMENTS
+            // TOOLBAR-ELEMENTS
             const toolbarBtns = document.querySelectorAll('#toolbar [data-cmd]');
             const selHeading = document.getElementById('selHeading');
             const selFontSize = document.getElementById('selFontSize');
@@ -730,7 +759,42 @@
             const btnCodeFence = document.getElementById('btnCodeFence');
             const btnCheckboxList = document.getElementById('btnCheckboxList');
 
-            // ─── FILE‑EXPLORER ─────────────────────────────────────────────────────────
+            // NEW Dropdown instead of selects
+
+            // // Textsize
+            // const btnHeading = document.getElementById('btnHeading');
+            // const currentHeading = document.getElementById('currentHeading');
+            // const popoverHeading = document.getElementById('popover-heading');
+
+            // // Click-Handler für die Popover-Items
+            // popoverHeading.querySelectorAll('li').forEach(li => {
+            //     li.addEventListener('click', e => {
+            //         const newValue = li.dataset.value;     
+            //         const label = li.textContent.trim();
+
+            //         // a) Button-Label updaten
+            //         currentHeading.textContent = label;
+
+            //         // b) Ausführen wie früher:
+            //         document.execCommand('formatBlock', false, newValue);
+            //         updateToolbarState();
+
+            //         // c) Popover schließen
+            //         btnHeading.popover = false;
+            //     });
+            // });
+
+            // // 3) Per JS schließen willst:
+            // btnHeading.addEventListener('blur', () => {
+            //     btnHeading.popover = false;
+            // });
+            // btnHeading.addEventListener('click', () => {
+            //     btnHeading.popover = !btnHeading.popover;
+            // });
+
+
+
+            // ─── FILE-EXPLORER ─────────────────────────────────────────────────────────
 
             async function refreshFileList() {
                 const files = await fetch('/api/files').then(r => r.json());
@@ -891,11 +955,87 @@
 
                 selHeading.addEventListener('change', () => document.execCommand('formatBlock', false, selHeading.value));
                 selFontSize.addEventListener('change', () => document.execCommand('fontSize', false, selFontSize.value));
-                selForeColor.addEventListener('change', () => document.execCommand('foreColor', false, selForeColor.value));
-                selBackColor.addEventListener('change', () => {
-                    const cmd = document.queryCommandSupported('hiliteColor') ? 'hiliteColor' : 'backColor';
-                    document.execCommand(cmd, false, selBackColor.value);
+                selForeColor.addEventListener('change', () => {
+                    // document.execCommand('foreColor', false, selForeColor.value);
+
+                    const val = selForeColor.value;
+                    if (!val) {
+                        // Default-Farbe aus deinem Tailwind-Theme holen
+                        const defaultColor = getComputedStyle(document.documentElement)
+                            .getPropertyValue('--color-base-content').trim();
+                        document.execCommand('foreColor', false, defaultColor);
+                    } else {
+                        document.execCommand('foreColor', false, val);
+                    }
+
                 });
+                // selBackColor.addEventListener('change', () => {
+                //     const cmd = document.queryCommandSupported('hiliteColor') ? 'hiliteColor' : 'backColor';
+                //     // document.execCommand(cmd, false, selBackColor.value);
+
+                //     const val = selBackColor.value;
+                //     if (!val) {
+                //         document.execCommand('hiliteColor', false, 'transparent');
+                //         document.execCommand('backColor', false, 'transparent');
+                //         console.log('transparent');
+
+                //     } else {
+                //         document.execCommand(cmd, false, val);
+                //     }
+
+                // });
+
+                selBackColor.addEventListener('change', () => {
+                    // aktivieren, dass execCommand CSS statt FONT-Tags benutzt
+                    document.execCommand('styleWithCSS', false, true);
+
+                    const val = selBackColor.value;
+                    // hiliteColor für Highlights, backColor für Legacy
+                    const cmd = document.queryCommandSupported('hiliteColor') ? 'hiliteColor' : 'backColor';
+
+                    if (val) {
+                        // echte Farbe setzen
+                        document.execCommand(cmd, false, val);
+                    } else {
+                        // // Default: entferne jede background‐color aus den gerade markierten Elementen
+                        // const sel = window.getSelection();
+                        // if (!sel.rangeCount) return;
+                        // const range = sel.getRangeAt(0);
+                        // // Hole alle <span> im Auswahl-Bereich
+                        // const container = range.commonAncestorContainer.nodeType === 3
+                        //     ? range.commonAncestorContainer.parentNode
+                        //     : range.commonAncestorContainer;
+                        // container.querySelectorAll('span').forEach(span => {
+                        //     if (span.style && span.style.backgroundColor) {
+                        //         span.style.backgroundColor = '';
+                        //         // wenn keine anderen Styles mehr drauf sind, das Attribut wegwerfen
+                        //         if (!span.getAttribute('style')) span.removeAttribute('style');
+                        //         // und falls jetzt nur noch ein leerer <span> übrig ist, inline auflösen:
+                        //         if (!span.attributes.length) {
+                        //             const parent = span.parentNode;
+                        //             while (span.firstChild) parent.insertBefore(span.firstChild, span);
+                        //             parent.removeChild(span);
+                        //         }
+                        //     }
+                        // });
+                        const defaultColor = getComputedStyle(document.documentElement)
+                            .getPropertyValue('--color-base-content').trim();
+
+                        if (span.style && span.style.backgroundColor) {
+                            span.style.backgroundColor = '';
+                            // wenn keine anderen Styles mehr drauf sind, das Attribut wegwerfen
+                            if (!span.getAttribute('style')) span.removeAttribute('style');
+                            // und falls jetzt nur noch ein leerer <span> übrig ist, inline auflösen:
+                            if (!span.attributes.length) {
+                                const parent = span.parentNode;
+                                while (span.firstChild) parent.insertBefore(span.firstChild, span);
+                                parent.removeChild(span);
+                            }
+                        }
+
+                    }
+                });
+
 
                 btnCheckboxList.addEventListener('click', () => {
                     document.execCommand('insertHTML', false,
@@ -1378,6 +1518,222 @@
         })();
     </script>
 
+    <!-- ============  RGB-Color-Picker  ============ -->
+    <!-- <script>
+        /* ---------- 1) OKLCH-String parsen (unverändert) --------- */
+        function parseOKLCH(css) {
+            // const m = /oklch\\(\\s*([0-9.]+)%\\s+([0-9.]+)\\s+([0-9.]+)\\s*\\)/i.exec(css);
+            const m = /oklch\(\s*([0-9.]+)%\s+([0-9.]+)\s+([0-9.]+)\s*\)/i.exec(css);
+
+            return m ? { L: +m[1], C: +m[2], h: +m[3] } : null;
+        }
+
+        /* ---------- 2) Konvertierung OKLCH → sRGB (unverändert) -- */
+        function oklchToOklab(L, C, hDeg) {
+            const h = hDeg * Math.PI / 180;
+            return { L: L / 100, a: C * Math.cos(h), b: C * Math.sin(h) };
+        }
+        function oklabToLinearSRGB({ L, a, b }) {
+            const l_ = L + 0.3963377774 * a + 0.2158037573 * b,
+                m_ = L - 0.1055613458 * a - 0.0638541728 * b,
+                s_ = L - 0.0894841775 * a - 1.2914855480 * b;
+            const l = l_ ** 3, m = m_ ** 3, s = s_ ** 3;
+            return {
+                r: 4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+                g: -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+                b: -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s
+            };
+        }
+        const linearToSRGB = c =>
+            (c = Math.min(Math.max(c, 0), 1)) <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055;
+        // const toHex = c => Math.round(c * 255).toString(16).padStart(2, "0").toUpperCase();
+        const toHex = c => Number(c).toString(16).padStart(2,'0').toUpperCase();
+
+        /* ---------- 3) OKLCH → {r,g,b} ----------------------------- */
+        function oklchToRGB(L, C, h) {
+            const lin = oklabToLinearSRGB(oklchToOklab(L, C, h));
+            return { r: linearToSRGB(lin.r), g: linearToSRGB(lin.g), b: linearToSRGB(lin.b) };
+        }
+
+        /* ---------- 4) Picker-Logik ------------------------------- */
+        const dialog = document.getElementById("dialog");      // optional
+
+        const [rIn, gIn, bIn] = ["r", "g", "b"].map(id => document.getElementById(id));
+        const vals = { r: "rVal", g: "gVal", b: "bVal" };
+        const preview = document.getElementById("preview");
+        const output = document.getElementById("rgbOutput");
+
+        /* Sliderfarbe live einfärben */
+        [rIn, gIn, bIn].forEach((el, i) => {
+            const setBg = v => el.style.setProperty("--range-progress",
+                `rgb(${i === 0 ? v : 0},${i === 1 ? v : 0},${i === 2 ? v : 0})`);
+            setBg(el.value);
+            el.addEventListener("input", e => setBg(e.target.value));
+        });
+
+        /* Werte anzeigen & Hex-String bilden */
+        function update() {
+            const r = +rIn.value, g = +gIn.value, b = +bIn.value;
+            Object.entries({ r, g, b }).forEach(([k, v]) => (
+                document.getElementById(vals[k]).textContent = v));
+            preview.style.backgroundColor = `rgb(${r},${g},${b})`;
+            output.value = "#" + [r, g, b].map(toHex).join("");
+        }
+        document.querySelectorAll("input[type=range]").forEach(slider =>
+            slider.addEventListener("input", update));
+
+        /* Beim Laden Grundfarbe aus CSS-Variable ableiten */
+        window.addEventListener("DOMContentLoaded", () => {
+            const css = getComputedStyle(document.documentElement)
+                .getPropertyValue("--color-primary").trim();
+            const o = parseOKLCH(css);
+            if (o) {
+                const rgb = oklchToRGB(o.L, o.C, o.h);
+                rIn.value = Math.round(rgb.r * 255);
+                gIn.value = Math.round(rgb.g * 255);
+                bIn.value = Math.round(rgb.b * 255);
+            }
+            update();
+        });
+    </script> -->
+    <script>
+        /* ----------------------------------------------------------------- */
+        /* 1)  Hilfs-Funktionen                                              */
+        /* ----------------------------------------------------------------- */
+        const toHex   = c => Number(c).toString(16).padStart(2,'0').toUpperCase();
+        const hex6    = h => /^#?([0-9a-f]{6})$/i.exec(h||'')?.[1] || null;
+        
+        /*  OKLCH ➜ OKLab ➜ linear sRGB ➜ sRGB  ---------------------------- */
+        function parseOKLCH(css){
+          const m=/oklch\(\s*([0-9.]+)%\s+([0-9.]+)\s+([0-9.]+)\s*\)/i.exec(css);
+          return m?{L:+m[1],C:+m[2],h:+m[3]}:null;
+        }
+        function oklchToOklab(L,C,hDeg){
+          const h=hDeg*Math.PI/180; return {L:L/100,a:C*Math.cos(h),b:C*Math.sin(h)};
+        }
+        function oklabToLinearSRGB({L,a,b}){
+          const l_=L+0.3963377774*a+0.2158037573*b,
+                m_=L-0.1055613458*a-0.0638541728*b,
+                s_=L-0.0894841775*a-1.2914855480*b;
+          const l=l_**3, m=m_**3, s=s_**3;
+          return {
+            r:4.0767416621*l-3.3077115913*m+0.2309699292*s,
+            g:-1.2684380046*l+2.6097574011*m-0.3413193965*s,
+            b:-0.0041960863*l-0.7034186147*m+1.7076147010*s
+          };
+        }
+        const linearToSRGB = c =>
+          (c=Math.min(Math.max(c,0),1))<=0.0031308 ? 12.92*c : 1.055*c**(1/2.4)-0.055;
+        function oklchToRGB(L,C,h){
+          const lin=oklabToLinearSRGB(oklchToOklab(L,C,h));
+          return {r:linearToSRGB(lin.r), g:linearToSRGB(lin.g), b:linearToSRGB(lin.b)};
+        }
+        
+        /* ----------------------------------------------------------------- */
+        /* 2)  DOM-Elemente                                                  */
+        /* ----------------------------------------------------------------- */
+        const [rIn,gIn,bIn] = ['r','g','b'].map(id=>document.getElementById(id));
+        const [rVal,gVal,bVal] = ['rVal','gVal','bVal'].map(id=>document.getElementById(id));
+        const preview = document.getElementById('preview');
+        const output  = document.getElementById('rgbOutput');
+        
+        /* ----------------------------------------------------------------- */
+        /* 3)  Slider-Look: Progress-Farbe je Kanal                          */
+        /* ----------------------------------------------------------------- */
+        [rIn,gIn,bIn].forEach((el,i)=>{
+          const paint=v=>el.style.setProperty('--range-progress',
+            `rgb(${i===0?v:0},${i===1?v:0},${i===2?v:0})`);
+          paint(el.value);
+          el.addEventListener('input',e=>paint(e.target.value));
+        });
+        
+        /* ----------------------------------------------------------------- */
+        /* 4)  Slider  ➜  Hex-Feld + Vorschau                                */
+        /* ----------------------------------------------------------------- */
+        function update(){
+          const r=+rIn.value, g=+gIn.value, b=+bIn.value;
+          rVal.textContent=r; gVal.textContent=g; bVal.textContent=b;
+          preview.style.backgroundColor=`rgb(${r},${g},${b})`;
+          output.value = '#'+[r,g,b].map(toHex).join('');
+        }
+        [rIn,gIn,bIn].forEach(el=>el.addEventListener('input',update));
+        
+        /* ----------------------------------------------------------------- */
+        /* 5)  Hex-Feld  ➜  Slider (bidirektional)                           */
+        /* ----------------------------------------------------------------- */
+        output.addEventListener('input',e=>{
+          const h=hex6(e.target.value.trim());          // gültig? sonst nix tun
+          if(!h) return;
+          setSliders(
+            parseInt(h.slice(0,2),16),
+            parseInt(h.slice(2,4),16),
+            parseInt(h.slice(4,6),16)
+          );
+        });
+        
+        /* ----------------------------------------------------------------- */
+        /* 6)  Zentrale Setter-Funktion                                      */
+        /* ----------------------------------------------------------------- */
+        function setSliders(r,g,b){
+          rIn.value=r; gIn.value=g; bIn.value=b;
+          [rIn,gIn,bIn].forEach((el,i)=>{
+            el.style.setProperty('--range-progress',
+              `rgb(${i===0?r:0},${i===1?g:0},${i===2?b:0})`);
+          });
+          update();
+        }
+        
+        /* ----------------------------------------------------------------- */
+        /* 7)  Initialfarbe ermitteln & anwenden                             */
+        /* ----------------------------------------------------------------- */
+        function getInitialHex(){
+          /* 1) gespeicherter Wert im localStorage? ------------------------- */
+          const ls = localStorage.getItem('primaryColor');
+          if (hex6(ls)) return hex6(ls);
+        
+          /* 2) CSS-Variable --color-primary lesen ------------------------- */
+          const css = getComputedStyle(document.documentElement)
+                        .getPropertyValue('--color-primary').trim();
+        
+          /*    2a) steht dort schon #RRGGBB?                                */
+          if (hex6(css)) return hex6(css);
+        
+          /*    2b) OKLCH → umrechnen                                        */
+          const o = parseOKLCH(css);
+          if (o){
+            const rgb = oklchToRGB(o.L,o.C,o.h);
+            return [rgb.r,rgb.g,rgb.b]
+                    .map(v=>toHex(Math.round(v*255))).join('');
+          }
+          /* 3) Fallback: schwarz                                            */
+          return '000000';
+        }
+        
+        /* beim ersten DOMContentLoaded sofort Regler setzen ---------------- */
+        window.addEventListener('DOMContentLoaded',()=>{
+          const h = getInitialHex();                          // z.B. '00FF00'
+          setSliders(
+            parseInt(h.slice(0,2),16),
+            parseInt(h.slice(2,4),16),
+            parseInt(h.slice(4,6),16)
+          );
+        });
+        
+        /* ----------------------------------------------------------------- */
+        /* OPTIONAL: Regler synchronisieren, wenn primaryColor später        */
+        /*           (z. B. aus Settings-Drawer) geändert wird               */
+        /* ----------------------------------------------------------------- */
+        window.addEventListener('storage',e=>{
+          if(e.key==='primaryColor' && hex6(e.newValue)){
+            const h=hex6(e.newValue);
+            setSliders(
+              parseInt(h.slice(0,2),16),
+              parseInt(h.slice(2,4),16),
+              parseInt(h.slice(4,6),16)
+            );
+          }
+        });
+        </script>
 
 
     <script type="module" src="./js/settings.js"></script>
