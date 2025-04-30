@@ -302,10 +302,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 Third-party libraries remain under their respective licenses – see THIRD_PARTY.md (THIRD_PARTY.md not added yet).
-
-© 2025 Meet Note Contributors · Built with 💙 in Europe
 ```
 
+---
+
+© 2025 Meet Note Contributors · Built with 💙 in Europe
 
 <!-- # Meet_Note 📝
 
