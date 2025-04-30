@@ -70,9 +70,11 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const dotenv = require('dotenv');
 
 /* ---------- Verzeichnisse / Konstanten --------------------------- */
-const PORT = 6060;
+// const PORT = 6060;
+const PORT = process.env.PORT || 6060;
 const DATA_ROOT = path.join(__dirname, '..', 'data');
 const NOTES_DIR = path.join(DATA_ROOT, 'notes');
 const SETTINGS_DIR = path.join(DATA_ROOT, 'settings');

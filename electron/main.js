@@ -10,11 +10,13 @@ const fs = require('fs');
 // const { log } = require('console');
 const log = require('../utils/logger.js');
 // const ora = require('ora');
-
+// const dotenv = require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const SETTINGS_FILE = path.join(__dirname, '..', 'data', 'settings', 'settings.json');
 
-const PORT = 6060;
+// const PORT = 6060;
+// const PORT = dotenv.parsed.PORT || 6060; // Port aus .env oder 6060
+const PORT = process.env.PORT || 6060; // Port aus .env oder 6060
 let win;                    // BrowserWindow‑Instanz
 let serverProc = null;      // Kindprozess (node server.js)
 let serverReady = false;    // wurde „🌐 http://…“ ausgegeben?
@@ -201,7 +203,62 @@ ipcMain.handle('start-server', async () => {
 
 /* URL‑Wechsel */
 ipcMain.handle('open-url', (_e, url) => {
-    if (win) win.loadURL(url);
+
+    const needsFrame = !url.includes(':6060')
+
+    if (needsFrame && !win.isFramed) {
+        const { width, height } = win.getBounds(); // Größe übernehmen
+
+        const newWin = new BrowserWindow({
+            width,
+            height,
+            frame: true,
+            resizable: true,
+            autoHideMenuBar: true,
+            webPreferences: {
+                preload: path.join(__dirname, 'preload.js'),
+                contextIsolation: true,
+                nodeIntegration: false
+            }
+        });
+
+        newWin.loadURL(url);
+
+        win.destroy();            // altes Fenster schließen
+        win = newWin;             // Referenz austauschen
+        win.isFramed = true;      // neue Markierung
+    } else {
+        // Port 6060 → einfach im bestehenden Fenster laden
+        win.loadURL(url);
+    }
+
+
+    // if (win) {
+
+    //     if (!url.includes(':')){
+
+    //         win.frame = true;
+    //         win.autoHideMenuBar = true;
+    //         // win.setMenuBarVisibility(true);
+    //         // win.setFrame(true);
+
+    //         win = new BrowserWindow({
+    //             width: 1200,
+    //             height: 800,
+    //             frame: true,
+    //             resizable: true,
+    //             autoHideMenuBar: true,
+    //             webPreferences: {
+    //                 preload: path.join(__dirname, 'preload.js'),
+    //                 contextIsolation: true,
+    //                 nodeIntegration: false
+    //             }
+    //         });
+
+    //     }
+    //     win.loadURL(url);
+
+    // }
 });
 
 /* --------------------------------- Fenster ----------------- */
