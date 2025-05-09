@@ -1,4 +1,4 @@
-@import "boxicons/css/boxicons.min.css";
+/* @import "boxicons/css/boxicons.min.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -25,23 +25,22 @@
 @layer utilities {
     .swatch-ring {
         @apply ring-2 ring-offset-1 ring-primary;
-    } /* Auswahl-Markierung   */
+    } 
     .swatch-size {
         @apply w-6 h-6;
-    } /* 1,5 rem × 1,5 rem     */
+    } 
     .swatch-base {
         @apply rounded-none border border-base-200
                                cursor-pointer inline-block p-0;
-    } /* Grundoptik            */
+    } 
 }
 
 @layer components {
-    /* 1) Focus (z. B. wenn per Tastatur gefocust) */
+    
     .btn:focus {
         @apply outline-none ring-0 border-transparent shadow-none;
     }
-    /* 2) Focus-Visible (nur sichtbar wenn per Tastatur oder explizit,  
-          und auch das überschreibt den weißen Ring) */
+
     .btn:focus-visible {
         @apply outline-none ring-0 border-transparent shadow-none;
     }
@@ -52,6 +51,50 @@
     }
 }
 
+@layer base {
+    html,
+    body {
+        @apply h-full;
+       
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+} */
+
+
+
+/* 1) externe Assets                                         */
+@import "boxicons/css/boxicons.min.css";
+
+/* 2) Tailwind CSS (ersetzt die alten @tailwind‑Direktiven)  */
+@import "tailwindcss";
+
+/* 3) DaisyUI‑Plugin                                         */
+@plugin "daisyui" { logs: false; }
+
+/* ---------- Eigene Utilities (reine Klassennamen) --------- */
+
+.swatch-ring { @apply ring-2 ring-offset-1 ring-primary; }
+.swatch-size { @apply w-6 h-6; }
+.swatch-base { @apply rounded-none border border-base-200 cursor-pointer inline-block p-0; }
+
+/* ---------- Fokus‑Styles u. Ä. als normales CSS ----------- */
+
+select.select:focus      { @apply outline-none ring-0 border-primary; }
+button.btn:focus         { @apply outline-none ring-0 border-primary; }
+button.btn:focus-visible { @apply outline-none ring-0 border-transparent shadow-none; }
+input.input:focus        { @apply outline-none ring-0 border-primary; }
+
+header div .btn:hover {
+  background-color: var(--color-red-300) !important;
+  transition: background-color .15s;
+}
+
+/* ---------- Basis‑Layout ---------------------------------- */
+
+html, body { @apply h-full overflow-y-auto overflow-x-hidden; }
+
+
 .btn:focus,
 .btn:focus-visible {
     outline: none !important;
@@ -59,15 +102,6 @@
     border-color: transparent !important;
 }
 
-@layer base {
-    html,
-    body {
-        @apply h-full;
-        /* overflow-y: hidden; */
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-}
 
 /* .header-wrapper .btn:hover,
 .btn-active {
