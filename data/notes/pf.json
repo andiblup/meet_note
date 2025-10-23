@@ -1,0 +1,92 @@
+[
+  {
+    "type": "note",
+    "text": "<hr><span style=\"color: rgb(249, 115, 22);\">disable landing caroussel -&gt; new kind of display</span>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<span style=\"color: rgb(34, 197, 94);\">centering footer</span>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "add meet_note as project<div style=\"text-align: center;\"><font color=\"#22c55e\">enable rioute</font></div><div style=\"text-align: center;\"><font color=\"#22c55e\">fill content</font></div><div style=\"text-align: center;\"><font color=\"#22c55e\">ger and eng desc</font></div><div style=\"text-align: center;\"><span style=\"font-size: var(--text-base); background-color: var(--color-base-100); font-family: var(--default-font-family,ui-sans-serif,system-ui,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;,&quot;Segoe UI Symbol&quot;,&quot;Noto Color Emoji&quot;);\"><font color=\"#22c55e\">installation guide</font></span></div>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "set up layout for project display<div style=\"text-align: center;\">set up every other like <strike>badui</strike>&nbsp;meet note</div>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "powerpoint api rejects connection, why? only player? offline working?",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "installation guide und translate for badui",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<div style=\"text-align: center;\"><font size=\"5\">Text changes</font></div>badui<div style=\"text-align: center;\">description overview card:</div><div style=\"text-align: center;\">i created a website in 2 weeks -&gt; As my first passionate project on my programming journey&nbsp;</div><div style=\"text-align: left;\">overview</div><div style=\"text-align: center;\">here you can see all my projects -&gt; here you can see all my favourite projects, for more visit me at github or contact me via mail</div>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "<div style=\"text-align: center;\"><font size=\"5\">Portfolio Project Text content</font></div><div style=\"text-align: left;\"><font size=\"3\">Features:</font></div><div style=\"text-align: left;\"><font size=\"3\">selfmade js and css, and how i did it</font></div>",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  },
+  {
+    "type": "note",
+    "text": "",
+    "style": {
+      "bold": false,
+      "color": "",
+      "size": "3"
+    }
+  }
+]
