@@ -8,10 +8,8 @@
     "dev:server": "node server/server.js",
     "dev:css": "tailwindcss -i ./public/styles/input.css -o ./public/styles/output.css --watch",
     "dev:web": "npm-run-all --parallel dev:server dev:css",
+    "electron": "npm run build:css && electron .",
     "build:css": "tailwindcss -i ./public/styles/input.css -o ./public/styles/output.css",
-    "prepare:vendor": "npx cpx \"node_modules/quill/dist/**\" public/vendor/quill && npx cpx node_modules/iconify-icon/dist/iconify-icon.min.js public/vendor/iconify",
-    "build": "npm run prepare:vendor && npm run build:css",
-    "electron": "npm run build && electron .",
     "start": "node server/server.js"
   },
   "dependencies": {
