@@ -1,0 +1,81 @@
+/* Scope Quill to purple brand */
+
+
+:root[data-brand="purple"] {
+.ql-toolbar.ql-snow {
+background: var(--card);
+border-color: var(--border);
+color: var(--foreground);
+
+
+.ql-picker { color: var(--foreground); }
+.ql-stroke { stroke: var(--foreground); }
+.ql-fill { fill: var(--foreground); }
+
+
+.ql-picker-options {
+background: var(--card);
+border-color: var(--border);
+color: var(--foreground);
+}
+}
+
+
+.ql-container.ql-snow {
+background: var(--card);
+border-color: var(--border);
+}
+
+
+.ql-editor {
+color: var(--foreground);
+
+
+a { color: var(--primary); }
+&.ql-blank::before { color: var(--foreground) !important; }
+}
+
+
+.ql-snow {
+.ql-tooltip {
+background: var(--card);
+color: var(--foreground);
+border-color: var(--border);
+
+
+input[type="text"] {
+background: var(--card);
+color: var(--foreground);
+border: 1px solid var(--border);
+}
+}
+
+
+.ql-formats button,
+.ql-toolbar .ql-picker-label,
+.ql-toolbar .ql-picker-item { border-radius: .375rem; }
+
+
+.ql-formats button:hover,
+.ql-toolbar .ql-picker-label:hover,
+.ql-toolbar .ql-picker-item:hover,
+.ql-formats button:focus,
+.ql-toolbar .ql-picker-label:focus,
+.ql-toolbar .ql-picker-item:focus,
+.ql-formats button.ql-active,
+.ql-toolbar .ql-picker-label.ql-active,
+.ql-toolbar .ql-picker-item.ql-selected {
+background: var(--background) !important;
+color: var(--primary) !important;
+outline: 2px solid transparent;
+}
+
+
+.ql-formats button:focus-visible,
+.ql-toolbar .ql-picker-label:focus-visible,
+.ql-toolbar .ql-picker-item:focus-visible {
+outline: 2px solid var(--ring) !important;
+outline-offset: 2px;
+}
+}
+}

@@ -4,9 +4,10 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-const Delta = require('quill-delta'); // <- wichtig
+const Delta = require('quill-delta');
 
-const PORT = process.env.PORT || 6060;
+// TODO: setting || env || 55555
+const PORT = process.env.PORT || 55555;
 const DATA_DIR = path.join(__dirname, '..', 'data', 'rooms');
 
 fs.mkdirSync(DATA_DIR, { recursive: true });

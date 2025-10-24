@@ -1,0 +1,523 @@
+/* ===== Theme Variables =================================================== */
+/* Default (light) – wirkt, wenn kein data-theme gesetzt ist */
+:root {
+  --bg:            #f7f7f8;
+  --fg:            #0f1115;
+  --muted:         #6b7280;
+  --border:        #e5e7eb;
+  --card:          #ffffff;
+
+  --primary:       #2563eb; /* blau */
+  --primary-fg:    #ffffff;
+
+  --accent:        #10b981; /* grün */
+  --accent-fg:     #0b1317;
+
+  --danger:        #ef4444;
+  --danger-fg:     #ffffff;
+
+  --ring:          rgba(37, 99, 235, 0.3);
+}
+
+/* Dark */
+:root[data-theme="dark"] {
+  --bg:            #0f1115;
+  --fg:            #e5e7eb;
+  --muted:         #9aa4b2;
+  --border:        #232a34;
+  --card:          #151922;
+
+  --primary:       #60a5fa;   /* helleres blau */
+  --primary-fg:    #0b1020;
+
+  --accent:        #34d399;
+  --accent-fg:     #0b1317;
+
+  --danger:        #f87171;
+  --danger-fg:     #0b1020;
+
+  --ring:          rgba(96, 165, 250, 0.35);
+}
+
+/* (Optional) Solarized */
+:root[data-theme="solar"] {
+  --bg:            #fdf6e3;
+  --fg:            #073642;
+  --muted:         #586e75;
+  --border:        #eee8d5;
+  --card:          #fffdf6;
+
+  --primary:       #268bd2;
+  --primary-fg:    #fff;
+
+  --accent:        #2aa198;
+  --accent-fg:     #001f27;
+
+  --danger:        #dc322f;
+  --danger-fg:     #fff;
+
+  --ring:          rgba(38,139,210,0.28);
+}
+
+/* ===== Base Layout ======================================================= */
+html, body {
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+/* Cards / Container (falls du Basecoat Cards nutzt, ergänzen wir optisch) */
+.card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+}
+
+/* ===== Basecoat – sanfte Anpassungen ==================================== */
+/* Buttons (falls Basecoat .btn/.btn-outline einsetzt; passe ggf. deine Klassen an) */
+.bc-btn, .btn {
+  background-color: var(--primary);
+  color: var(--primary-fg);
+  border: 1px solid var(--primary);
+}
+.bc-btn:hover, .btn:hover {
+  filter: brightness(0.95);
+}
+.bc-btn:focus, .btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.bc-btn.bc-btn-primary, .btn-primary { /* Alias */
+  background-color: var(--primary);
+  color: var(--primary-fg);
+}
+
+.btn-outline, .bc-btn-outline {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--border);
+}
+.btn-outline:hover, .bc-btn-outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Inputs */
+.bc-input, input[type="text"], input[type="email"], input[type="password"], textarea {
+  background-color: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.65rem;
+}
+.bc-input:focus, input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+/* ===== Quill – Theme-Overrides ========================================== */
+/* Toolbar */
+.ql-toolbar.ql-snow {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--fg);
+}
+.ql-toolbar.ql-snow .ql-picker {
+  color: var(--fg);
+}
+.ql-toolbar.ql-snow .ql-stroke {
+  stroke: var(--fg);
+}
+.ql-toolbar.ql-snow .ql-fill {
+  fill: var(--fg);
+}
+.ql-toolbar.ql-snow .ql-picker-options {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--fg);
+}
+
+/* Editor Container */
+.ql-container.ql-snow {
+  border-color: var(--border);
+  background: var(--card);
+}
+.ql-editor {
+  color: var(--fg);
+}
+
+/* Links, Code, Blockquote etc. */
+.ql-editor a {
+  color: var(--primary);
+}
+.ql-snow .ql-tooltip {
+  background: var(--card);
+  color: var(--fg);
+  border-color: var(--border);
+}
+.ql-snow .ql-tooltip input[type=text] {
+  background: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--border);
+}
+
+/* Cursors/Selection (Browser-seitig) kannst du optional leicht anpassen */
+::selection { background: var(--ring); }
+::-moz-selection { background: var(--ring); }
+
+
+
+///////////////
+
+
+/* ====== Defaults (Fallback, falls keine Attribute gesetzt) ================= */
+:root {
+    --radius: 0.75rem;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+    /* neutrales, zugängliches Default (hell) */
+    --bg: #f7f7f8;
+    --fg: #0f1115;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --card: #ffffff;
+
+    --primary: #3b82f6; /* blue-500 */
+    --primary-fg: #ffffff;
+    --accent: #6366f1; /* indigo-500 */
+    --accent-fg: #ffffff;
+
+    --success: #22c55e;
+    --success-fg: #06210f;
+    --warning: #f59e0b;
+    --warning-fg: #1a1300;
+    --info: #0ea5e9;
+    --info-fg: #041018;
+    --danger: #ef4444;
+    --danger-fg: #2b0a0a;
+
+    --ring: rgba(59, 130, 246, 0.35);
+    --kbd-bg: #eef2ff;
+    --code-bg: #0b1220;
+}
+
+/* ========= Base layout hooks ============================================= */
+html,
+body {
+    background: var(--bg);
+    color: var(--fg);
+}
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+.bc-btn,
+.btn {
+    border-radius: var(--radius);
+}
+.bc-input,
+input,
+textarea,
+select {
+    border-radius: 0.5rem;
+}
+
+/* ========= Basecoat tweaks (kurz) ======================================== */
+.bc-btn,
+.btn {
+    background: var(--primary);
+    color: var(--primary-fg);
+    border: 1px solid var(--primary);
+}
+.bc-btn:hover,
+.btn:hover {
+    filter: brightness(0.96);
+}
+.bc-btn:focus,
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ring);
+}
+
+.btn-outline,
+.bc-btn-outline {
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid var(--border);
+}
+.btn-outline:hover,
+.bc-btn-outline:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.bc-input,
+input,
+textarea,
+select {
+    background: var(--card);
+    color: var(--fg);
+    border: 1px solid var(--border);
+}
+.bc-input:focus,
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--ring);
+}
+
+/* ========= Quill (snow) =================================================== */
+.ql-toolbar.ql-snow {
+    background: var(--card);
+    border-color: var(--border);
+    color: var(--fg);
+}
+.ql-toolbar.ql-snow .ql-picker {
+    color: var(--fg);
+}
+.ql-toolbar.ql-snow .ql-stroke {
+    stroke: var(--fg);
+}
+.ql-toolbar.ql-snow .ql-fill {
+    fill: var(--fg);
+}
+.ql-toolbar.ql-snow .ql-picker-options {
+    background: var(--card);
+    border-color: var(--border);
+    color: var(--fg);
+}
+.ql-container.ql-snow {
+    border-color: var(--border);
+    background: var(--card);
+}
+.ql-editor {
+    color: var(--fg);
+}
+.ql-editor a {
+    color: var(--primary);
+}
+.ql-snow .ql-tooltip {
+    background: var(--card);
+    color: var(--fg);
+    border-color: var(--border);
+}
+.ql-snow .ql-tooltip input[type="text"] {
+    background: var(--card);
+    color: var(--fg);
+    border: 1px solid var(--border);
+}
+
+/* ==========================================================================
+   THEME FAMILIES (light/dark)
+   - data-theme = classic|green|purple|playful
+   - data-mode  = light|dark
+   ========================================================================== */
+
+/* ---------- CLASSIC (shadcn-esque) -------------------------------------- */
+:root[data-theme="classic"][data-mode="light"] {
+    --bg: #fafafa;
+    --fg: #0b0f19;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --card: #ffffff;
+    --primary: #3b82f6;
+    --primary-fg: #ffffff; /* blue-500 */
+    --accent: #6366f1;
+    --accent-fg: #ffffff; /* indigo-500 */
+    --success: #22c55e;
+    --success-fg: #06210f;
+    --warning: #f59e0b;
+    --warning-fg: #1a1300;
+    --info: #0ea5e9;
+    --info-fg: #041018;
+    --danger: #ef4444;
+    --danger-fg: #2b0a0a;
+    --ring: rgba(59, 130, 246, 0.35);
+    --kbd-bg: #eef2ff;
+    --code-bg: #0b1220;
+}
+:root[data-theme="classic"][data-mode="dark"] {
+    --bg: #0f1115;
+    --fg: #e5e7eb;
+    --muted: #9aa4b2;
+    --border: #232a34;
+    --card: #141924;
+    --primary: #60a5fa;
+    --primary-fg: #0a1224; /* blue-400 */
+    --accent: #818cf8;
+    --accent-fg: #0a0e25; /* indigo-400 */
+    --success: #34d399;
+    --success-fg: #051610;
+    --warning: #fbbf24;
+    --warning-fg: #221702;
+    --info: #38bdf8;
+    --info-fg: #03131f;
+    --danger: #f87171;
+    --danger-fg: #210a0a;
+    --ring: rgba(96, 165, 250, 0.35);
+    --kbd-bg: #111827;
+    --code-bg: #0b1220;
+}
+
+/* ---------- GREEN (shadcn green + Supabase + Nuxt) ---------------------- */
+:root[data-theme="green"][data-mode="light"] {
+    --bg: #f6fff9;
+    --fg: #07130e;
+    --muted: #5f6d64;
+    --border: #dbe7df;
+    --card: #ffffff;
+    --primary: #22c55e;
+    --primary-fg: #052212; /* shadcn green-500 */
+    --accent: #3ecf8e;
+    --accent-fg: #062116; /* Supabase */
+    --success: #00dc82;
+    --success-fg: #042015; /* Nuxt */
+    --warning: #f59e0b;
+    --warning-fg: #1a1300;
+    --info: #10b981;
+    --info-fg: #04160f;
+    --danger: #ef4444;
+    --danger-fg: #2b0a0a;
+    --ring: rgba(16, 185, 129, 0.28);
+    --kbd-bg: #eafcf4;
+    --code-bg: #082015;
+}
+:root[data-theme="green"][data-mode="dark"] {
+    --bg: #08110d;
+    --fg: #e6f5ec;
+    --muted: #9db4a5;
+    --border: #1a2920;
+    --card: #0f1a15;
+    --primary: #34d399;
+    --primary-fg: #062016;
+    --accent: #3ecf8e;
+    --accent-fg: #041c12;
+    --success: #00dc82;
+    --success-fg: #032015;
+    --warning: #fbbf24;
+    --warning-fg: #221702;
+    --info: #2dd4bf;
+    --info-fg: #021b17;
+    --danger: #f87171;
+    --danger-fg: #210a0a;
+    --ring: rgba(52, 211, 153, 0.3);
+    --kbd-bg: #0b1712;
+    --code-bg: #061910;
+}
+
+/* ---------- PURPLE (shadcn violet) ------------------------------------- */
+:root[data-theme="purple"][data-mode="light"] {
+    --bg: #fbf8ff;
+    --fg: #130923;
+    --muted: #6c6780;
+    --border: #eadffd;
+    --card: #ffffff;
+    --primary: #8b5cf6;
+    --primary-fg: #0f0a20; /* violet-500 */
+    --accent: #c084fc;
+    --accent-fg: #140a26; /* violet-400 */
+    --success: #22c55e;
+    --success-fg: #06210f;
+    --warning: #f59e0b;
+    --warning-fg: #1a1300;
+    --info: #60a5fa;
+    --info-fg: #0a1224;
+    --danger: #ef4444;
+    --danger-fg: #2b0a0a;
+    --ring: rgba(139, 92, 246, 0.32);
+    --kbd-bg: #f3e8ff;
+    --code-bg: #130a22;
+}
+:root[data-theme="purple"][data-mode="dark"] {
+    --bg: #0f0a1a;
+    --fg: #ece7ff;
+    --muted: #b7a8d9;
+    --border: #251b3a;
+    --card: #160f26;
+    --primary: #a78bfa;
+    --primary-fg: #0e0a1a; /* violet-400 */
+    --accent: #d8b4fe;
+    --accent-fg: #0e0a18;
+    --success: #34d399;
+    --success-fg: #051610;
+    --warning: #fbbf24;
+    --warning-fg: #221702;
+    --info: #93c5fd;
+    --info-fg: #0a1220;
+    --danger: #f87171;
+    --danger-fg: #210a0a;
+    --ring: rgba(167, 139, 250, 0.34);
+    --kbd-bg: #140f22;
+    --code-bg: #0d0a15;
+}
+
+/* ---------- PLAYFUL (farbenreich & verspielt) --------------------------- */
+/* Ziel: freundlich, lebendig, trotzdem kontraststark für Lesbarkeit */
+:root[data-theme="playful"][data-mode="light"] {
+    --bg: #fffaf3;
+    --fg: #16120f;
+    --muted: #7a6d68;
+    --border: #f2e6d9;
+    --card: #ffffff;
+
+    /* bunt aber harmonisch */
+    --primary: #ff6b6b;
+    --primary-fg: #2b0a0a; /* coral */
+    --accent: #6a7dff;
+    --accent-fg: #070b2b; /* periwinkle */
+    --success: #2bd9a2;
+    --success-fg: #062017; /* mint */
+    --warning: #ffd93d;
+    --warning-fg: #2a2305; /* yellow */
+    --info: #00c2ff;
+    --info-fg: #041824;
+    --danger: #ff5470;
+    --danger-fg: #2b0812;
+
+    --ring: rgba(255, 107, 107, 0.28);
+    --kbd-bg: #fff1e6;
+    --code-bg: #10131f;
+}
+:root[data-theme="playful"][data-mode="dark"] {
+    --bg: #0d0b14;
+    --fg: #f6f5ff;
+    --muted: #c6c1e3;
+    --border: #231f33;
+    --card: #141127;
+
+    --primary: #ff7b7b;
+    --primary-fg: #2a0b0b;
+    --accent: #8aa0ff;
+    --accent-fg: #0a0f2e;
+    --success: #48e6b7;
+    --success-fg: #041a13;
+    --warning: #ffe073;
+    --warning-fg: #2a2508;
+    --info: #34d6ff;
+    --info-fg: #031823;
+    --danger: #ff6b90;
+    --danger-fg: #2a0a15;
+
+    --ring: rgba(138, 160, 255, 0.32);
+    --kbd-bg: #16132a;
+    --code-bg: #0a0f1a;
+}
+
+/* Kleine Extras für Playful (optional): Badge/Tag Farben */
+:root[data-theme="playful"] .tag-success {
+    background: var(--success);
+    color: var(--success-fg);
+}
+:root[data-theme="playful"] .tag-warning {
+    background: var(--warning);
+    color: var(--warning-fg);
+}
+:root[data-theme="playful"] .tag-info {
+    background: var(--info);
+    color: var(--info-fg);
+}

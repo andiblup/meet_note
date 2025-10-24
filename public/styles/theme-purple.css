@@ -1,0 +1,168 @@
+/* Purple brand tokens — scoped to <html data-brand="purple">  */
+/* LIGHT */
+:root[data-brand="purple"] {
+  --background: oklch(0.9911 0 0);
+  --foreground: oklch(0.2046 0 0);
+
+  --card: oklch(0.9911 0 0);
+  --card-foreground: oklch(0.2046 0 0);
+
+  --popover: oklch(0.9911 0 0);
+  --popover-foreground: oklch(0.4386 0 0);
+
+  /* VIOLETT: moderat, gut lesbar auf hell */
+  --primary: oklch(0.70 0.18 278);         /* sanftes Violet (≈ shadcn violet, leicht entsättigt) */
+  --primary-foreground: oklch(0.14 0.03 280);
+
+  --secondary: oklch(0.9940 0 0);
+  --secondary-foreground: oklch(0.2046 0 0);
+
+  --muted: oklch(0.9461 0 0);
+  --muted-foreground: oklch(0.2435 0 0);
+
+  --accent: oklch(0.9461 0 0);
+  --accent-foreground: oklch(0.2435 0 0);
+
+  --destructive: oklch(0.5523 0.1927 32.7272);
+  --destructive-foreground: oklch(1 0 0);
+
+  --border: oklch(0.9037 0 0);
+  --input: oklch(0.9731 0 0);
+
+  /* Ring = primärfarbiger Fokus, nicht zu dominant */
+  --ring: oklch(0.70 0.18 278);
+
+  /* optionale Diagramm-/Sidebarfarben, harmonisch zu Violet */
+  --chart-1: oklch(0.70 0.18 278);
+  --chart-2: oklch(0.63 0.19 255);
+  --chart-3: oklch(0.62 0.20 300);
+  --chart-4: oklch(0.77 0.16 70);
+  --chart-5: oklch(0.69 0.15 210);
+
+  --sidebar: oklch(0.9911 0 0);
+  --sidebar-foreground: oklch(0.5452 0 0);
+  --sidebar-primary: oklch(0.70 0.18 278);
+  --sidebar-primary-foreground: oklch(0.14 0.03 280);
+  --sidebar-accent: oklch(0.9461 0 0);
+  --sidebar-accent-foreground: oklch(0.2435 0 0);
+  --sidebar-border: oklch(0.9037 0 0);
+  --sidebar-ring: oklch(0.70 0.18 278);
+
+  --font-sans: Outfit, sans-serif;
+  --font-serif: ui-serif, Georgia, serif;
+  --font-mono: monospace;
+  --radius: 0.5rem;
+}
+
+/* DARK */
+:root.dark[data-brand="purple"] {
+  --background: oklch(0.1822 0 0);
+  --foreground: oklch(0.9288 0.0126 255.5078);
+
+  --card: oklch(0.2046 0 0);
+  --card-foreground: oklch(0.9288 0.0126 255.5078);
+
+  --popover: oklch(0.2603 0 0);
+  --popover-foreground: oklch(0.7348 0 0);
+
+  /* VIOLETT: etwas heller im Dark Mode für Tragfähigkeit */
+  --primary: oklch(0.80 0.16 278);         /* heller & leicht weniger chroma als im Lichtmodus */
+  --primary-foreground: oklch(0.13 0.03 280);
+
+  --secondary: oklch(0.2603 0 0);
+  --secondary-foreground: oklch(0.9851 0 0);
+
+  --muted: oklch(0.2393 0 0);
+  --muted-foreground: oklch(0.7122 0 0);
+
+  --accent: oklch(0.3132 0 0);
+  --accent-foreground: oklch(0.9851 0 0);
+
+  --destructive: oklch(0.3123 0.0852 29.7877);
+  --destructive-foreground: oklch(1 0 0);
+
+  --border: oklch(0.2809 0 0);
+  --input: oklch(0.2603 0 0);
+
+  --ring: oklch(0.80 0.16 278);
+
+  --chart-1: oklch(0.80 0.16 278);
+  --chart-2: oklch(0.71 0.14 254);
+  --chart-3: oklch(0.72 0.16 300);
+  --chart-4: oklch(0.84 0.16 84);
+  --chart-5: oklch(0.78 0.13 182);
+
+  --sidebar: oklch(0.1822 0 0);
+  --sidebar-foreground: oklch(0.6301 0 0);
+  --sidebar-primary: oklch(0.80 0.16 278);
+  --sidebar-primary-foreground: oklch(0.13 0.03 280);
+  --sidebar-accent: oklch(0.3132 0 0);
+  --sidebar-accent-foreground: oklch(0.9851 0 0);
+  --sidebar-border: oklch(0.2809 0 0);
+  --sidebar-ring: oklch(0.80 0.16 278);
+
+  --font-sans: Outfit, sans-serif;
+  --font-serif: ui-serif, Georgia, serif;
+  --font-mono: monospace;
+  --radius: 0.5rem;
+}
+
+/* Quill Hooks – direkt var(--token), kein hsl(...) */
+:root[data-brand="purple"] .ql-toolbar.ql-snow {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+:root[data-brand="purple"] .ql-toolbar.ql-snow .ql-picker { color: var(--foreground); }
+:root[data-brand="purple"] .ql-toolbar.ql-snow .ql-stroke { stroke: var(--foreground); }
+:root[data-brand="purple"] .ql-toolbar.ql-snow .ql-fill   { fill: var(--foreground); }
+:root[data-brand="purple"] .ql-toolbar.ql-snow .ql-picker-options {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+:root[data-brand="purple"] .ql-container.ql-snow {
+  border-color: var(--border);
+  background: var(--card);
+}
+:root[data-brand="purple"] .ql-editor { color: var(--foreground); }
+:root[data-brand="purple"] .ql-editor a { color: var(--primary); }
+:root[data-brand="purple"] .ql-snow .ql-tooltip {
+  background: var(--card);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+:root[data-brand="purple"] .ql-snow .ql-tooltip input[type="text"] {
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+/* Purple brand: feinere Nuancen, etwas sanftere Flächen */
+:root[data-brand="purple"] {
+  --primary-soft:  color-mix(in oklch, var(--primary) 11%, var(--background));
+  --primary-weak:  color-mix(in oklch, var(--primary) 26%, var(--background));
+  --primary-strong:color-mix(in oklch, var(--primary) 56%, var(--background));
+  --accent-soft:   color-mix(in oklch, var(--primary) 15%, var(--background));
+  --quote:         color-mix(in oklch, var(--primary) 48%, var(--border));
+}
+:root.dark[data-brand="purple"] {
+  --primary-soft:  color-mix(in oklch, var(--primary) 9%, var(--background));
+  --primary-weak:  color-mix(in oklch, var(--primary) 22%, var(--background));
+  --primary-strong:color-mix(in oklch, var(--primary) 54%, var(--background));
+  --accent-soft:   color-mix(in oklch, var(--primary) 13%, var(--background));
+  --quote:         color-mix(in oklch, var(--primary) 44%, var(--border));
+}
+:root[data-brand="purple"] {
+  --primary-soft:   color-mix(in oklch, var(--primary) 11%, var(--background));
+  --primary-weak:   color-mix(in oklch, var(--primary) 25%, var(--background));
+  --primary-strong: color-mix(in oklch, var(--primary) 55%, var(--background));
+  --accent-soft:    color-mix(in oklch, var(--primary) 15%, var(--background));
+  --quote:          color-mix(in oklch, var(--primary) 46%, var(--border));
+}
+:root.dark[data-brand="purple"] {
+  --primary-soft:   color-mix(in oklch, var(--primary) 9%, var(--background));
+  --primary-weak:   color-mix(in oklch, var(--primary) 22%, var(--background));
+  --primary-strong: color-mix(in oklch, var(--primary) 52%, var(--background));
+  --accent-soft:    color-mix(in oklch, var(--primary) 13%, var(--background));
+  --quote:          color-mix(in oklch, var(--primary) 42%, var(--border));
+}

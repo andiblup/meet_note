@@ -141,11 +141,3 @@ a:focus {
     font-weight: bold;
 }
 
-  [data-popover][aria-hidden="true"] { display: none; }
-  [data-popover][aria-hidden="false"] { display: block; }
-
-   [data-popover][aria-hidden="true"] { display: none; }
-  [data-popover][aria-hidden="false"] { display: block; }
-  /* optional: kleine Optik-Verbesserungen */
-  #connector-listbox [role="option"] { cursor: pointer; padding: .375rem .5rem; border-radius: .5rem; }
-  #connector-listbox [role="option"][aria-selected="true"] { outline: 2px solid currentColor; outline-offset: 2px; }

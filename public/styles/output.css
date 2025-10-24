@@ -89,6 +89,7 @@
     --text-3xl--line-height: calc(2.25 / 1.875);
     --text-4xl: 2.25rem;
     --text-4xl--line-height: calc(2.5 / 2.25);
+    --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
@@ -397,6 +398,10 @@
   .table-row {
     display: table-row;
   }
+  .size-8 {
+    width: calc(var(--spacing) * 8);
+    height: calc(var(--spacing) * 8);
+  }
   .h-4 {
     height: calc(var(--spacing) * 4);
   }
@@ -451,6 +456,12 @@
   .w-100 {
     width: calc(var(--spacing) * 100);
   }
+  .w-\[180px\] {
+    width: 180px;
+  }
+  .w-\[360px\] {
+    width: 360px;
+  }
   .w-full {
     width: 100%;
   }
@@ -462,6 +473,9 @@
   }
   .flex-1 {
     flex: 1;
+  }
+  .shrink-0 {
+    flex-shrink: 0;
   }
   .border-collapse {
     border-collapse: collapse;
@@ -811,6 +825,10 @@
     --tw-font-weight: var(--font-weight-medium);
     font-weight: var(--font-weight-medium);
   }
+  .font-normal {
+    --tw-font-weight: var(--font-weight-normal);
+    font-weight: var(--font-weight-normal);
+  }
   .font-semibold {
     --tw-font-weight: var(--font-weight-semibold);
     font-weight: var(--font-weight-semibold);
@@ -820,6 +838,9 @@
   }
   .text-gray-500 {
     color: var(--color-gray-500);
+  }
+  .text-muted-foreground {
+    color: var(--color-muted-foreground);
   }
   .text-red-700 {
     color: var(--color-red-700);
@@ -835,6 +856,9 @@
   }
   .underline-offset-4 {
     text-underline-offset: 4px;
+  }
+  .opacity-50 {
+    opacity: 50%;
   }
   .opacity-70 {
     opacity: 70%;
@@ -914,6 +938,21 @@
   .md\:grid-cols-2 {
     @media (width >= 48rem) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .dark\:flex {
+    &:is(.dark *) {
+      display: flex;
+    }
+  }
+  .dark\:hidden {
+    &:is(.dark *) {
+      display: none;
+    }
+  }
+  .dark\:bg-transparent {
+    &:is(.dark *) {
+      background-color: transparent;
     }
   }
 }
@@ -3603,6 +3642,986 @@
       }
     }
   }
+}
+:root[data-brand="purple"] {
+  --background: #f0f0f0;
+  --foreground: #030712;
+  --card: oklch(0.9911 0 0);
+  --card-foreground: oklch(0.2046 0 0);
+  --popover: oklch(0.9911 0 0);
+  --popover-foreground: oklch(0.4386 0 0);
+  --primary: #894bef;
+  --primary-second: #6e73ed;
+  --primary-strong: #000000;
+  --primary-soft: #e5d7fc;
+  --primary-foreground: #f0fafb;
+  --primary-hover: #894bef;
+  --primary-hover-second: #6e73ed;
+  --primary-disabled: #BF9AF6;
+  --grey: #f3f4f6;
+  --grey-hover: #e0dfdf;
+  --grey-foreground: #6B7280;
+  --grey-soft: #C4C7CC;
+  --grey-strong: #4B5563;
+  --ring: oklch(0.7 0.18 278);
+}
+:root.dark[data-brand="purple"] {
+  --background: oklch(0.1822 0 0);
+  --foreground: oklch(0.9288 0.0126 255.5078);
+  --card: #171717;
+  --card-foreground: oklch(0.9288 0.0126 255.5078);
+  --popover: oklch(0.2603 0 0);
+  --popover-foreground: oklch(0.7348 0 0);
+  --primary: oklch(0.8 0.16 278);
+  --primary-foreground: oklch(0.13 0.03 280);
+  --secondary: oklch(0.2603 0 0);
+  --secondary-foreground: oklch(0.9851 0 0);
+  --muted: oklch(0.2393 0 0);
+  --muted-foreground: oklch(0.7122 0 0);
+  --accent: oklch(0.3132 0 0);
+  --accent-foreground: oklch(0.9851 0 0);
+  --destructive: oklch(0.3123 0.0852 29.7877);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.2809 0 0);
+  --input: oklch(0.2603 0 0);
+  --ring: oklch(0.8 0.16 278);
+  --chart-1: oklch(0.8 0.16 278);
+  --chart-2: oklch(0.71 0.14 254);
+  --chart-3: oklch(0.72 0.16 300);
+  --chart-4: oklch(0.84 0.16 84);
+  --chart-5: oklch(0.78 0.13 182);
+  --sidebar: oklch(0.1822 0 0);
+  --sidebar-foreground: oklch(0.6301 0 0);
+  --sidebar-primary: oklch(0.8 0.16 278);
+  --sidebar-primary-foreground: oklch(0.13 0.03 280);
+  --sidebar-accent: oklch(0.3132 0 0);
+  --sidebar-accent-foreground: oklch(0.9851 0 0);
+  --sidebar-border: oklch(0.2809 0 0);
+  --sidebar-ring: oklch(0.8 0.16 278);
+  --font-sans: Outfit, sans-serif;
+  --font-serif: ui-serif, Georgia, serif;
+  --font-mono: monospace;
+  --radius: 0.5rem;
+}
+:root[data-brand="purple"] .ql-toolbar.ql-snow {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+:root[data-brand="purple"] .ql-toolbar.ql-snow .ql-picker {
+  color: var(--foreground);
+}
+:root[data-brand="purple"] .ql-toolbar.ql-snow .ql-stroke {
+  stroke: var(--foreground);
+}
+:root[data-brand="purple"] .ql-toolbar.ql-snow .ql-fill {
+  fill: var(--foreground);
+}
+:root[data-brand="purple"] .ql-toolbar.ql-snow .ql-picker-options {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+:root[data-brand="purple"] .ql-container.ql-snow {
+  border-color: var(--border);
+  background: var(--card);
+}
+:root[data-brand="purple"] .ql-editor {
+  color: var(--foreground);
+}
+:root[data-brand="purple"] .ql-editor a {
+  color: var(--primary);
+}
+:root[data-brand="purple"] .ql-snow .ql-tooltip {
+  background: var(--card);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+:root[data-brand="purple"] .ql-snow .ql-tooltip input[type="text"] {
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+:root[data-brand="purple"] {
+  --primary-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-soft: color-mix(in oklch, var(--primary) 11%, var(--background));
+  }
+  --primary-weak: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-weak: color-mix(in oklch, var(--primary) 26%, var(--background));
+  }
+  --primary-strong: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-strong: color-mix(in oklch, var(--primary) 56%, var(--background));
+  }
+  --accent-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent-soft: color-mix(in oklch, var(--primary) 15%, var(--background));
+  }
+  --quote: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --quote: color-mix(in oklch, var(--primary) 48%, var(--border));
+  }
+}
+:root.dark[data-brand="purple"] {
+  --primary-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-soft: color-mix(in oklch, var(--primary) 9%, var(--background));
+  }
+  --primary-weak: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-weak: color-mix(in oklch, var(--primary) 22%, var(--background));
+  }
+  --primary-strong: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-strong: color-mix(in oklch, var(--primary) 54%, var(--background));
+  }
+  --accent-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent-soft: color-mix(in oklch, var(--primary) 13%, var(--background));
+  }
+  --quote: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --quote: color-mix(in oklch, var(--primary) 44%, var(--border));
+  }
+}
+:root[data-brand="purple"] {
+  --primary-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-soft: color-mix(in oklch, var(--primary) 11%, var(--background));
+  }
+  --primary-weak: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-weak: color-mix(in oklch, var(--primary) 25%, var(--background));
+  }
+  --primary-strong: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-strong: color-mix(in oklch, var(--primary) 55%, var(--background));
+  }
+  --accent-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent-soft: color-mix(in oklch, var(--primary) 15%, var(--background));
+  }
+  --quote: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --quote: color-mix(in oklch, var(--primary) 46%, var(--border));
+  }
+}
+:root.dark[data-brand="purple"] {
+  --primary-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-soft: color-mix(in oklch, var(--primary) 9%, var(--background));
+  }
+  --primary-weak: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-weak: color-mix(in oklch, var(--primary) 22%, var(--background));
+  }
+  --primary-strong: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-strong: color-mix(in oklch, var(--primary) 52%, var(--background));
+  }
+  --accent-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent-soft: color-mix(in oklch, var(--primary) 13%, var(--background));
+  }
+  --quote: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --quote: color-mix(in oklch, var(--primary) 42%, var(--border));
+  }
+}
+:root[data-brand="supabase"] {
+  --background: oklch(0.9911 0 0);
+  --foreground: oklch(0.2046 0 0);
+  --card: oklch(0.9911 0 0);
+  --card-foreground: oklch(0.2046 0 0);
+  --popover: oklch(0.9911 0 0);
+  --popover-foreground: oklch(0.4386 0 0);
+  --primary: oklch(0.8348 0.1302 160.9080);
+  --primary-foreground: oklch(0.2626 0.0147 166.4589);
+  --secondary: oklch(0.9940 0 0);
+  --secondary-foreground: oklch(0.2046 0 0);
+  --muted: oklch(0.9461 0 0);
+  --muted-foreground: oklch(0.2435 0 0);
+  --accent: oklch(0.9461 0 0);
+  --accent-foreground: oklch(0.2435 0 0);
+  --destructive: oklch(0.5523 0.1927 32.7272);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.9037 0 0);
+  --input: oklch(0.9731 0 0);
+  --ring: oklch(0.8348 0.1302 160.9080);
+  --chart-1: oklch(0.8348 0.1302 160.9080);
+  --chart-2: oklch(0.6231 0.1880 259.8145);
+  --chart-3: oklch(0.6056 0.2189 292.7172);
+  --chart-4: oklch(0.7686 0.1647 70.0804);
+  --chart-5: oklch(0.6959 0.1491 162.4796);
+  --sidebar: oklch(0.9911 0 0);
+  --sidebar-foreground: oklch(0.5452 0 0);
+  --sidebar-primary: oklch(0.8348 0.1302 160.9080);
+  --sidebar-primary-foreground: oklch(0.2626 0.0147 166.4589);
+  --sidebar-accent: oklch(0.9461 0 0);
+  --sidebar-accent-foreground: oklch(0.2435 0 0);
+  --sidebar-border: oklch(0.9037 0 0);
+  --sidebar-ring: oklch(0.8348 0.1302 160.9080);
+  --font-sans: Outfit, sans-serif;
+  --font-serif: ui-serif, Georgia, serif;
+  --font-mono: monospace;
+  --radius: 0.5rem;
+}
+:root.dark[data-brand="supabase"] {
+  --background: oklch(0.1822 0 0);
+  --foreground: oklch(0.9288 0.0126 255.5078);
+  --card: oklch(0.2046 0 0);
+  --card-foreground: oklch(0.9288 0.0126 255.5078);
+  --popover: oklch(0.2603 0 0);
+  --popover-foreground: oklch(0.7348 0 0);
+  --primary: oklch(0.4365 0.1044 156.7556);
+  --primary-foreground: oklch(0.9213 0.0135 167.1556);
+  --secondary: oklch(0.2603 0 0);
+  --secondary-foreground: oklch(0.9851 0 0);
+  --muted: oklch(0.2393 0 0);
+  --muted-foreground: oklch(0.7122 0 0);
+  --accent: oklch(0.3132 0 0);
+  --accent-foreground: oklch(0.9851 0 0);
+  --destructive: oklch(0.3123 0.0852 29.7877);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.2809 0 0);
+  --input: oklch(0.2603 0 0);
+  --ring: oklch(0.8003 0.1821 151.7110);
+  --chart-1: oklch(0.8003 0.1821 151.7110);
+  --chart-2: oklch(0.7137 0.1434 254.6240);
+  --chart-3: oklch(0.7090 0.1592 293.5412);
+  --chart-4: oklch(0.8369 0.1644 84.4286);
+  --chart-5: oklch(0.7845 0.1325 181.9120);
+  --sidebar: oklch(0.1822 0 0);
+  --sidebar-foreground: oklch(0.6301 0 0);
+  --sidebar-primary: oklch(0.4365 0.1044 156.7556);
+  --sidebar-primary-foreground: oklch(0.9213 0.0135 167.1556);
+  --sidebar-accent: oklch(0.3132 0 0);
+  --sidebar-accent-foreground: oklch(0.9851 0 0);
+  --sidebar-border: oklch(0.2809 0 0);
+  --sidebar-ring: oklch(0.8003 0.1821 151.7110);
+  --font-sans: Outfit, sans-serif;
+  --font-serif: ui-serif, Georgia, serif;
+  --font-mono: monospace;
+  --radius: 0.5rem;
+}
+:root[data-brand="supabase"] .ql-toolbar.ql-snow {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+:root[data-brand="supabase"] .ql-toolbar.ql-snow .ql-picker {
+  color: var(--foreground);
+}
+:root[data-brand="supabase"] .ql-toolbar.ql-snow .ql-stroke {
+  stroke: var(--foreground);
+}
+:root[data-brand="supabase"] .ql-toolbar.ql-snow .ql-fill {
+  fill: var(--foreground);
+}
+:root[data-brand="supabase"] .ql-toolbar.ql-snow .ql-picker-options {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+:root[data-brand="supabase"] .ql-container.ql-snow {
+  border-color: var(--border);
+  background: var(--card);
+}
+:root[data-brand="supabase"] .ql-editor {
+  color: var(--foreground);
+}
+:root[data-brand="supabase"] .ql-editor a {
+  color: var(--primary);
+}
+:root[data-brand="supabase"] .ql-snow .ql-tooltip {
+  background: var(--card);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+:root[data-brand="supabase"] .ql-snow .ql-tooltip input[type="text"] {
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+:root[data-brand="supabase"] {
+  --primary-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-soft: color-mix(in oklch, var(--primary) 12%, var(--background));
+  }
+  --primary-weak: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-weak: color-mix(in oklch, var(--primary) 26%, var(--background));
+  }
+  --primary-strong: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-strong: color-mix(in oklch, var(--primary) 60%, var(--background));
+  }
+  --accent-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent-soft: color-mix(in oklch, var(--primary) 16%, var(--background));
+  }
+  --quote: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --quote: color-mix(in oklch, var(--primary) 50%, var(--border));
+  }
+}
+:root.dark[data-brand="supabase"] {
+  --primary-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-soft: color-mix(in oklch, var(--primary) 10%, var(--background));
+  }
+  --primary-weak: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-weak: color-mix(in oklch, var(--primary) 24%, var(--background));
+  }
+  --primary-strong: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-strong: color-mix(in oklch, var(--primary) 56%, var(--background));
+  }
+  --accent-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent-soft: color-mix(in oklch, var(--primary) 14%, var(--background));
+  }
+  --quote: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --quote: color-mix(in oklch, var(--primary) 45%, var(--border));
+  }
+}
+:root[data-brand="purple"] {
+  --background: #f0f0f0;
+  --foreground: #030712;
+  --card: oklch(0.9911 0 0);
+  --card-foreground: oklch(0.2046 0 0);
+  --popover: oklch(0.9911 0 0);
+  --popover-foreground: oklch(0.4386 0 0);
+  --primary: #894bef;
+  --primary-second: #6e73ed;
+  --primary-strong: #000000;
+  --primary-soft: #e5d7fc;
+  --primary-foreground: #f0fafb;
+  --primary-hover: #894bef;
+  --primary-hover-second: #6e73ed;
+  --primary-disabled: #BF9AF6;
+  --grey: #f3f4f6;
+  --grey-hover: #e0dfdf;
+  --grey-foreground: #6B7280;
+  --grey-soft: #C4C7CC;
+  --grey-strong: #4B5563;
+  --ring: oklch(0.7 0.18 278);
+}
+:root.dark[data-brand="purple"] {
+  --background: oklch(0.1822 0 0);
+  --foreground: oklch(0.9288 0.0126 255.5078);
+  --card: #171717;
+  --card-foreground: oklch(0.9288 0.0126 255.5078);
+  --popover: oklch(0.2603 0 0);
+  --popover-foreground: oklch(0.7348 0 0);
+  --primary: oklch(0.8 0.16 278);
+  --primary-foreground: oklch(0.13 0.03 280);
+  --secondary: oklch(0.2603 0 0);
+  --secondary-foreground: oklch(0.9851 0 0);
+  --muted: oklch(0.2393 0 0);
+  --muted-foreground: oklch(0.7122 0 0);
+  --accent: oklch(0.3132 0 0);
+  --accent-foreground: oklch(0.9851 0 0);
+  --destructive: oklch(0.3123 0.0852 29.7877);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.2809 0 0);
+  --input: oklch(0.2603 0 0);
+  --ring: oklch(0.8 0.16 278);
+  --chart-1: oklch(0.8 0.16 278);
+  --chart-2: oklch(0.71 0.14 254);
+  --chart-3: oklch(0.72 0.16 300);
+  --chart-4: oklch(0.84 0.16 84);
+  --chart-5: oklch(0.78 0.13 182);
+  --sidebar: oklch(0.1822 0 0);
+  --sidebar-foreground: oklch(0.6301 0 0);
+  --sidebar-primary: oklch(0.8 0.16 278);
+  --sidebar-primary-foreground: oklch(0.13 0.03 280);
+  --sidebar-accent: oklch(0.3132 0 0);
+  --sidebar-accent-foreground: oklch(0.9851 0 0);
+  --sidebar-border: oklch(0.2809 0 0);
+  --sidebar-ring: oklch(0.8 0.16 278);
+  --font-sans: Outfit, sans-serif;
+  --font-serif: ui-serif, Georgia, serif;
+  --font-mono: monospace;
+  --radius: 0.5rem;
+}
+:root[data-brand="purple"] .ql-toolbar.ql-snow {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+:root[data-brand="purple"] .ql-toolbar.ql-snow .ql-picker {
+  color: var(--foreground);
+}
+:root[data-brand="purple"] .ql-toolbar.ql-snow .ql-stroke {
+  stroke: var(--foreground);
+}
+:root[data-brand="purple"] .ql-toolbar.ql-snow .ql-fill {
+  fill: var(--foreground);
+}
+:root[data-brand="purple"] .ql-toolbar.ql-snow .ql-picker-options {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+:root[data-brand="purple"] .ql-container.ql-snow {
+  border-color: var(--border);
+  background: var(--card);
+}
+:root[data-brand="purple"] .ql-editor {
+  color: var(--foreground);
+}
+:root[data-brand="purple"] .ql-editor a {
+  color: var(--primary);
+}
+:root[data-brand="purple"] .ql-snow .ql-tooltip {
+  background: var(--card);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+:root[data-brand="purple"] .ql-snow .ql-tooltip input[type="text"] {
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+:root[data-brand="purple"] {
+  --primary-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-soft: color-mix(in oklch, var(--primary) 11%, var(--background));
+  }
+  --primary-weak: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-weak: color-mix(in oklch, var(--primary) 26%, var(--background));
+  }
+  --primary-strong: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-strong: color-mix(in oklch, var(--primary) 56%, var(--background));
+  }
+  --accent-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent-soft: color-mix(in oklch, var(--primary) 15%, var(--background));
+  }
+  --quote: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --quote: color-mix(in oklch, var(--primary) 48%, var(--border));
+  }
+}
+:root.dark[data-brand="purple"] {
+  --primary-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-soft: color-mix(in oklch, var(--primary) 9%, var(--background));
+  }
+  --primary-weak: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-weak: color-mix(in oklch, var(--primary) 22%, var(--background));
+  }
+  --primary-strong: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-strong: color-mix(in oklch, var(--primary) 54%, var(--background));
+  }
+  --accent-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent-soft: color-mix(in oklch, var(--primary) 13%, var(--background));
+  }
+  --quote: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --quote: color-mix(in oklch, var(--primary) 44%, var(--border));
+  }
+}
+:root[data-brand="purple"] {
+  --primary-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-soft: color-mix(in oklch, var(--primary) 11%, var(--background));
+  }
+  --primary-weak: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-weak: color-mix(in oklch, var(--primary) 25%, var(--background));
+  }
+  --primary-strong: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-strong: color-mix(in oklch, var(--primary) 55%, var(--background));
+  }
+  --accent-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent-soft: color-mix(in oklch, var(--primary) 15%, var(--background));
+  }
+  --quote: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --quote: color-mix(in oklch, var(--primary) 46%, var(--border));
+  }
+}
+:root.dark[data-brand="purple"] {
+  --primary-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-soft: color-mix(in oklch, var(--primary) 9%, var(--background));
+  }
+  --primary-weak: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-weak: color-mix(in oklch, var(--primary) 22%, var(--background));
+  }
+  --primary-strong: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-strong: color-mix(in oklch, var(--primary) 52%, var(--background));
+  }
+  --accent-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent-soft: color-mix(in oklch, var(--primary) 13%, var(--background));
+  }
+  --quote: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --quote: color-mix(in oklch, var(--primary) 42%, var(--border));
+  }
+}
+.ql-toolbar.ql-snow {
+  background: hsl(var(--card));
+  border-color: hsl(var(--border));
+  color: hsl(var(--foreground));
+  border-radius: var(--radius);
+}
+.ql-container.ql-snow {
+  background: hsl(var(--card));
+  border-color: hsl(var(--border));
+  border-radius: var(--radius);
+}
+.ql-editor {
+  color: hsl(var(--foreground));
+}
+.ql-snow .ql-stroke {
+  stroke: currentColor !important;
+}
+.ql-snow .ql-fill {
+  fill: currentColor !important;
+}
+.ql-snow .ql-formats button, .ql-snow .ql-picker-label, .ql-snow .ql-picker-item {
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+  border-radius: calc(var(--radius) - 4px);
+  color: hsl(var(--foreground));
+}
+.ql-snow .ql-formats button:hover, .ql-snow .ql-picker-label:hover, .ql-snow .ql-picker-item:hover {
+  background: var(--primary-weak);
+  color: hsl(var(--primary-foreground));
+}
+.ql-snow .ql-formats button.ql-active, .ql-snow .ql-picker-label.ql-active, .ql-snow .ql-picker-item.ql-selected {
+  background: var(--primary-strong);
+  color: hsl(var(--primary-foreground));
+}
+.ql-snow .ql-picker-options {
+  background: hsl(var(--card));
+  border-color: hsl(var(--border));
+  color: hsl(var(--foreground));
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px color-mix(in oklch, black 12%, transparent);
+}
+.ql-snow .ql-tooltip {
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--border));
+  border-radius: var(--radius);
+}
+.ql-snow .ql-tooltip input[type="text"] {
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+  border-radius: calc(var(--radius) - 4px);
+}
+.ql-editor pre {
+  background: hsl(var(--foreground));
+  @supports (color: color-mix(in lab, red, red)) {
+    background: color-mix(in oklch, hsl(var(--foreground)) 8%, hsl(var(--background)));
+  }
+  color: hsl(var(--foreground));
+  border-radius: calc(var(--radius) - 4px);
+  padding: .5rem .75rem;
+}
+.ql-editor blockquote {
+  border-left: 4px solid hsl(var(--primary));
+  @supports (color: color-mix(in lab, red, red)) {
+    border-left: 4px solid color-mix(in oklch, hsl(var(--primary)) 48%, hsl(var(--border)));
+  }
+  margin: .75rem 0;
+  padding-left: .75rem;
+  color: hsl(var(--foreground));
+  @supports (color: color-mix(in lab, red, red)) {
+    color: color-mix(in oklch, hsl(var(--foreground)) 85%, hsl(var(--muted-foreground)));
+  }
+}
+::selection {
+  background: var(--primary-soft);
+}
+.ql-snow .ql-color .ql-picker-options .ql-picker-item.ql-selected, .ql-snow .ql-background .ql-picker-options .ql-picker-item.ql-selected {
+  box-shadow: 0 0 0 2px hsl(var(--primary)) inset;
+}
+.ql-snow .ql-color .ql-picker-options .ql-picker-item:hover, .ql-snow .ql-background .ql-picker-options .ql-picker-item:hover {
+  box-shadow: 0 0 0 2px hsl(var(--primary)) inset;
+}
+.ql-snow .ql-color .ql-picker-options .ql-picker-item, .ql-snow .ql-background .ql-picker-options .ql-picker-item {
+  border-radius: calc(var(--radius) - 4px);
+}
+.ql-editor table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+.ql-editor th, .ql-editor td {
+  padding: .5rem .75rem;
+  border: 1px solid hsl(var(--border));
+}
+.ql-editor th {
+  background: hsl(var(--foreground));
+  @supports (color: color-mix(in lab, red, red)) {
+    background: color-mix(in oklch, hsl(var(--foreground)) 8%, hsl(var(--background)));
+  }
+  font-weight: 600;
+}
+.ql-editor tr:hover {
+  background: var(--primary-soft);
+}
+.ql-editor td.ql-table-selected {
+  background: var(--primary-weak);
+}
+.ql-editor td.ql-table-selected:hover {
+  background: var(--primary-soft);
+}
+.ql-snow .ql-table-toolbar {
+  background: hsl(var(--card));
+  border-color: hsl(var(--border));
+  color: hsl(var(--foreground));
+  border-radius: var(--radius);
+}
+.ql-snow .ql-table-toolbar .ql-picker-options {
+  background: hsl(var(--card));
+  border-color: hsl(var(--border));
+  color: hsl(var(--foreground));
+}
+.ql-snow .ql-table-toolbar .ql-picker-item {
+  border-radius: calc(var(--radius) - 4px);
+}
+.ql-snow .ql-table-toolbar .ql-picker-item:hover {
+  box-shadow: 0 0 0 2px hsl(var(--primary)) inset;
+}
+.ql-snow .ql-table-toolbar .ql-picker-item.ql-selected {
+  box-shadow: 0 0 0 2px hsl(var(--primary)) inset;
+}
+.ql-snow .ql-table-toolbar button {
+  border-radius: calc(var(--radius) - 4px);
+}
+.ql-snow .ql-table-toolbar button:hover {
+  background: var(--primary-weak);
+  color: hsl(var(--primary-foreground));
+}
+.ql-snow .ql-table-toolbar button.ql-active {
+  background: var(--primary-strong);
+  color: hsl(var(--primary-foreground));
+}
+.ql-snow .ql-table-toolbar .ql-stroke {
+  stroke: currentColor !important;
+}
+.ql-snow .ql-table-toolbar .ql-fill {
+  fill: currentColor !important;
+}
+.ql-snow .ql-table-toolbar .ql-tooltip {
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--border));
+  border-radius: var(--radius);
+}
+.ql-snow .ql-table-toolbar .ql-tooltip input[type="text"] {
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+  border-radius: calc(var(--radius) - 4px);
+}
+:root {
+  --radius: 0.5rem;
+  --elev-1: 0 1px 2px color-mix(in oklch, black 8%, transparent);
+  --elev-2: 0 8px 24px color-mix(in oklch, black 12%, transparent);
+}
+:root, :root.dark {
+  --primary-soft: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-soft: color-mix(in oklch, var(--primary) 12%, var(--background));
+  }
+  --primary-soft-2: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-soft-2: color-mix(in oklch, var(--primary) 20%, var(--background));
+  }
+  --primary-weak: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-weak: color-mix(in oklch, var(--primary) 35%, var(--background));
+  }
+  --primary-strong: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --primary-strong: color-mix(in oklch, var(--primary) 65%, var(--background));
+  }
+  --ring: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --ring: color-mix(in oklch, var(--primary) 35%, transparent);
+  }
+  --muted-bg: var(--muted);
+  @supports (color: color-mix(in lab, red, red)) {
+    --muted-bg: color-mix(in oklch, var(--muted) 8%, var(--background));
+  }
+  --accent-soft: var(--accent);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent-soft: color-mix(in oklch, var(--accent) 16%, var(--background));
+  }
+  --code-bg: var(--foreground);
+  @supports (color: color-mix(in lab, red, red)) {
+    --code-bg: color-mix(in oklch, var(--foreground) 8%, var(--background));
+  }
+  --quote: var(--primary);
+  @supports (color: color-mix(in lab, red, red)) {
+    --quote: color-mix(in oklch, var(--primary) 46%, var(--border));
+  }
+}
+.bc-btn.btn-ghost {
+  background: transparent;
+  color: var(--foreground);
+}
+.bc-btn.btn-ghost:hover {
+  background: var(--muted-bg);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .4ch;
+  font-size: .75rem;
+  padding: .15rem .5rem;
+  border-radius: 9999px;
+  background: var(--primary-soft);
+  color: var(--foreground);
+}
+.badge--primary {
+  background: var(--primary-weak);
+  color: var(--primary-foreground);
+}
+.badge--accent {
+  background: var(--accent-soft);
+}
+.tabs {
+  border-bottom: 1px solid var(--border);
+}
+.tab {
+  padding: .5rem .75rem;
+  color: var(--muted-foreground);
+}
+.tab[aria-selected="true"] {
+  color: var(--foreground);
+  border-bottom: 2px solid var(--primary);
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--elev-1);
+}
+.card:hover {
+  box-shadow: var(--elev-2);
+}
+.card-header {
+  border-bottom: 1px solid var(--border);
+  padding: .75rem 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+.card-body {
+  padding: 1rem;
+  color: var(--foreground);
+}
+.card-footer {
+  border-top: 1px solid var(--border);
+  padding: .75rem 1rem;
+  color: var(--muted-foreground);
+}
+.bc-input {
+  background: var(--input);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  border-radius: calc(var(--radius) - 4px);
+  padding: .5rem .75rem;
+}
+.bc-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ring);
+  border-color: var(--primary);
+}
+.bc-input::placeholder {
+  color: var(--foreground);
+  @supports (color: color-mix(in lab, red, red)) {
+    color: color-mix(in oklch, var(--foreground) 60%, var(--muted));
+  }
+}
+.bc-tooltip {
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  box-shadow: var(--elev-2);
+  border-radius: var(--radius);
+  padding: .5rem .75rem;
+}
+.bc-tooltip::after {
+  border-top-color: var(--border);
+}
+.bc-tooltip::before {
+  border-top-color: var(--card);
+}
+.bc-modal {
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  box-shadow: var(--elev-2);
+  border-radius: var(--radius);
+}
+.bc-modal-header {
+  border-bottom: 1px solid var(--border);
+  padding: .75rem 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+.bc-modal-body {
+  padding: 1rem;
+  color: var(--foreground);
+}
+.bc-modal-footer {
+  border-top: 1px solid var(--border);
+  padding: .75rem 1rem;
+  color: var(--muted-foreground);
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--elev-1);
+}
+.table th, .table td {
+  padding: .75rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--foreground);
+}
+.table tr:hover {
+  background: var(--primary-soft);
+}
+.ql-snow .ql-formats button:hover, .ql-snow .ql-picker-label:hover, .ql-snow .ql-picker-item:hover {
+  background: var(--primary-weak) !important;
+  color: var(--primary) !important;
+}
+.ql-toolbar.ql-snow {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+.ql-toolbar.ql-snow .ql-picker {
+  color: var(--foreground);
+}
+.ql-toolbar.ql-snow .ql-stroke {
+  stroke: var(--foreground);
+}
+.ql-toolbar.ql-snow .ql-fill {
+  fill: var(--foreground);
+}
+.ql-toolbar.ql-snow .ql-picker-options {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+.ql-container.ql-snow {
+  background: var(--card);
+  border-color: var(--border);
+}
+.ql-editor {
+  color: var(--foreground);
+}
+.ql-editor a {
+  color: var(--primary);
+}
+.ql-snow .ql-tooltip {
+  background: var(--card);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+.ql-snow .ql-tooltip input[type="text"] {
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+.ql-snow .ql-formats button:hover, .ql-snow .ql-picker-label:hover, .ql-snow .ql-picker-item:hover, .ql-snow .ql-formats button:active, .ql-snow .ql-picker-label:active, .ql-snow .ql-picker-item:active, .ql-snow .ql-formats button:focus, .ql-snow .ql-picker-label:focus, .ql-snow .ql-picker-item:focus, .ql-snow .ql-formats button:focus-within, .ql-snow .ql-picker-label:focus-within, .ql-snow .ql-picker-item:focus-within, .ql-snow .ql-formats button:target, .ql-snow .ql-picker-label:target, .ql-snow .ql-picker-item:target {
+  background: var(--background) !important;
+  color: var(--primary-strong) !important;
+  border: none;
+}
+.ql-snow .ql-formats button:focus, .ql-snow .ql-picker-label:focus, .ql-snow .ql-picker-item:focus {
+  outline: 2px solid var(--primary) !important;
+  border: none;
+}
+.ql-picker-options {
+  background: var(--card);
+  border-color: var(--border) !important;
+  color: var(--foreground);
+}
+.ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar button:focus, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+  background: var(--background) !important;
+  color: var(--primary-hover-second) !important;
+}
+.ql-editor.ql-blank::before {
+  color: var(--foreground) !important;
+}
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+a {
+  color: var(--primary);
+  font-weight: bold;
+}
+a:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+a:active {
+  color: var(--primary-strong);
+  font-weight: bold;
+}
+a:focus {
+  color: var(--primary-disabled);
+  text-decoration: none;
+  font-weight: bold;
+}
+.btn a {
+  color: var(--button-foreground);
+  text-decoration: none;
+  font-weight: bold;
+}
+[data-popover][aria-hidden="true"] {
+  display: none;
+}
+[data-popover][aria-hidden="false"] {
+  display: block;
+}
+[data-popover][aria-hidden="true"] {
+  display: none;
+}
+[data-popover][aria-hidden="false"] {
+  display: block;
+}
+#connector-listbox [role="option"] {
+  cursor: pointer;
+  padding: .375rem .5rem;
+  border-radius: .5rem;
+}
+#connector-listbox [role="option"][aria-selected="true"] {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 @property --tw-rotate-x {
   syntax: "*";

@@ -1,0 +1,57 @@
+/* Purple brand base tokens — LIGHT */
+:root[data-brand="purple"] {
+    --background: #f0f0f0;
+    --foreground: #030712;
+
+    --card: oklch(0.9911 0 0);
+    --card-foreground: oklch(0.2046 0 0);
+
+    --popover: var(--card);
+    --popover-foreground: oklch(0.4386 0 0);
+
+    --primary: #894bef; /* brief */
+    --primary-effect: #bf9af6; /* brief */
+    --primary-foreground: #f0fafb;
+
+    --ring: oklch(0.7 0.18 278);
+
+    --grey: #f3f4f6;
+    --grey-hover: #e0dfdf;
+    --grey-foreground: #6b7280;
+    --grey-soft: #c4c7cc;
+    --grey-strong: #4b5563;
+
+    --border: oklch(0.9037 0 0);
+    --input: oklch(0.9731 0 0);
+}
+
+/* DARK */
+:root.dark[data-brand="purple"] {
+    --background: oklch(0.1822 0 0);
+    --foreground: oklch(0.9288 0.0126 255.5078);
+
+    --card: #171717;
+    --card-foreground: var(--foreground);
+
+    --popover: oklch(0.2603 0 0);
+    --popover-foreground: oklch(0.7348 0 0);
+
+    --primary: oklch(0.8 0.16 278);
+    /* fehlender Effekt-Ton im Dark → aus Brand ableiten */
+    --primary-effect: color-mix(in oklch, var(--primary) 55%, white);
+    --primary-foreground: oklch(0.13 0.03 280);
+
+    --ring: var(--primary);
+
+    --border: oklch(0.2809 0 0);
+    --input: oklch(0.2603 0 0);
+}
+
+/* States (optional, für Komponenten) */
+:root[data-brand="purple"],
+:root.dark[data-brand="purple"] {
+    --success: oklch(0.78 0.12 150);
+    --warning: oklch(0.84 0.09 80);
+    --destructive: oklch(0.5523 0.1927 32.7272);
+    --destructive-foreground: oklch(1 0 0);
+}

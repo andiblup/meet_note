@@ -1,0 +1,145 @@
+/* ----------------------------------------------------------------------------
+   Theme Utilities: aus Primärfarbe stufenweise Akzente ableiten (OKLCH + color-mix)
+   Diese Variablen funktionieren mit jedem Brand, das --primary & Co. definiert.
+---------------------------------------------------------------------------- */
+:root {
+  /* Flächenhöhen / Radius (optional) */
+  --radius: 0.5rem;
+  --elev-1: 0 1px 2px color-mix(in oklch, black 8%, transparent);
+  --elev-2: 0 8px 24px color-mix(in oklch, black 12%, transparent);
+}
+
+/* Für JEDE Theme-Kombi (Brand+Mode): aus den Tokens weitere Stufen ableiten */
+:root, :root.dark {
+  /* Primär-Abstufungen */
+  --primary-soft:  color-mix(in oklch, var(--primary) 12%, var(--background));  /* zarte Fläche */
+  --primary-soft-2:color-mix(in oklch, var(--primary) 20%, var(--background));
+  --primary-weak:  color-mix(in oklch, var(--primary) 35%, var(--background));  /* Hover-Fläche */
+  --primary-strong:color-mix(in oklch, var(--primary) 65%, var(--background));  /* aktive Fläche */
+  --ring:          color-mix(in oklch, var(--primary) 35%, transparent);        /* Fokus */
+
+  /* Sekundär/Mute-Ableitungen */
+  --muted-bg:      color-mix(in oklch, var(--muted) 8%, var(--background));
+  --accent-soft:   color-mix(in oklch, var(--accent) 16%, var(--background));
+
+  /* Code / Quote */
+  --code-bg:       color-mix(in oklch, var(--foreground) 8%, var(--background));
+  --quote:         color-mix(in oklch, var(--primary) 46%, var(--border));
+}
+/* Buttons */
+.bc-btn.btn-ghost { background: transparent; color: var(--foreground); }
+.bc-btn.btn-ghost:hover { background: var(--muted-bg); }
+
+/* Badges */
+.badge {
+  display:inline-flex; align-items:center; gap:.4ch;
+  font-size:.75rem; padding:.15rem .5rem; border-radius: 9999px;
+  background: var(--primary-soft); color: var(--foreground);
+}
+.badge--primary { background: var(--primary-weak); color: var(--primary-foreground); }
+.badge--accent  { background: var(--accent-soft); }
+
+/* Tabs (Basecoat Tabs minimal veredeln) */
+.tabs { border-bottom:1px solid var(--border); }
+.tab { padding:.5rem .75rem; color:var(--muted-foreground); }
+.tab[aria-selected="true"] { color:var(--foreground); border-bottom:2px solid var(--primary); }
+
+/* Cards / Panels */
+.card { background: var(--card); border:1px solid var(--border); border-radius: var(--radius); box-shadow: var(--elev-1); }
+.card:hover { box-shadow: var(--elev-2); }
+.card-header { border-bottom:1px solid var(--border); padding:.75rem 1rem; font-weight:600; color:var(--foreground); }
+.card-body { padding:1rem; color:var(--foreground); }
+.card-footer { border-top:1px solid var(--border); padding:.75rem 1rem; color:var(--muted-foreground); }
+/* Inputs (Basecoat Inputs minimal veredeln) */
+.bc-input {
+  background: var(--input);
+  border:1px solid var(--border);
+  color: var(--foreground);
+  border-radius: calc(var(--radius) - 4px);
+  padding:.5rem .75rem;
+}
+.bc-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ring);
+    border-color: var(--primary);
+}
+.bc-input::placeholder { color: color-mix(in oklch, var(--foreground) 60%, var(--muted)); }
+/* Tooltips */
+.bc-tooltip {
+  background: var(--card);
+  color: var(--foreground);
+  border:1px solid var(--border);
+  box-shadow: var(--elev-2);
+  border-radius: var(--radius);
+  padding:.5rem .75rem;
+}
+.bc-tooltip::after {
+  border-top-color: var(--border);
+}
+.bc-tooltip::before {
+  border-top-color: var(--card);
+}
+/* Modale */
+.bc-modal {
+  background: var(--card);
+  color: var(--foreground);
+  border:1px solid var(--border);
+  box-shadow: var(--elev-2);
+  border-radius: var(--radius);
+}
+.bc-modal-header {
+  border-bottom:1px solid var(--border);
+  padding:.75rem 1rem;
+  font-weight:600;
+  color:var(--foreground);
+}
+.bc-modal-body {
+  padding:1rem;
+  color:var(--foreground);
+}
+.bc-modal-footer {
+  border-top:1px solid var(--border);
+  padding:.75rem 1rem;
+  color:var(--muted-foreground);
+}
+/* Tabellen */
+.table {
+  width:100%;
+  border-collapse:collapse;
+  background: var(--card);
+  color: var(--foreground);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--elev-1);
+}
+.table th, .table td {
+  padding:.75rem 1rem;
+  border-bottom:1px solid var(--border);
+}
+.table th {
+  text-align:left;
+  font-weight:600;
+  color: var(--foreground);
+}
+.table tr:hover {
+  background: var(--primary-soft);
+}
+/* .ql-clean:hover {
+  background: var(--primary-soft)!important;
+  color: hsl(var(--primary-foreground))!important;
+} */
+ 
+/* .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar button:focus, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+    background: var(--primary-weak)!important;
+    color: hsl(var(--primary))!important;
+}
+button .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar button:focus, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+    background: var(--primary-weak)!important;
+    color: hsl(var(--primary))!important;
+} */
+.ql-snow .ql-formats button:hover, .ql-snow .ql-picker-label:hover, .ql-snow .ql-picker-item:hover {
+    background: var(--primary-weak)!important;
+    color: var(--primary)!important;
+}
+
+
