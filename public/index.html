@@ -187,8 +187,53 @@
             </button>
         </div>
 
+        <!--  -->
 
-        <div id="connector-select" class="select">
+        <div id="select-445592" class="select">
+            <button type="button" class="btn-outline justify-between font-normal w-[360px]" id="select-445592-trigger"
+                aria-haspopup="listbox" aria-expanded="false" aria-controls="select-445592-listbox">
+                <span class="truncate" id="select-445592-label">—</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-chevrons-up-down-icon lucide-chevrons-up-down text-muted-foreground opacity-50 shrink-0">
+                    <path d="m7 15 5 5 5-5" />
+                    <path d="m7 9 5-5 5 5" />
+                </svg>
+            </button>
+
+            <div id="select-445592-popover" data-popover aria-hidden="true">
+                <header>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-search-icon lucide-search">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.3-4.3" />
+                    </svg>
+                    <input type="text" value="" placeholder="Scanning LAN…" autocomplete="off" autocorrect="off"
+                        spellcheck="false" aria-autocomplete="list" role="combobox" aria-expanded="false"
+                        aria-controls="select-445592-listbox" aria-labelledby="select-445592-trigger" disabled />
+                </header>
+
+                <div role="listbox" id="select-445592-listbox" aria-orientation="vertical"
+                    aria-labelledby="select-445592-trigger">
+                    <div role="group" aria-labelledby="group-label-select-445592-items-1">
+                        <div role="heading" id="group-label-select-445592-items-1">Connections</div>
+
+                        <!-- Aktuelle Verbindung (wird per JS befüllt & ausgewählt) -->
+                        <div id="select-445592-current" role="option" data-value="" aria-selected="true">—</div>
+
+                        <!-- Dynamische Treffer werden davor eingefügt -->
+                        <div id="select-445592-dynamic-anchor" aria-hidden="true" style="height:0;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="select-445592-value" value="" />
+        </div>
+
+        
+
+        <!-- <div id="connector-select" class="select">
             <button type="button" class="btn-outline justify-between font-normal w-[360px]" id="connector-trigger"
                 aria-haspopup="listbox" aria-expanded="false" aria-controls="connector-listbox">
                 <span class="truncate" id="connector-label">—</span>
@@ -202,7 +247,7 @@
 
             <div id="connector-popover" data-popover aria-hidden="true">
                 <header>
-                    <!-- Nur Deko, wir filtern hier nicht -->
+                    
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="lucide lucide-search">
@@ -217,10 +262,8 @@
                     <div role="group" aria-labelledby="connector-group-heading">
                         <div role="heading" id="connector-group-heading">Connections</div>
 
-                        <!-- Aktuelle Verbindung -->
                         <div id="connector-current" role="option" data-value="" aria-selected="true">—</div>
 
-                        <!-- Gefundene Ziele werden hier dynamisch eingefügt -->
                         <div id="connector-dynamic-anchor" aria-hidden="true" style="height:0;"></div>
                     </div>
                 </div>
@@ -228,8 +271,9 @@
 
             <input type="hidden" name="connector-value" value="" />
         </div>
-        <script>
+        script>
             (() => {
+
                 // ---------- Utilities ----------
                 const $ = (sel, root = document) => root.querySelector(sel);
                 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
@@ -397,8 +441,15 @@
                     info.textContent = text;
                     anchor.insertAdjacentElement('beforebegin', info);
                 }
+
             })();
-        </script>
+        </script> -->
+
+
+        <!--  -->
+
+
+
         <!-- <div>
             <form class="gap-3" onsubmit="event.preventDefault(); redirectToRoom();">
                 <input id="room" class="bc-input w-40" placeholder="Room ID oder URL" />
