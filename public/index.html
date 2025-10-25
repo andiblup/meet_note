@@ -192,16 +192,19 @@
         <div id="select-445592" class="select">
             <button type="button" class="btn-outline justify-between font-normal w-[360px]" id="select-445592-trigger"
                 aria-haspopup="listbox" aria-expanded="false" aria-controls="select-445592-listbox">
+
+                <iconify-icon icon="mdi:antenna"></iconify-icon>
                 <span class="truncate" id="select-445592-label">—</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-chevrons-up-down-icon lucide-chevrons-up-down text-muted-foreground opacity-50 shrink-0">
+                    class="lucide text-muted-foreground opacity-50 shrink-0">
                     <path d="m7 15 5 5 5-5" />
                     <path d="m7 9 5-5 5 5" />
                 </svg>
+                <!-- <iconify-icon icon="mdi:lan-connect"></iconify-icon> -->
             </button>
 
-            <div id="select-445592-popover" data-popover aria-hidden="true">
+            <div id="select-445592-popover" data-popover aria-hidden="true" class="w-[360px]">
                 <header>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -224,6 +227,7 @@
 
                         <!-- Dynamische Treffer werden davor eingefügt -->
                         <div id="select-445592-dynamic-anchor" aria-hidden="true" style="height:0;"></div>
+                        
                     </div>
                 </div>
             </div>
@@ -231,7 +235,7 @@
             <input type="hidden" name="select-445592-value" value="" />
         </div>
 
-        
+
 
         <!-- <div id="connector-select" class="select">
             <button type="button" class="btn-outline justify-between font-normal w-[360px]" id="connector-trigger"
@@ -547,11 +551,117 @@
 
 
 
+    <!-- ip fetch service test, needs server restart -->
+
+    <!-- <h1>Gefundene Hosts</h1>
+    <button id="refresh">Aktualisieren</button>
+    <span id="meta"></span>
+    <table>
+        <thead>
+            <tr>
+                <th>IP</th>
+                <th>Port</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="list"></tbody>
+    </table>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+    <script>
+        const list = document.getElementById('list');
+        const meta = document.getElementById('meta');
+        const btn = document.getElementById('refresh');
+
+        const ioClient = io(); // same-origin
+
+        function fmt(ts) {
+            if (!ts) return '–';
+            const d = new Date(ts);
+            return d.toLocaleTimeString();
+        }
+        function setMeta(updatedAt, nextAllowedAt) {
+            const now = Date.now();
+            const wait = Math.max(0, Math.ceil((nextAllowedAt - now) / 1000));
+            meta.textContent = `Zuletzt aktualisiert: ${fmt(updatedAt)}  •  Nächster Scan möglich in: ${wait}s`;
+        }
+        function render(peers) {
+            list.innerHTML = peers.map(p =>
+                `<tr><td>${p.ip}</td><td>${p.port}</td><td class="${p.healthy ? 'healthy' : 'unhealthy'}">${p.healthy ? 'OK' : '—'}</td></tr>`
+            ).join('');
+        }
+
+        async function loadOnce() {
+            const r = await fetch('/api/peers');
+            const j = await r.json();
+            render(j.peers || []);
+            setMeta(j.updatedAt, j.nextAllowedAt ?? (Date.now() + 30000));
+        }
+
+        // Live-Updates vom Server
+        ioClient.on('peers-updated', ({ peers, updatedAt }) => {
+            render(peers || []);
+            // nextAllowedAt wird bereits von Server gesetzt: 30s nach Start des Scans.
+            // Bei Live-Event kennen wir ihn nicht => setze jetzt+30s (konservativ)
+            setMeta(updatedAt, Date.now() + 30000);
+        });
+
+        // Cooldown-Feedback (wenn via Socket ausgelöst)
+        ioClient.on('peers-cooldown', ({ retryIn, nextAllowedAt }) => {
+            setMeta(Date.now(), nextAllowedAt);
+            btn.disabled = true;
+            const end = Date.now() + (retryIn || 0);
+            const t = setInterval(() => {
+                const left = Math.max(0, Math.ceil((end - Date.now()) / 1000));
+                btn.textContent = left ? `Aktualisieren (${left})` : 'Aktualisieren';
+                if (!left) { clearInterval(t); btn.disabled = false; }
+            }, 500);
+        });
+
+        btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            btn.textContent = 'Aktualisieren …';
+            try {
+                const r = await fetch('/api/peers/refresh', { method: 'POST' });
+                if (r.status === 429) {
+                    const j = await r.json();
+                    // Countdown anzeigen
+                    const end = Date.now() + (j.retryIn || 0);
+                    const timer = setInterval(() => {
+                        const left = Math.max(0, Math.ceil((end - Date.now()) / 1000));
+                        btn.textContent = left ? `Aktualisieren (${left})` : 'Aktualisieren';
+                        setMeta(j.updatedAt, j.nextAllowedAt);
+                        if (!left) { clearInterval(timer); btn.disabled = false; }
+                    }, 500);
+                    return;
+                }
+                const j = await r.json();
+                render(j.peers || []);
+                setMeta(j.updatedAt, j.nextAllowedAt);
+            } catch (e) {
+                console.error(e);
+            } finally {
+                // bei Erfolg stellt das Live-Event sowieso ein; hier wieder freigeben
+                setTimeout(() => { btn.disabled = false; btn.textContent = 'Aktualisieren'; }, 500);
+            }
+        });
+
+        // initial laden
+        loadOnce();
+    </script> -->
+
+    <!-- <script>
+        document.addEventListener('peer:selected', (e) => {
+            const { value } = e.detail; // z.B. "192.168.1.23:55555"
+            console.log('Selected peer:', value);
+            // hier ggf. deine Socket.IO-Connection umstellen …
+            // socket = io('http://' + value, {...})
+        });
+    </script> -->
 
 
-
-
-
+    <!-- ip fetch service -->
+    <script defer src="/js/peers-select.js"></script>
 
     <!-- Socket.IO Client (lokal vom Server) -->
     <script src="./socket.io/socket.io.js"></script>
@@ -566,7 +676,8 @@
     <!-- Basecoat CSS lokal -->
     <script src="/js/basecoat/basecoat-css/dist/js/basecoat.min.js" defer></script>
     <script src="/js/basecoat/basecoat-css/dist/js/select.min.js" defer></script>
-    <!-- Basecoat Theme-Handler lokal -->
+
+    <!-- Basecoat Theme-Handler locale -->
     <script src="/js/theme-basecoat.js"></script>
 
     <script type="module" src="./js/app.js"></script>

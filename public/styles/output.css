@@ -368,6 +368,9 @@
   .ml-auto {
     margin-left: auto;
   }
+  .\!hidden {
+    display: none !important;
+  }
   .block {
     display: block;
   }
@@ -4616,12 +4619,15 @@ a:focus {
 }
 #connector-listbox [role="option"] {
   cursor: pointer;
-  padding: .375rem .5rem;
-  border-radius: .5rem;
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.5rem;
 }
 #connector-listbox [role="option"][aria-selected="true"] {
   outline: 2px solid currentColor;
   outline-offset: 2px;
+}
+.active:hover {
+  cursor: pointer;
 }
 @property --tw-rotate-x {
   syntax: "*";
