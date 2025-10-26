@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="./vendor/quill/quill.core.css" />
     <link rel="stylesheet" href="./vendor/quill/quill.snow.css" />
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/theme-toggles@4.10.1/css/{toggle name}.min.css"> -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/theme-toggles@latest/css/classic.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/theme-toggles@latest/css/classic.min.css"> -->
 
 
 </head>
@@ -64,6 +64,94 @@
     <header class="bg-white dark:bg-transparent shadow p-3 flex items-center gap-3"
         style="background:var(--card);color:var(--fg);">
         <h1 class="text-xl font-semibold">MeetNote</h1>
+
+        <div id="rooms-select" class="select">
+            <button type="button" class="btn-outline justify-between font-normal w-[260px]" id="rooms-trigger"
+                aria-haspopup="listbox" aria-expanded="false" aria-controls="rooms-listbox">
+                <span class="truncate" id="rooms-label">default</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" class="lucide text-muted-foreground opacity-50 shrink-0">
+                    <path d="m7 15 5 5 5-5" />
+                    <path d="m7 9 5-5 5 5" />
+                </svg>
+            </button>
+
+            <div id="rooms-popover" data-popover aria-hidden="true" class="w-[260px]">
+                <header class="flex justify-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" class="lucide lucide-search">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.3-4.3" />
+                    </svg>
+                    <input type="text" id="rooms-search" placeholder="Search rooms…" autocomplete="off"
+                        autocorrect="off" spellcheck="false" aria-autocomplete="list" role="combobox"
+                        aria-expanded="false" aria-controls="select-445592-listbox"
+                        aria-labelledby="select-445592-trigger"
+                        class="flex-1 bg-transparent border-none outline-none" />
+                </header>
+                <header class="flex justify-start items-center mt-2">
+                    <button type="button" id="room-create-btn" type="submit" aria-label="Create new room"
+                        class="cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-file-plus">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <path d="M12 18v-6" />
+                            <path d="M9 15h6" />
+                        </svg>
+                    </button>
+
+                    <input type="text" id="room-create-input" placeholder="Create new room" autocomplete="off"
+                        autocorrect="off" spellcheck="false" aria-autocomplete="list" role="combobox"
+                        aria-expanded="false" aria-controls="select-445592-listbox"
+                        aria-labelledby="select-445592-trigger"
+                        class="flex-1 bg-transparent border-none outline-none" />
+                </header>
+
+                <script>
+                    const input = document.getElementById('room-create-input');
+                    const btn = document.getElementById('room-create-btn');
+
+                    function createRoom() {
+                        const roomName = input?.value?.trim();
+                        if (!roomName) {
+                            alert('Bitte einen Raumnamen eingeben.');
+                            input.focus();
+                            return;
+                        }
+                        console.log('Neuer Raum:', roomName);
+                        input.value = ''; // optional Eingabe leeren
+                    }
+
+                    // Klick auf das Icon
+                    btn?.addEventListener('click', createRoom);
+
+                    // Enter-Taste im Input
+                    input?.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            createRoom();
+                        }
+                    });
+                </script>
+
+                <div role="listbox" id="rooms-listbox" aria-orientation="vertical" aria-labelledby="rooms-trigger">
+                    <div role="group" aria-labelledby="rooms-group-heading">
+                        <div role="heading" id="rooms-group-heading">Rooms</div>
+
+                        <!-- ausgewählter -->
+                        <div id="rooms-current" role="option" data-value="" aria-selected="true">default</div>
+
+                        <!-- neue/gef. Einträge vor dem Anchor -->
+                        <div id="rooms-dynamic-anchor" aria-hidden="true" style="height:0;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="rooms-value" value="default" />
+        </div>
+
 
         <div class="ml-auto flex items-center gap-2">
 
@@ -194,7 +282,7 @@
     </header>
 
     <!-- <main id="main" class="flex-1 p-4 w-full mx-auto overflow-y-auto"> -->
-    <main id="main" class="flex-1 p-4 max-w-6xl mx-auto overflow-y-auto">
+    <main id="main" class="flex-1 p-4 max-w-7xl mx-auto overflow-y-auto">
         <!-- <main id="main" class="p-4 max-w-6xl mx-auto h-full"> -->
 
         <div id="toolbar" class="mb-3">
@@ -267,7 +355,13 @@
         </button> -->
     </main>
 
-
+    <button class="btn" id="add-note">Neue Notiz</button>
+    <script>
+        document.getElementById('add-note').addEventListener('click', () => {
+            const id = 'note-' + Date.now().toString(36).slice(-6);
+            NotesUI.addNote(id, 'Notiz ' + id);
+        });
+    </script>
 
     <!-- quill delta -->
     <script defer src="/js/quill-notes.js"></script>

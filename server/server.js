@@ -1,3 +1,280 @@
+// const path = require('path');
+// const fs = require('fs');
+// const express = require('express');
+// const http = require('http');
+// const { Server } = require('socket.io');
+// const cors = require('cors');
+// const Delta = require('quill-delta');
+// const os = require('os');
+// const net = require('net');
+
+// // TODO: setting || env || 55555
+// const PORT = process.env.PORT || 55555;
+// const DATA_DIR = path.join(__dirname, '..', 'data', 'rooms');
+
+// fs.mkdirSync(DATA_DIR, { recursive: true });
+
+// const app = express();
+// const server = http.createServer(app);
+// const io = new Server(server, { cors: { origin: '*' } });
+
+// app.use(cors());
+// app.use(express.json());
+// app.use(express.static(path.join(__dirname, '..', 'public')));
+
+// app.get('/health', (_req, res) => res.json({ ok: true }));
+
+// // Room-Struktur: { notes: { [noteId]: fullDelta }, updatedAt }
+// const rooms = new Map();
+// const owners = new Map(); // roomId -> { [noteId]: ownerId }
+
+// function roomFile(roomId) {
+//   return path.join(DATA_DIR, `${roomId}.json`);
+// }
+
+// function loadRoom(roomId) {
+//   const file = roomFile(roomId);
+//   if (fs.existsSync(file)) {
+//     try {
+//       const data = JSON.parse(fs.readFileSync(file, 'utf-8'));
+//       // Delta-Objekte sicherstellen
+//       Object.keys(data.notes || {}).forEach(k => {
+//         const d = data.notes[k];
+//         if (!d || !Array.isArray(d.ops)) data.notes[k] = { ops: [] };
+//       });
+//       return data;
+//     } catch { }
+//   }
+//   return { notes: {}, updatedAt: Date.now() };
+// }
+
+// function saveRoom(roomId, state) {
+//   fs.writeFileSync(roomFile(roomId), JSON.stringify(state));
+// }
+
+// function ensureRoom(roomId) {
+//   if (!rooms.has(roomId)) rooms.set(roomId, loadRoom(roomId));
+//   return rooms.get(roomId);
+// }
+
+// function ensureOwners(roomId) {
+//   if (!owners.has(roomId)) owners.set(roomId, {});
+//   return owners.get(roomId);
+// }
+
+
+// // Periodisches Autosave
+// setInterval(() => {
+//   for (const [rid, state] of rooms) saveRoom(rid, state);
+// }, 3000);
+
+// io.on('connection', (socket) => {
+//   socket.emit('peers-updated', { peers: peersCache.peers, updatedAt: peersCache.updatedAt });
+//   let roomId = null;
+//   const userId = socket.handshake.address || socket.id;
+//   socket.emit('whoami', { userId });
+
+//   socket.on('join', (rid) => {
+//     if (roomId) socket.leave(roomId);
+//     roomId = String(rid || 'default');
+//     socket.join(roomId);
+
+//     const state = ensureRoom(roomId);
+//     // socket.emit('init', state);
+//     const meta = { owners: ensureOwners(roomId) };
+//     socket.emit('init', { ...state, meta });
+//   });
+
+//   // { noteId, delta, ts }
+//   socket.on('delta', (payload) => {
+//     if (!roomId || !payload?.noteId || !payload?.delta) return;
+//     const { noteId, delta } = payload;
+//     const state = ensureRoom(roomId);
+//     const own = ensureOwners(roomId);
+
+//     const current = new Delta(state.notes[noteId] || { ops: [] });
+//     const incoming = new Delta(delta);
+//     const composed = current.compose(incoming);
+
+//     state.notes[noteId] = composed;
+//     state.updatedAt = Date.now();
+
+//     if (!own[noteId]) own[noteId] = userId;
+
+//     // an alle anderen Clients im Room
+//     // socket.to(roomId).emit('delta', { noteId, delta });
+//     socket.to(roomId).emit('delta', { noteId, delta, author: userId });
+//   });
+
+//   socket.on('disconnect', () => { });
+// });
+
+// // IP Scanner endpoint
+
+// const SCAN_PORT = Number(PORT || process.env.PORT || 55555);
+// const SCAN_TIMEOUT = 300;          // ms pro TCP-Versuch
+// const SCAN_CONCURRENCY = 256;      // gleichzeitige Verbindungen
+// const SCAN_INTERVAL_MS = 30_000;   // 30s
+// const SCAN_CIDRS = process.env.SCAN_CIDRS?.split(',').map(s => s.trim()); // optional: "192.168.1.0/24,10.0.0.0/24"
+
+// const peersCache = {
+//   peers: [],         // [{ ip, port, healthy }]
+//   updatedAt: 0,      // epoch ms
+//   nextAllowedAt: 0,  // epoch ms – Rate-Limit
+// };
+
+// // kleine IP-Utils
+// function ipToInt(ip) { return ip.split('.').reduce((a, o) => (a << 8) + (+o), 0) >>> 0 }
+// function intToIp(i) { return [(i >>> 24) & 255, (i >>> 16) & 255, (i >>> 8) & 255, i & 255].join('.') }
+// function cidrToRange(cidr) {
+//   const [ip, p] = cidr.split('/');
+//   const prefix = Number(p);
+//   const base = ipToInt(ip);
+//   const mask = prefix === 0 ? 0 : (~((1 << (32 - prefix)) - 1) >>> 0);
+//   const net = base & mask;
+//   const first = net + 1;
+//   const last = (net | (~mask >>> 0)) - 1;
+//   return { first, last };
+// }
+// function localCIDRsFallback24() {
+//   const out = [];
+//   const nets = os.networkInterfaces();
+//   for (const infos of Object.values(nets)) {
+//     for (const i of infos || []) {
+//       if (i.family !== 'IPv4' || i.internal) continue;
+//       if (!/^10\.|^192\.168\.|^172\.(1[6-9]|2\d|3[0-1])\./.test(i.address)) continue;
+//       const [a, b, c] = i.address.split('.');
+//       out.push(`${a}.${b}.${c}.0/24`);
+//     }
+//   }
+//   // dedupe
+//   return [...new Set(out)];
+// }
+// function buildTargets() {
+//   const cidrs = SCAN_CIDRS && SCAN_CIDRS.length ? SCAN_CIDRS : localCIDRsFallback24();
+//   const ips = [];
+//   for (const cidr of cidrs) {
+//     const { first, last } = cidrToRange(cidr);
+//     for (let n = first; n <= last; n++) ips.push(intToIp(n));
+//   }
+//   return ips;
+// }
+// function checkPort(ip, port, timeoutMs) {
+//   return new Promise(res => {
+//     const s = new net.Socket();
+//     let done = false;
+//     const finish = ok => { if (!done) { done = true; s.destroy(); res(ok); } };
+//     s.setTimeout(timeoutMs);
+//     s.once('connect', () => finish(true));
+//     s.once('timeout', () => finish(false));
+//     s.once('error', () => finish(false));
+//     s.connect(port, ip);
+//   });
+// }
+// async function scanPeers() {
+//   const targets = buildTargets();
+//   const found = [];
+//   let i = 0;
+//   async function worker() {
+//     while (i < targets.length) {
+//       const idx = i++; const ip = targets[idx];
+//       const ok = await checkPort(ip, SCAN_PORT, SCAN_TIMEOUT);
+//       if (ok) {
+//         // optional: /health prüfen (robuster)
+//         try {
+//           const r = await fetch(`http://${ip}:${SCAN_PORT}/health`, { timeout: 500 }).catch(() => null);
+//           if (r && r.ok) found.push({ ip, port: SCAN_PORT, healthy: true });
+//           else found.push({ ip, port: SCAN_PORT, healthy: false });
+//         } catch {
+//           found.push({ ip, port: SCAN_PORT, healthy: false });
+//         }
+//       }
+//     }
+//   }
+//   const workers = Array.from({ length: Math.min(SCAN_CONCURRENCY, 512) }, worker);
+//   await Promise.all(workers);
+//   // Sortierung: healthy zuerst
+//   found.sort((a, b) => (b.healthy - a.healthy) || (a.ip > b.ip ? 1 : -1));
+//   return found;
+// }
+// // async function runScanAndBroadcast() {
+// //   peersCache.nextAllowedAt = Date.now() + SCAN_INTERVAL_MS; // sofort Cooldown setzen
+// //   const peers = await scanPeers();
+// //   peersCache.peers = peers;
+// //   peersCache.updatedAt = Date.now();
+// //   io.emit('peers-updated', { peers, updatedAt: peersCache.updatedAt });
+// // }
+// function canScanNow() { return Date.now() >= peersCache.nextAllowedAt; }
+
+// // --- REST: aktuelle Peers + manueller Refresh ---
+// app.get('/api/peers', (_req, res) => {
+//   res.json({
+//     peers: peersCache.peers,
+//     updatedAt: peersCache.updatedAt,
+//     nextAllowedAt: peersCache.nextAllowedAt,
+//     now: Date.now(),
+//   });
+// });
+// app.post('/api/peers/refresh', async (_req, res) => {
+//   if (!canScanNow()) {
+//     return res.status(429).json({
+//       error: 'cooldown',
+//       retryIn: Math.max(0, peersCache.nextAllowedAt - Date.now()),
+//       nextAllowedAt: peersCache.nextAllowedAt,
+//       updatedAt: peersCache.updatedAt,
+//       peers: peersCache.peers,
+//     });
+//   }
+//   await runScanAndBroadcast();
+//   res.json({
+//     ok: true,
+//     updatedAt: peersCache.updatedAt,
+//     peers: peersCache.peers,
+//     nextAllowedAt: peersCache.nextAllowedAt,
+//   });
+// });
+
+// // --- Socket.IO: beim Connect den aktuellen Stand pushen + Refresh anfordern ---
+// io.on('connection', (socket) => {
+//   socket.emit('peers-updated', { peers: peersCache.peers, updatedAt: peersCache.updatedAt });
+//   socket.on('peers:refresh', async () => {
+//     if (!canScanNow()) {
+//       socket.emit('peers-cooldown', {
+//         retryIn: Math.max(0, peersCache.nextAllowedAt - Date.now()),
+//         nextAllowedAt: peersCache.nextAllowedAt
+//       });
+//       return;
+//     }
+//     await runScanAndBroadcast(); // überschreibt Cache & broadcastet an alle
+//   });
+// });
+
+// // --- Initial: einmal scannen und danach alle 30s ---
+// // (async () => {
+// //   await runScanAndBroadcast();                    // sofort
+// //   setInterval(runScanAndBroadcast, SCAN_INTERVAL_MS); // periodisch
+// // })();
+
+// // scan on user demand only
+// async function runScanAndBroadcast() {
+//   const peers = await scanPeers();
+//   peersCache.peers = peers;
+//   peersCache.updatedAt = Date.now();
+//   // Cooldown *jetzt* setzen (nach Erfolg)
+//   peersCache.nextAllowedAt = Date.now() + SCAN_INTERVAL_MS;
+
+//   io.emit('peers-updated', { peers, updatedAt: peersCache.updatedAt });
+// }
+
+// // END
+
+// // Server start
+// server.listen(PORT, () => console.log(`[server] listening on :${PORT}`));
+
+//! ////////
+
+// server/server.js
+/* eslint-disable no-console */
 const path = require('path');
 const fs = require('fs');
 const express = require('express');
@@ -8,12 +285,21 @@ const Delta = require('quill-delta');
 const os = require('os');
 const net = require('net');
 
-// TODO: setting || env || 55555
-const PORT = process.env.PORT || 55555;
-const DATA_DIR = path.join(__dirname, '..', 'data', 'rooms');
+/* ──────────────────────────────────────────────────────────────
+ * Settings
+ * ──────────────────────────────────────────────────────────────*/
+const PORT = Number(process.env.PORT || 55555);
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || ''; // wenn gesetzt, ist x-admin Pflicht für Write-APIs
 
-fs.mkdirSync(DATA_DIR, { recursive: true });
+const DATA_ROOT = path.join(__dirname, '..', 'data');
+const ROOMS_DIR = path.join(DATA_ROOT, 'rooms');
 
+fs.mkdirSync(DATA_ROOT, { recursive: true });
+fs.mkdirSync(ROOMS_DIR, { recursive: true });
+
+/* ──────────────────────────────────────────────────────────────
+ * Express / Socket.IO
+ * ──────────────────────────────────────────────────────────────*/
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
@@ -24,101 +310,214 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.get('/health', (_req, res) => res.json({ ok: true }));
 
-// Room-Struktur: { notes: { [noteId]: fullDelta }, updatedAt }
-const rooms = new Map();
+/* ──────────────────────────────────────────────────────────────
+ * Storage (JSON-Dokumente)
+ * ──────────────────────────────────────────────────────────────*/
+const roomFile = (id) => path.join(ROOMS_DIR, `${id}.json`);
+const emptyState = () => ({ title: 'default', notes: {}, updatedAt: Date.now() });
 
-function roomFile(roomId) {
-  return path.join(DATA_DIR, `${roomId}.json`);
-}
-
-function loadRoom(roomId) {
-  const file = roomFile(roomId);
-  if (fs.existsSync(file)) {
+function listRooms() {
+  const files = fs.readdirSync(ROOMS_DIR).filter(f => f.endsWith('.json'));
+  const rows = files.map(f => {
+    const id = path.basename(f, '.json');
     try {
-      const data = JSON.parse(fs.readFileSync(file, 'utf-8'));
-      // Delta-Objekte sicherstellen
-      Object.keys(data.notes || {}).forEach(k => {
-        const d = data.notes[k];
-        if (!d || !Array.isArray(d.ops)) data.notes[k] = { ops: [] };
-      });
-      return data;
-    } catch { }
-  }
-  return { notes: {}, updatedAt: Date.now() };
+      const j = JSON.parse(fs.readFileSync(path.join(ROOMS_DIR, f), 'utf8'));
+      return {
+        id,
+        title: j.title || id,
+        updatedAt: j.updatedAt || 0,
+        count: Object.keys(j.notes || {}).length
+      };
+    } catch {
+      return { id, title: id, updatedAt: 0, count: 0 };
+    }
+  });
+  return rows.sort((a, b) => (b.updatedAt - a.updatedAt) || a.id.localeCompare(b.id));
 }
 
-function saveRoom(roomId, state) {
-  fs.writeFileSync(roomFile(roomId), JSON.stringify(state));
+function loadRoom(id) {
+  const f = roomFile(id);
+  if (!fs.existsSync(f)) return { ...emptyState(), title: id };
+  try {
+    const j = JSON.parse(fs.readFileSync(f, 'utf8'));
+    // sanitize Quill contents
+    const notes = j.notes || {};
+    for (const k of Object.keys(notes)) {
+      const d = notes[k];
+      if (!d || !Array.isArray(d.ops)) notes[k] = { ops: [] };
+    }
+    return { title: j.title || id, notes, updatedAt: j.updatedAt || Date.now() };
+  } catch {
+    return { ...emptyState(), title: id };
+  }
 }
+
+function saveRoom(id, state) {
+  const payload = {
+    title: state.title || id,
+    notes: state.notes || {},
+    updatedAt: state.updatedAt || Date.now()
+  };
+  fs.writeFileSync(roomFile(id), JSON.stringify(payload, null, 2), 'utf8');
+}
+
+function createRoom(id, title) {
+  id = String(id || '').trim();
+  if (!/^[a-z0-9_-]{1,64}$/i.test(id)) throw new Error('invalid id');
+  const f = roomFile(id);
+  if (fs.existsSync(f)) throw new Error('exists');
+  const st = { ...emptyState(), title: title || id };
+  saveRoom(id, st);
+  return st;
+}
+
+function renameRoom(oldId, newId) {
+  if (!/^[a-z0-9_-]{1,64}$/i.test(newId)) throw new Error('invalid id');
+  const src = roomFile(oldId), dst = roomFile(newId);
+  if (!fs.existsSync(src)) throw new Error('not found');
+  if (fs.existsSync(dst)) throw new Error('target exists');
+  fs.renameSync(src, dst);
+}
+
+function deleteRoom(id) {
+  const f = roomFile(id);
+  if (fs.existsSync(f)) fs.unlinkSync(f);
+}
+
+function wipeDefaultOnStart() {
+  const f = roomFile('default');
+  if (fs.existsSync(f)) fs.unlinkSync(f);
+}
+
+/* Cache (Memory) */
+const rooms = new Map();  // roomId -> state
+const owners = new Map(); // roomId -> { noteId: userId }
 
 function ensureRoom(roomId) {
   if (!rooms.has(roomId)) rooms.set(roomId, loadRoom(roomId));
   return rooms.get(roomId);
 }
+function ensureOwners(roomId) {
+  if (!owners.has(roomId)) owners.set(roomId, {});
+  return owners.get(roomId);
+}
 
-// Periodisches Autosave
-setInterval(() => {
-  for (const [rid, state] of rooms) saveRoom(rid, state);
-}, 3000);
+/* default ephemeral */
+wipeDefaultOnStart();
 
-io.on('connection', (socket) => {
-  socket.emit('peers-updated', { peers: peersCache.peers, updatedAt: peersCache.updatedAt });
-  let roomId = null;
+/* ──────────────────────────────────────────────────────────────
+ * Admin Guard
+ * ──────────────────────────────────────────────────────────────*/
+function requireAdmin(req, res, next) {
+  if (!ADMIN_TOKEN) {
+    // Ohne Token: nur localhost darf
+    const ip = req.socket?.remoteAddress || '';
+    const isLocal = ip.includes('127.0.0.1') || ip.includes('::1');
+    if (!isLocal) return res.status(403).json({ error: 'forbidden (host only without ADMIN_TOKEN)' });
+    return next();
+  }
+  const tok = req.get('x-admin') || req.query.token;
+  if (tok !== ADMIN_TOKEN) return res.status(403).json({ error: 'forbidden' });
+  return next();
+}
 
-  socket.on('join', (rid) => {
-    if (roomId) socket.leave(roomId);
-    roomId = String(rid || 'default');
-    socket.join(roomId);
-
-    const state = ensureRoom(roomId);
-    socket.emit('init', state);
-  });
-
-  // { noteId, delta, ts }
-  socket.on('delta', (payload) => {
-    if (!roomId || !payload?.noteId || !payload?.delta) return;
-    const { noteId, delta } = payload;
-    const state = ensureRoom(roomId);
-
-    const current = new Delta(state.notes[noteId] || { ops: [] });
-    const incoming = new Delta(delta);
-    const composed = current.compose(incoming);
-
-    state.notes[noteId] = composed;
-    state.updatedAt = Date.now();
-
-    // an alle anderen Clients im Room
-    socket.to(roomId).emit('delta', { noteId, delta });
-  });
-
-  socket.on('disconnect', () => { });
+/* ──────────────────────────────────────────────────────────────
+ * Rooms REST
+ * ──────────────────────────────────────────────────────────────*/
+app.get('/api/rooms', (_req, res) => {
+  res.json({ rooms: listRooms() });
 });
 
-// IP Scanner endpoint
+app.get('/api/rooms/:id', (req, res) => {
+  const id = String(req.params.id);
+  const st = ensureRoom(id);
+  res.json({ id, ...st, meta: { owners: ensureOwners(id) } });
+});
 
-const SCAN_PORT = Number(PORT || process.env.PORT || 55555);
-const SCAN_TIMEOUT = 300;          // ms pro TCP-Versuch
-const SCAN_CONCURRENCY = 256;      // gleichzeitige Verbindungen
-const SCAN_INTERVAL_MS = 30_000;   // 30s
-const SCAN_CIDRS = process.env.SCAN_CIDRS?.split(',').map(s => s.trim()); // optional: "192.168.1.0/24,10.0.0.0/24"
+app.post('/api/rooms', requireAdmin, (req, res) => {
+  const { id, title } = req.body || {};
+  try {
+    const st = createRoom(id, title);
+    rooms.set(id, st);
+    owners.set(id, {});
+    io.emit('rooms-updated', { rooms: listRooms() });
+    res.json({ ok: true, id, title: st.title });
+  } catch (e) {
+    res.status(400).json({ error: String(e.message || e) });
+  }
+});
+
+app.put('/api/rooms/:id', requireAdmin, (req, res) => {
+  const id = String(req.params.id);
+  const { newId, title } = req.body || {};
+  try {
+    if (newId && newId !== id) {
+      renameRoom(id, newId);
+      // move caches
+      const st = rooms.get(id) || loadRoom(id);
+      rooms.delete(id);
+      rooms.set(newId, st);
+      const own = owners.get(id) || {};
+      owners.delete(id);
+      owners.set(newId, own);
+
+      if (title) {
+        const st2 = rooms.get(newId);
+        st2.title = title;
+        st2.updatedAt = Date.now();
+        saveRoom(newId, st2);
+      }
+      io.emit('rooms-updated', { rooms: listRooms() });
+      return res.json({ ok: true, from: id, to: newId });
+    }
+    // nur Title updaten
+    const st = ensureRoom(id);
+    if (title) { st.title = title; st.updatedAt = Date.now(); saveRoom(id, st); }
+    io.emit('rooms-updated', { rooms: listRooms() });
+    res.json({ ok: true, id, title: (title || st.title) });
+  } catch (e) {
+    res.status(400).json({ error: String(e.message || e) });
+  }
+});
+
+app.delete('/api/rooms/:id', requireAdmin, (req, res) => {
+  const id = String(req.params.id);
+  try {
+    deleteRoom(id);
+    rooms.delete(id);
+    owners.delete(id);
+    io.emit('rooms-updated', { rooms: listRooms() });
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(400).json({ error: String(e.message || e) });
+  }
+});
+
+/* ──────────────────────────────────────────────────────────────
+ * LAN-Peers Scanner (manuell, mit Cooldown)
+ * ──────────────────────────────────────────────────────────────*/
+const SCAN_PORT = PORT;
+const SCAN_TIMEOUT = Number(process.env.SCAN_TIMEOUT || 300);
+const SCAN_CONCURRENCY = Number(process.env.SCAN_CONCURRENCY || 256);
+const SCAN_INTERVAL_MS = Number(process.env.SCAN_INTERVAL_MS || 30_000);
+const SCAN_CIDRS = process.env.SCAN_CIDRS?.split(',').map(s => s.trim()).filter(Boolean); // optional
 
 const peersCache = {
-  peers: [],         // [{ ip, port, healthy }]
-  updatedAt: 0,      // epoch ms
-  nextAllowedAt: 0,  // epoch ms – Rate-Limit
+  peers: [],           // [{ ip, port, healthy }]
+  updatedAt: 0,
+  nextAllowedAt: 0,
 };
 
-// kleine IP-Utils
-function ipToInt(ip) { return ip.split('.').reduce((a, o) => (a << 8) + (+o), 0) >>> 0 }
-function intToIp(i) { return [(i >>> 24) & 255, (i >>> 16) & 255, (i >>> 8) & 255, i & 255].join('.') }
+function ipToInt(ip) { return ip.split('.').reduce((a, o) => (a << 8) + (+o), 0) >>> 0; }
+function intToIp(i) { return [(i >>> 24) & 255, (i >>> 16) & 255, (i >>> 8) & 255, i & 255].join('.'); }
 function cidrToRange(cidr) {
   const [ip, p] = cidr.split('/');
   const prefix = Number(p);
   const base = ipToInt(ip);
   const mask = prefix === 0 ? 0 : (~((1 << (32 - prefix)) - 1) >>> 0);
-  const net = base & mask;
-  const first = net + 1;
-  const last = (net | (~mask >>> 0)) - 1;
+  const neta = base & mask;
+  const first = neta + 1;
+  const last = (neta | (~mask >>> 0)) - 1;
   return { first, last };
 }
 function localCIDRsFallback24() {
@@ -132,14 +531,13 @@ function localCIDRsFallback24() {
       out.push(`${a}.${b}.${c}.0/24`);
     }
   }
-  // dedupe
   return [...new Set(out)];
 }
 function buildTargets() {
-  const cidrs = SCAN_CIDRS && SCAN_CIDRS.length ? SCAN_CIDRS : localCIDRsFallback24();
+  const cidrs = (SCAN_CIDRS && SCAN_CIDRS.length) ? SCAN_CIDRS : localCIDRsFallback24();
   const ips = [];
-  for (const cidr of cidrs) {
-    const { first, last } = cidrToRange(cidr);
+  for (const c of cidrs) {
+    const { first, last } = cidrToRange(c);
     for (let n = first; n <= last; n++) ips.push(intToIp(n));
   }
   return ips;
@@ -152,7 +550,7 @@ function checkPort(ip, port, timeoutMs) {
     s.setTimeout(timeoutMs);
     s.once('connect', () => finish(true));
     s.once('timeout', () => finish(false));
-    s.once('error', () => finish(false));
+    s.once('error',  () => finish(false));
     s.connect(port, ip);
   });
 }
@@ -165,9 +563,8 @@ async function scanPeers() {
       const idx = i++; const ip = targets[idx];
       const ok = await checkPort(ip, SCAN_PORT, SCAN_TIMEOUT);
       if (ok) {
-        // optional: /health prüfen (robuster)
         try {
-          const r = await fetch(`http://${ip}:${SCAN_PORT}/health`, { timeout: 500 }).catch(() => null);
+          const r = await fetch(`http://${ip}:${SCAN_PORT}/health`, { signal: AbortSignal.timeout(500) }).catch(() => null);
           if (r && r.ok) found.push({ ip, port: SCAN_PORT, healthy: true });
           else found.push({ ip, port: SCAN_PORT, healthy: false });
         } catch {
@@ -178,20 +575,18 @@ async function scanPeers() {
   }
   const workers = Array.from({ length: Math.min(SCAN_CONCURRENCY, 512) }, worker);
   await Promise.all(workers);
-  // Sortierung: healthy zuerst
   found.sort((a, b) => (b.healthy - a.healthy) || (a.ip > b.ip ? 1 : -1));
   return found;
 }
-// async function runScanAndBroadcast() {
-//   peersCache.nextAllowedAt = Date.now() + SCAN_INTERVAL_MS; // sofort Cooldown setzen
-//   const peers = await scanPeers();
-//   peersCache.peers = peers;
-//   peersCache.updatedAt = Date.now();
-//   io.emit('peers-updated', { peers, updatedAt: peersCache.updatedAt });
-// }
 function canScanNow() { return Date.now() >= peersCache.nextAllowedAt; }
+async function runScanAndBroadcast() {
+  const peers = await scanPeers();
+  peersCache.peers = peers;
+  peersCache.updatedAt = Date.now();
+  peersCache.nextAllowedAt = Date.now() + SCAN_INTERVAL_MS; // Cooldown NACH Erfolg
+  io.emit('peers-updated', { peers, updatedAt: peersCache.updatedAt });
+}
 
-// --- REST: aktuelle Peers + manueller Refresh ---
 app.get('/api/peers', (_req, res) => {
   res.json({
     peers: peersCache.peers,
@@ -219,9 +614,20 @@ app.post('/api/peers/refresh', async (_req, res) => {
   });
 });
 
-// --- Socket.IO: beim Connect den aktuellen Stand pushen + Refresh anfordern ---
+/* ──────────────────────────────────────────────────────────────
+ * Socket.IO – Rooms + Peers Events
+ * ──────────────────────────────────────────────────────────────*/
 io.on('connection', (socket) => {
+  let roomId = null;
+  const userId = socket.handshake.address || socket.id;
+
+  // Wer bin ich?
+  socket.emit('whoami', { userId });
+
+  // direkt den aktuellen Peer-Stand geben
   socket.emit('peers-updated', { peers: peersCache.peers, updatedAt: peersCache.updatedAt });
+
+  // Peers manuell triggern (mit Cooldown Feedback)
   socket.on('peers:refresh', async () => {
     if (!canScanNow()) {
       socket.emit('peers-cooldown', {
@@ -230,28 +636,49 @@ io.on('connection', (socket) => {
       });
       return;
     }
-    await runScanAndBroadcast(); // überschreibt Cache & broadcastet an alle
+    await runScanAndBroadcast();
   });
+
+  // Room join
+  socket.on('join', (rid) => {
+    if (roomId) socket.leave(roomId);
+    roomId = String(rid || 'default');
+    socket.join(roomId);
+
+    const state = ensureRoom(roomId);
+    const meta  = { owners: ensureOwners(roomId) };
+    socket.emit('init', { ...state, meta }); // <— WICHTIG: meta eingebettet
+  });
+
+  // Quill Deltas
+  socket.on('delta', (payload) => {
+    if (!roomId || !payload?.noteId || !payload?.delta) return;
+    const { noteId, delta } = payload;
+    const state = ensureRoom(roomId);
+    const own   = ensureOwners(roomId);
+
+    const current  = new Delta(state.notes[noteId] || { ops: [] });
+    const composed = current.compose(new Delta(delta));
+
+    state.notes[noteId] = composed;
+    state.updatedAt = Date.now();
+
+    if (!own[noteId]) own[noteId] = userId;
+
+    // persist
+    saveRoom(roomId, state);
+
+    // broadcast an andere
+    socket.to(roomId).emit('delta', { noteId, delta, author: userId });
+  });
+
+  socket.on('disconnect', () => {});
 });
 
-// --- Initial: einmal scannen und danach alle 30s ---
-// (async () => {
-//   await runScanAndBroadcast();                    // sofort
-//   setInterval(runScanAndBroadcast, SCAN_INTERVAL_MS); // periodisch
-// })();
+/* ──────────────────────────────────────────────────────────────
+ * Start
+ * ──────────────────────────────────────────────────────────────*/
+server.listen(PORT, () => {
+  console.log(`[server] listening on :${PORT}`);
+});
 
-// scan on user demand only
-async function runScanAndBroadcast() {
-  const peers = await scanPeers();
-  peersCache.peers = peers;
-  peersCache.updatedAt = Date.now();
-  // Cooldown *jetzt* setzen (nach Erfolg)
-  peersCache.nextAllowedAt = Date.now() + SCAN_INTERVAL_MS;
-
-  io.emit('peers-updated', { peers, updatedAt: peersCache.updatedAt });
-}
-
-// END
-
-// Server start
-server.listen(PORT, () => console.log(`[server] listening on :${PORT}`));
