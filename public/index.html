@@ -10,9 +10,14 @@
 
     <link rel="stylesheet" href="./vendor/quill/quill.core.css" />
     <link rel="stylesheet" href="./vendor/quill/quill.snow.css" />
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/theme-toggles@4.10.1/css/{toggle name}.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/theme-toggles@latest/css/classic.min.css">
+
+
 </head>
 
-<body class="min-h-screen">
+<body class="flex flex-col min-h-screen">
+    <!-- <body class="min-h-screen"> -->
     <!-- <h1 class="text-3xl font-bold underline bg-red-600">
         Hello world!
     </h1>
@@ -61,131 +66,82 @@
         <h1 class="text-xl font-semibold">MeetNote</h1>
 
         <div class="ml-auto flex items-center gap-2">
-            <!-- <select id="theme-family" class="bc-input">
-                <option value="classic">Klassisch</option>
-                <option value="green">Grün</option>
-                <option value="purple">Lila</option>
-                <option value="playful">Verspielt</option>
-            </select>
-            <select id="theme-mode" class="bc-input">
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-            </select> -->
-            <div class="ml-auto flex items-center gap-2">
-                <!-- <select id="brand-select" class="bc-input">
-                    <option value="default">Basecoat Default</option>
-                    <option value="supabase">Supabase</option>
-                    <option value="purple">Purple</option>
-                </select> -->
 
-                <!-- <div id="select-445592" class="select">
-                    <button type="button" class="btn-outline justify-between font-normal w-[180px]"
-                        id="select-445592-trigger" aria-haspopup="listbox" aria-expanded="false"
-                        aria-controls="select-445592-listbox">
-                        <span class="truncate">Purple</span>
+            <div id="select-445592" class="select">
+                <button type="button" class="btn-outline justify-between font-normal w-[180px]"
+                    id="select-445592-trigger" aria-haspopup="listbox" aria-expanded="false"
+                    aria-controls="select-445592-listbox">
+                    <span class="truncate">Default</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-chevrons-up-down-icon lucide-chevrons-up-down text-muted-foreground opacity-50 shrink-0">
+                        <path d="m7 15 5 5 5-5" />
+                        <path d="m7 9 5-5 5 5" />
+                    </svg>
+                </button>
 
-                        <iconify-icon icon="mdi:unfold-more-horizontal" class="w-4 h-4"></iconify-icon>
-                    </button>
-                    <div id="select-445592-popover" data-popover aria-hidden="true">
-                        <header>
-                            <iconify-icon icon="mdi:magnify" class="w-4 h-4"></iconify-icon>
-                            <input type="text" value="" placeholder="Search entries..." autocomplete="off"
-                                autocorrect="off" spellcheck="false" aria-autocomplete="list" role="combobox"
-                                aria-expanded="false" aria-controls="select-445592-listbox"
-                                aria-labelledby="select-445592-trigger" />
-                        </header>
-
-                        <div role="listbox" id="select-445592-listbox" aria-orientation="vertical"
-                            aria-labelledby="select-445592-trigger">
-                            <div role="group" aria-labelledby="group-label-select-445592-items-1">
-                                <div role="heading" id="group-label-select-445592-items-1">Fruits</div>
-
-                                <div id="select-445592-items-1-1" role="option" data-value="purple" value="purple"
-                                    aria-selected="true">
-                                    Purple</div>
-
-                                <div id="select-445592-items-1-2" role="option" value="" data-value="banana">Supabase
-                                </div>
-
-                                <div id="select-445592-items-1-3" role="option" data-value="blueberry">Basic</div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <input type="hidden" name="select-445592-value" value="purple" />
-                </div> -->
-
-
-
-                <div id="select-445592" class="select">
-                    <button type="button" class="btn-outline justify-between font-normal w-[180px]"
-                        id="select-445592-trigger" aria-haspopup="listbox" aria-expanded="false"
-                        aria-controls="select-445592-listbox">
-                        <span class="truncate">Default</span>
+                <div id="select-445592-popover" data-popover aria-hidden="true" class="w-[180px]">
+                    <header>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="lucide lucide-chevrons-up-down-icon lucide-chevrons-up-down text-muted-foreground opacity-50 shrink-0">
-                            <path d="m7 15 5 5 5-5" />
-                            <path d="m7 9 5-5 5 5" />
+                            class="lucide lucide-search-icon lucide-search">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.3-4.3" />
                         </svg>
-                    </button>
+                        <input type="text" value="" placeholder="Search entries..." autocomplete="off" autocorrect="off"
+                            spellcheck="false" aria-autocomplete="list" role="combobox" aria-expanded="false"
+                            aria-controls="select-445592-listbox" aria-labelledby="select-445592-trigger" />
+                    </header>
 
-                    <div id="select-445592-popover" data-popover aria-hidden="true">
-                        <header>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="lucide lucide-search-icon lucide-search">
-                                <circle cx="11" cy="11" r="8" />
-                                <path d="m21 21-4.3-4.3" />
-                            </svg>
-                            <input type="text" value="" placeholder="Search entries..." autocomplete="off"
-                                autocorrect="off" spellcheck="false" aria-autocomplete="list" role="combobox"
-                                aria-expanded="false" aria-controls="select-445592-listbox"
-                                aria-labelledby="select-445592-trigger" />
-                        </header>
+                    <div role="listbox" id="select-445592-listbox" aria-orientation="vertical"
+                        aria-labelledby="select-445592-trigger">
+                        <div role="group" aria-labelledby="group-label-select-445592-items-1">
+                            <div role="heading" id="group-label-select-445592-items-1">Theme family</div>
 
-                        <div role="listbox" id="select-445592-listbox" aria-orientation="vertical"
-                            aria-labelledby="select-445592-trigger">
-                            <div role="group" aria-labelledby="group-label-select-445592-items-1">
-                                <div role="heading" id="group-label-select-445592-items-1">Theme family</div>
+                            <!-- Default -->
+                            <div id="select-445592-items-1-1" role="option" data-value="default" aria-selected="true"
+                                onclick="document.dispatchEvent(new CustomEvent('basecoat:brand',{detail:{brand:'default'}}));">
+                                Default
+                            </div>
 
-                                <!-- Default -->
-                                <div id="select-445592-items-1-1" role="option" data-value="default"
-                                    aria-selected="true"
-                                    onclick="document.dispatchEvent(new CustomEvent('basecoat:brand',{detail:{brand:'default'}}));">
-                                    Default
-                                </div>
-
-                                <!-- Purple -->
-                                <div id="select-445592-items-1-2" role="option" data-value="purple"
-                                    onclick="document.dispatchEvent(new CustomEvent('basecoat:brand',{detail:{brand:'purple'}}));">
-                                    Purple
-                                </div>
+                            <!-- Purple -->
+                            <div id="select-445592-items-1-2" role="option" data-value="purple"
+                                onclick="document.dispatchEvent(new CustomEvent('basecoat:brand',{detail:{brand:'purple'}}));">
+                                Purple
                             </div>
                         </div>
                     </div>
-
-                    <input type="hidden" name="select-445592-value" value="default" />
                 </div>
 
+                <input type="hidden" name="select-445592-value" value="default" />
             </div>
 
-            <!-- <button id="theme-toggle" class="bc-btn btn-outline">Light/Dark</button> -->
-            <button type="button" aria-label="Toggle dark mode" data-tooltip="Toggle dark mode" data-side="bottom"
-                onclick="document.dispatchEvent(new CustomEvent('basecoat:theme'))" class="btn-icon-outline size-8">
-                <span class="hidden dark:flex h-full w-full items-center justify-center">
-                    <iconify-icon width="60%" height="60%" icon="mdi:weather-sunny"></iconify-icon>
-                </span>
-                <span class="flex dark:hidden h-full w-full items-center justify-center">
-                    <iconify-icon width="60%" height="60%" icon="mdi:weather-night"></iconify-icon>
-                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-                        </svg> -->
-                </span>
-            </button>
         </div>
+
+
+        <!-- <button type="button" aria-label="Toggle dark mode" data-tooltip="Toggle dark mode" data-side="bottom"
+            onclick="document.dispatchEvent(new CustomEvent('basecoat:theme'))" class="btn-icon-outline size-8">
+            <span class="hidden dark:flex h-full w-full items-center justify-center">
+                <iconify-icon width="60%" height="60%" icon="mdi:weather-sunny"></iconify-icon>
+            </span>
+            <span class="flex dark:hidden h-full w-full items-center justify-center">
+                <iconify-icon width="60%" height="60%" icon="mdi:weather-night"></iconify-icon>
+            </span>
+        </button> -->
+        <button type="button" aria-label="Toggle dark mode" data-tooltip="Toggle dark mode" data-side="bottom"
+            onclick="document.dispatchEvent(new CustomEvent('basecoat:theme'))" class="btn-icon-outline size-8"
+            id="theme-toggle-btn">
+            <span class="sr-only">Toggle dark mode</span>
+
+            <!-- NEU: überlagerte Icons -->
+            <span class="tt-wrap" aria-hidden="true">
+                <iconify-icon class="tt-icon tt-sun" width="60%" height="60%" icon="mdi:weather-sunny"></iconify-icon>
+                <iconify-icon class="tt-icon tt-moon" width="60%" height="60%" icon="mdi:weather-night"></iconify-icon>
+            </span>
+        </button>
+
+
+
 
         <!--  -->
 
@@ -227,7 +183,7 @@
 
                         <!-- Dynamische Treffer werden davor eingefügt -->
                         <div id="select-445592-dynamic-anchor" aria-hidden="true" style="height:0;"></div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -235,269 +191,12 @@
             <input type="hidden" name="select-445592-value" value="" />
         </div>
 
-
-
-        <!-- <div id="connector-select" class="select">
-            <button type="button" class="btn-outline justify-between font-normal w-[360px]" id="connector-trigger"
-                aria-haspopup="listbox" aria-expanded="false" aria-controls="connector-listbox">
-                <span class="truncate" id="connector-label">—</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-chevrons-up-down text-muted-foreground opacity-50 shrink-0">
-                    <path d="m7 15 5 5 5-5" />
-                    <path d="m7 9 5-5 5 5" />
-                </svg>
-            </button>
-
-            <div id="connector-popover" data-popover aria-hidden="true">
-                <header>
-                    
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="lucide lucide-search">
-                        <circle cx="11" cy="11" r="8" />
-                        <path d="m21 21-4.3-4.3" />
-                    </svg>
-                    <input type="text" placeholder="Scanning LAN…" disabled aria-hidden="true" />
-                </header>
-
-                <div role="listbox" id="connector-listbox" aria-orientation="vertical"
-                    aria-labelledby="connector-trigger">
-                    <div role="group" aria-labelledby="connector-group-heading">
-                        <div role="heading" id="connector-group-heading">Connections</div>
-
-                        <div id="connector-current" role="option" data-value="" aria-selected="true">—</div>
-
-                        <div id="connector-dynamic-anchor" aria-hidden="true" style="height:0;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <input type="hidden" name="connector-value" value="" />
-        </div>
-        script>
-            (() => {
-
-                // ---------- Utilities ----------
-                const $ = (sel, root = document) => root.querySelector(sel);
-                const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-
-                // IPv4-Subnet aus hostname ableiten (z.B. 192.168.8.83 -> "192.168.8.")
-                function getSubnetBase(hostname) {
-                    const m = hostname.match(/^(\d{1,3}\.\d{1,3}\.\d{1,3})\.\d{1,3}$/);
-                    return m ? m[1] + '.' : null;
-                }
-
-                // Probe via Image(): onload/onerror => Host erreichbar (Antwort egal), Timeout => nicht erreichbar
-                function probeReachable(url, timeoutMs = 1200) {
-                    return new Promise((resolve) => {
-                        const img = new Image();
-                        const timer = setTimeout(() => { img.src = ''; resolve(false); }, timeoutMs);
-                        img.onload = () => { clearTimeout(timer); resolve(true); };
-                        img.onerror = () => { clearTimeout(timer); resolve(true); };
-                        // favicon.ico ist üblich; egal ob 200/404 -> onerror zählt hier als "reagiert"
-                        img.src = url.replace(/\/+$/, '/') + 'favicon.ico?cb=' + Date.now();
-                    });
-                }
-
-                // Concurrency-limiter
-                async function mapPool(items, limit, worker) {
-                    const ret = [];
-                    let i = 0;
-                    const run = async () => {
-                        while (i < items.length) {
-                            const idx = i++;
-                            ret[idx] = await worker(items[idx], idx);
-                        }
-                    };
-                    const runners = Array.from({ length: Math.min(limit, items.length) }, run);
-                    await Promise.all(runners);
-                    return ret;
-                }
-
-                // ---------- UI Elemente ----------
-                const root = $('#connector-select') || $('#connector');
-                const trigger = $('#connector-trigger');
-                const popover = $('#connector-popover');
-                const listbox = $('#connector-listbox');
-                const labelEl = $('#connector-label');
-                const currentEl = $('#connector-current');
-                const anchor = $('#connector-dynamic-anchor');
-                const hiddenInp = $('input[name="connector-value"]');
-
-                // ---------- Konfiguration ----------
-                const CURRENT_ORIGIN = window.location.origin + '/';
-                const DEFAULT_PORTS = [55555, 6060]; // <— hier Ports ergänzen/ändern
-                const MAX_HOST = 254;
-                const POOL_SIZE = 24;
-                const SCAN_TIMEOUT = 1200; // ms pro Probe
-
-                // Label & aktuelle Option setzen
-                labelEl.textContent = CURRENT_ORIGIN;
-                currentEl.textContent = CURRENT_ORIGIN;
-                currentEl.dataset.value = CURRENT_ORIGIN;
-                hiddenInp.value = CURRENT_ORIGIN;
-
-                // Popover auf/zu
-                function openPopover() {
-                    popover.setAttribute('aria-hidden', 'false');
-                    trigger.setAttribute('aria-expanded', 'true');
-                }
-                function closePopover() {
-                    popover.setAttribute('aria-hidden', 'true');
-                    trigger.setAttribute('aria-expanded', 'false');
-                }
-
-                trigger.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const hidden = popover.getAttribute('aria-hidden') !== 'false';
-                    hidden ? openPopover() : closePopover();
-                    if (hidden) kickOffScanOnce(); // Startet Scan beim ersten Öffnen
-                });
-
-                document.addEventListener('click', (e) => {
-                    if (!root.contains(e.target)) closePopover();
-                });
-
-                // Auswahl setzen & navigieren
-                function selectAndNavigate(url) {
-                    // UI-Selection
-                    $$('#connector-listbox [role="option"]').forEach(o => o.setAttribute('aria-selected', 'false'));
-                    const opt = $(`#connector-listbox [role="option"][data-value="${CSS.escape(url)}"]`) || null;
-                    if (opt) opt.setAttribute('aria-selected', 'true');
-                    hiddenInp.value = url;
-                    labelEl.textContent = url;
-
-                    // Navigation: Wenn IPv4 mit Port -> http, sonst https (falls Schema fehlt)
-                    if (/^https?:\/\//i.test(url)) {
-                        window.location.href = url;
-                    } else if (/^(\d{1,3}\.){3}\d{1,3}:\d+/.test(url)) {
-                        window.location.href = 'http://' + url;
-                    } else {
-                        window.location.href = 'https://' + url;
-                    }
-                }
-
-                listbox.addEventListener('click', (e) => {
-                    const opt = e.target.closest('[role="option"]');
-                    if (!opt) return;
-                    const val = opt.dataset.value;
-                    if (val) selectAndNavigate(val);
-                });
-
-                // ---------- Scan-Logik ----------
-                let scanStarted = false;
-
-                async function kickOffScanOnce() {
-                    if (scanStarted) return;
-                    scanStarted = true;
-
-                    const host = window.location.hostname; // z.B. 192.168.8.83
-                    const subnet = getSubnetBase(host);
-                    if (!subnet) {
-                        // Kein IPv4 im LAN -> keine Auto-Discovery
-                        appendInfo('No IPv4 LAN detected. Enter target manually or use current connection.');
-                        return;
-                    }
-
-                    // Kandidaten bauen, z.B. 192.168.8.1..254 auf Ports
-                    const candidates = [];
-                    for (let h = 1; h <= MAX_HOST; h++) {
-                        const ip = `${subnet}${h}`;
-                        for (const port of DEFAULT_PORTS) {
-                            const url = `http://${ip}:${port}/`;
-                            // Aktuelle Origin überspringen (ist bereits oben)
-                            if (url === CURRENT_ORIGIN) continue;
-                            candidates.push(url);
-                        }
-                    }
-
-                    // Live-Append, sobald Host reagiert
-                    await mapPool(candidates, POOL_SIZE, async (url) => {
-                        const ok = await probeReachable(url, SCAN_TIMEOUT);
-                        if (ok) appendOption(url);
-                    });
-
-                    if (!$('#connector-listbox [data-dynamic="1"]')) {
-                        appendInfo('No additional connections found.');
-                    }
-                }
-
-                function appendOption(url) {
-                    // Duplicate check
-                    if ($(`#connector-listbox [role="option"][data-value="${CSS.escape(url)}"]`)) return;
-
-                    const div = document.createElement('div');
-                    div.setAttribute('role', 'option');
-                    div.setAttribute('data-value', url);
-                    div.setAttribute('data-dynamic', '1');
-                    div.textContent = url;
-                    div.style.whiteSpace = 'nowrap';
-                    anchor.insertAdjacentElement('beforebegin', div);
-                }
-
-                function appendInfo(text) {
-                    const info = document.createElement('div');
-                    info.setAttribute('role', 'option');
-                    info.setAttribute('aria-disabled', 'true');
-                    info.style.opacity = '0.7';
-                    info.style.cursor = 'default';
-                    info.textContent = text;
-                    anchor.insertAdjacentElement('beforebegin', info);
-                }
-
-            })();
-        </script> -->
-
-
-        <!--  -->
-
-
-
-        <!-- <div>
-            <form class="gap-3" onsubmit="event.preventDefault(); redirectToRoom();">
-                <input id="room" class="bc-input w-40" placeholder="Room ID oder URL" />
-                <button type="submit" class="btn">Join</button>
-            </form>
-
-            <script>
-                function redirectToRoom() {
-                    const input = document.getElementById('room');
-                    if (!input) return;
-
-                    let value = input.value.trim();
-                    if (!value) return;
-
-                    // 1️⃣ Vollständige URL (http/https) -> direkt weiterleiten
-                    if (/^https?:\/\//i.test(value)) {
-                        window.location.href = value;
-                        return;
-                    }
-
-                    // 2️⃣ IPv4-Adresse mit optionalem Port -> http://
-                    if (/^(\d{1,3}\.){3}\d{1,3}(:\d+)?(\/.*)?$/.test(value)) {
-                        const hasPort = /:\d+/.test(value);
-                        const protocol = hasPort ? 'http://' : 'https://';
-                        window.location.href = protocol + value;
-                        return;
-                    }
-
-                    // 3️⃣ Domain (z.B. google.com) -> https://
-                    if (/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(value)) {
-                        window.location.href = 'https://' + value;
-                        return;
-                    }
-
-                    // 4️⃣ Sonst: als lokale Room-ID behandeln (/xyz)
-                    if (!value.startsWith('/')) value = '/' + value;
-                    window.location.href = value;
-                }
-            </script>
-        </div> -->
     </header>
 
-    <main class="p-4 max-w-6xl mx-auto">
-        <!-- Gemeinsame Toolbar (einmalig, wird für alle Editoren benutzt) -->
+    <!-- <main id="main" class="flex-1 p-4 w-full mx-auto overflow-y-auto"> -->
+    <main id="main" class="flex-1 p-4 max-w-6xl mx-auto overflow-y-auto">
+        <!-- <main id="main" class="p-4 max-w-6xl mx-auto h-full"> -->
+
         <div id="toolbar" class="mb-3">
             <span class="ql-formats">
                 <select class="ql-header"></select>
@@ -528,7 +227,7 @@
             </span>
         </div>
 
-        <div class="grid gap-4 md:grid-cols-2">
+        <!-- <div class="grid gap-4 md:grid-cols-1">
             <div class="card p-2 bg-white">
                 <h3 class="mb-2 font-medium">Notiz A</h3>
                 <div class="editor" data-note-id="noteA"></div>
@@ -537,128 +236,41 @@
                 <h3 class="mb-2 font-medium">Notiz B</h3>
                 <div class="editor" data-note-id="noteB"></div>
             </div>
+        </div> -->
+
+
+
+        <div id="notes" class="notes">
+
+            <div class="note note--me" data-note-id="noteA" data-owner="">
+                <div class="card p-2 bg-white">
+                    <h3 class="mb-2 font-medium">Notiz A</h3>
+                    <div class="editor" data-note-id="noteA"></div>
+                </div>
+            </div>
+
+            <div class="note note--other" data-note-id="noteB" data-owner="">
+                <div class="card p-2 bg-white">
+                    <h3 class="mb-2 font-medium">Notiz B</h3>
+                    <div class="editor" data-note-id="noteB"></div>
+                </div>
+            </div>
         </div>
 
-        <p class="text-xs text-gray-500 mt-3" id="status">Verbunden…</p>
+
+
+        <!-- <p class="text-xs text-gray-500 mt-3" id="status">Verbunden…</p>
         <a href="#" onclick="event.preventDefault()">Example link</a>
         <a class="primary" href="#" onclick="event.preventDefault()">Example link</a>
         <button class="btn">
             <a onclick="event.preventDefault()">Example link</a>
-        </button>
+        </button> -->
     </main>
 
 
 
-
-
-    <!-- ip fetch service test, needs server restart -->
-
-    <!-- <h1>Gefundene Hosts</h1>
-    <button id="refresh">Aktualisieren</button>
-    <span id="meta"></span>
-    <table>
-        <thead>
-            <tr>
-                <th>IP</th>
-                <th>Port</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody id="list"></tbody>
-    </table>
-
-    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
-    <script>
-        const list = document.getElementById('list');
-        const meta = document.getElementById('meta');
-        const btn = document.getElementById('refresh');
-
-        const ioClient = io(); // same-origin
-
-        function fmt(ts) {
-            if (!ts) return '–';
-            const d = new Date(ts);
-            return d.toLocaleTimeString();
-        }
-        function setMeta(updatedAt, nextAllowedAt) {
-            const now = Date.now();
-            const wait = Math.max(0, Math.ceil((nextAllowedAt - now) / 1000));
-            meta.textContent = `Zuletzt aktualisiert: ${fmt(updatedAt)}  •  Nächster Scan möglich in: ${wait}s`;
-        }
-        function render(peers) {
-            list.innerHTML = peers.map(p =>
-                `<tr><td>${p.ip}</td><td>${p.port}</td><td class="${p.healthy ? 'healthy' : 'unhealthy'}">${p.healthy ? 'OK' : '—'}</td></tr>`
-            ).join('');
-        }
-
-        async function loadOnce() {
-            const r = await fetch('/api/peers');
-            const j = await r.json();
-            render(j.peers || []);
-            setMeta(j.updatedAt, j.nextAllowedAt ?? (Date.now() + 30000));
-        }
-
-        // Live-Updates vom Server
-        ioClient.on('peers-updated', ({ peers, updatedAt }) => {
-            render(peers || []);
-            // nextAllowedAt wird bereits von Server gesetzt: 30s nach Start des Scans.
-            // Bei Live-Event kennen wir ihn nicht => setze jetzt+30s (konservativ)
-            setMeta(updatedAt, Date.now() + 30000);
-        });
-
-        // Cooldown-Feedback (wenn via Socket ausgelöst)
-        ioClient.on('peers-cooldown', ({ retryIn, nextAllowedAt }) => {
-            setMeta(Date.now(), nextAllowedAt);
-            btn.disabled = true;
-            const end = Date.now() + (retryIn || 0);
-            const t = setInterval(() => {
-                const left = Math.max(0, Math.ceil((end - Date.now()) / 1000));
-                btn.textContent = left ? `Aktualisieren (${left})` : 'Aktualisieren';
-                if (!left) { clearInterval(t); btn.disabled = false; }
-            }, 500);
-        });
-
-        btn.addEventListener('click', async () => {
-            btn.disabled = true;
-            btn.textContent = 'Aktualisieren …';
-            try {
-                const r = await fetch('/api/peers/refresh', { method: 'POST' });
-                if (r.status === 429) {
-                    const j = await r.json();
-                    // Countdown anzeigen
-                    const end = Date.now() + (j.retryIn || 0);
-                    const timer = setInterval(() => {
-                        const left = Math.max(0, Math.ceil((end - Date.now()) / 1000));
-                        btn.textContent = left ? `Aktualisieren (${left})` : 'Aktualisieren';
-                        setMeta(j.updatedAt, j.nextAllowedAt);
-                        if (!left) { clearInterval(timer); btn.disabled = false; }
-                    }, 500);
-                    return;
-                }
-                const j = await r.json();
-                render(j.peers || []);
-                setMeta(j.updatedAt, j.nextAllowedAt);
-            } catch (e) {
-                console.error(e);
-            } finally {
-                // bei Erfolg stellt das Live-Event sowieso ein; hier wieder freigeben
-                setTimeout(() => { btn.disabled = false; btn.textContent = 'Aktualisieren'; }, 500);
-            }
-        });
-
-        // initial laden
-        loadOnce();
-    </script> -->
-
-    <!-- <script>
-        document.addEventListener('peer:selected', (e) => {
-            const { value } = e.detail; // z.B. "192.168.1.23:55555"
-            console.log('Selected peer:', value);
-            // hier ggf. deine Socket.IO-Connection umstellen …
-            // socket = io('http://' + value, {...})
-        });
-    </script> -->
-
+    <!-- quill delta -->
+    <script defer src="/js/quill-notes.js"></script>
 
     <!-- ip fetch service -->
     <script defer src="/js/peers-select.js"></script>

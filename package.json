@@ -26,7 +26,8 @@
     "quill": "^2.0.3",
     "quill-delta": "^5.1.0",
     "signale": "^1.4.0",
-    "socket.io": "^4.7.5"
+    "socket.io": "^4.7.5",
+    "theme-toggles": "^4.10.1"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.16",

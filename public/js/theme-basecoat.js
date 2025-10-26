@@ -1,6 +1,6 @@
 (() => {
-  const MODE_KEY = 'themeMode'; 
-  const BRAND_KEY = 'themeBrand'; 
+  const MODE_KEY = 'themeMode';
+  const BRAND_KEY = 'themeBrand';
 
   const applyMode = (mode) => {
     const dark = mode === 'dark' || (
@@ -8,6 +8,16 @@
     );
     document.documentElement.classList.toggle('dark', !!dark);
     localStorage.setItem(MODE_KEY, dark ? 'dark' : 'light');
+
+    // THEME SWITCH ADDON
+    const btn = document.getElementById('theme-toggle-btn');
+    if (btn) {
+      btn.classList.remove('tt-pop');       // reset falls schnell hintereinander
+      // force reflow, damit Animation erneut triggert:
+      // eslint-disable-next-line no-unused-expressions
+      btn.offsetHeight;
+      btn.classList.add('tt-pop');
+    }
   };
 
   const applyBrand = (brand) => {

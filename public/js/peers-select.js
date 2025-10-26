@@ -394,7 +394,7 @@
       info.setAttribute('aria-disabled', 'true');
       info.setAttribute('data-dynamic', '1');
       info.setAttribute('data-value', '__info'); // nötig für Hover-Style
-      info.textContent = 'Keine Verbindungen gefunden';
+      info.textContent = 'Keine weiteren Verbindungen gefunden';
       info.onclick = null;
       anchor.insertAdjacentElement('beforebegin', info);
       enableBasecoatHover(info, listbox);
