@@ -1,6 +1,12 @@
 {
+  "port": 55555, 
   "theme": "dark",
+  "brand": "purple",
   "autosave": 5000,
   "primaryColor": "#FF422AD5",
-  "tabSize": 4
+  "tabSize": 4,
+  "usernames": {
+    "default": "andiblup",
+    "exampleRoomName": "exampleUserName"
+  }
 }

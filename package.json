@@ -22,6 +22,7 @@
     "express": "^4.19.2",
     "iconify-icon": "^3.0.1",
     "log-symbols": "4.1.0",
+    "multer": "^2.0.2",
     "ora": "5.4.1",
     "quill": "^2.0.3",
     "quill-delta": "^5.1.0",
