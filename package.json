@@ -15,6 +15,7 @@
     "start": "node server/server.js"
   },
   "dependencies": {
+    "archiver": "^7.0.1",
     "basecoat-css": "^0.3.2",
     "chalk": "4.1.2",
     "cors": "^2.8.5",
@@ -28,7 +29,8 @@
     "quill-delta": "^5.1.0",
     "signale": "^1.4.0",
     "socket.io": "^4.7.5",
-    "theme-toggles": "^4.10.1"
+    "theme-toggles": "^4.10.1",
+    "unzipper": "^0.12.3"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.16",

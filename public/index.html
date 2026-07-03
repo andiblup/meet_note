@@ -23,7 +23,7 @@
         style="background:var(--card);color:var(--fg);">
         <h1 class="text-xl font-semibold">MeetNote</h1>
 
-        <div id="rooms-select" class="select">
+        <!-- <div id="rooms-select" class="select">
             <button type="button" class="btn-outline justify-between font-normal w-[260px]" id="rooms-trigger"
                 aria-haspopup="listbox" aria-expanded="false" aria-controls="rooms-listbox">
                 <span class="truncate" id="rooms-label">default</span>
@@ -98,10 +98,47 @@
                     <div role="group" aria-labelledby="rooms-group-heading">
                         <div role="heading" id="rooms-group-heading">Rooms</div>
 
-                        <!-- ausgewählter -->
                         <div id="rooms-current" role="option" data-value="" aria-selected="true">default</div>
 
-                        <!-- neue/gef. Einträge vor dem Anchor -->
+                        <div id="rooms-dynamic-anchor" aria-hidden="true" style="height:0;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="rooms-value" value="default" />
+        </div> -->
+        <div id="rooms-select" class="select">
+            <button id="rooms-trigger" type="button" class="btn-outline justify-between font-normal w-[360px]"
+                aria-haspopup="listbox" aria-expanded="false" aria-controls="rooms-listbox">
+                <span class="truncate" id="rooms-label">default</span>
+                <!-- dein Chevron-Icon ... -->
+            </button>
+
+            <div id="rooms-popover" data-popover aria-hidden="true" class="w-[360px]">
+                <!-- Header 1: Suchen -->
+                <header class="flex justify-start">
+                    <!-- (dein Search-Icon) -->
+                    <input type="text" id="rooms-search" placeholder="Search rooms…" autocomplete="off" />
+                </header>
+
+                <!-- Header 2: Erstellen -->
+                <form id="rooms-create-form" class="flex justify-start items-center mt-2">
+                    <button type="submit" id="room-create-btn" aria-label="Create new room" class="cursor-pointer">
+                        <!-- (dein file-plus Icon) -->
+                    </button>
+                    <input type="text" id="room-create-input" placeholder="Create new room" autocomplete="off"
+                        class="flex-1 bg-transparent border-none outline-none" />
+                </form>
+
+                <!-- Liste -->
+                <div role="listbox" id="rooms-listbox" aria-orientation="vertical" aria-labelledby="rooms-trigger">
+                    <div role="group" aria-labelledby="rooms-group-heading">
+                        <div role="heading" id="rooms-group-heading">Rooms</div>
+
+                        <!-- Aktueller (wird per JS befüllt) -->
+                        <div id="rooms-current" role="option" data-value="" aria-selected="true">default</div>
+
+                        <!-- Dynamische Treffer werden davor eingefügt -->
                         <div id="rooms-dynamic-anchor" aria-hidden="true" style="height:0;"></div>
                     </div>
                 </div>
@@ -326,6 +363,9 @@
 
     <!-- ip fetch service -->
     <script defer src="/js/peers-select.js"></script>
+
+    <!-- rooms fetch service -->
+    <script defer src="/js/rooms-select.js"></script>
 
     <!-- Socket.IO Client (lokal vom Server) -->
     <script src="./socket.io/socket.io.js"></script>

@@ -142,3 +142,68 @@
 
 // NotesUI.addEditor('noteC', document.querySelector('#noteC .editor'));
 
+//! ////////////////
+// public/js/app.js
+(() => {
+  const socket = window.io ? window.io() : null;
+  if (!socket) return;
+
+  let currentRoom = 'default';
+
+  // UI: Dropdown (nutze bitte eine EIGENE Select-ID für Rooms, nicht die 445592!)
+  const roomsSelect = document.getElementById('rooms-select');      // dein eigener Wrapper
+  const roomsLabel  = document.getElementById('rooms-select-label'); // im Trigger-Button
+  const roomsListbox= document.getElementById('rooms-select-list');  // listbox-Container
+
+  function renderRoomsDropdown(roomIds) {
+    if (!roomsListbox) return;
+    roomsListbox.innerHTML = '';
+    roomIds.forEach(id => {
+      const opt = document.createElement('div');
+      opt.setAttribute('role', 'option');
+      opt.dataset.value = id;
+      opt.textContent = id;
+      if (id === currentRoom) opt.setAttribute('aria-selected', 'true');
+      opt.addEventListener('click', () => {
+        if (id === currentRoom) return;
+        // UI-Selection
+        roomsListbox.querySelectorAll('[role="option"]').forEach(o => o.removeAttribute('aria-selected'));
+        opt.setAttribute('aria-selected', 'true');
+        currentRoom = id;
+        if (roomsLabel) roomsLabel.textContent = id;
+        // eigentlicher Wechsel
+        socket.emit('join', id);
+      });
+      roomsListbox.appendChild(opt);
+    });
+  }
+
+  // beim ersten Laden: Liste holen (zur Not per REST, aber Socket reicht meist)
+  fetch('/api/rooms').then(r=>r.json()).then(j=>{
+    renderRoomsDropdown(j.rooms || []);
+  }).catch(()=>{});
+
+  // Socket-Events
+  socket.on('rooms:list', ({ rooms }) => {
+    renderRoomsDropdown(rooms || []);
+  });
+
+  // WICHTIG: Wenn der Server init sendet → Notes neu laden!
+  socket.on('init', (state) => {
+    currentRoom = state?.roomId || currentRoom;
+    if (roomsLabel) roomsLabel.textContent = currentRoom;
+    // Quill/Notizen austauschen
+    if (window.NotesUI && typeof window.NotesUI.resetAndLoad === 'function') {
+      window.NotesUI.resetAndLoad(state);
+    }
+  });
+
+  // Optional debug
+  socket.on('joined', ({ roomId }) => {
+    currentRoom = roomId;
+    if (roomsLabel) roomsLabel.textContent = roomId;
+  });
+
+})();
+
+

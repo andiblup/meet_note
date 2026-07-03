@@ -19,4 +19,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   toggleMax:    () => ipcRenderer.send('window-toggle-max'),
   close:        () => ipcRenderer.send('window-close'),
   toggleFull:   () => ipcRenderer.send('window-toggle-full'),
+  roomsExport: (hostBase, roomId) => ipcRenderer.invoke('rooms-export', { hostBase, roomId })
 });

@@ -7,10 +7,11 @@ const { spawn, execSync } = require('child_process');
 const os = require('os');
 const net = require('net');
 const fs = require('fs');
-// const { log } = require('console');
+const https = require('https');
 const log = require('../utils/logger.js');
-// const ora = require('ora');
-// const dotenv = require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+const http = require('http');
+const { pipeline } = require('stream');
+const unzipper = require('unzipper');
 
 const SETTINGS_FILE = path.join(__dirname, '..', 'data', 'settings', 'settings.json');
 
@@ -73,6 +74,46 @@ function readSettings() {
 }
 
 /* --------------------------------- IPC --------------------- */
+//! NEW DOWNLOAD AND EXPORT
+
+function getUserDataDir() { return app.getPath('userData'); }
+function getLocalRoomsDir() { const d = path.join(getUserDataDir(), 'rooms'); if (!fs.existsSync(d)) fs.mkdirSync(d,{recursive:true}); return d; }
+
+
+function downloadToFile(url, destPath) {
+    return new Promise((resolve, reject) => {
+        const out = fs.createWriteStream(destPath);
+        const mod = url.startsWith('https') ? https : http;
+        const req = mod.get(url, res => {
+            if (res.statusCode !== 200) { out.close(); return reject(new Error(`HTTP ${res.statusCode}`)); }
+            pipeline(res, out, (err) => err ? reject(err) : resolve(destPath));
+        });
+        req.on('error', reject);
+    });
+}
+
+ipcMain.handle('rooms-export', async (_evt, { hostBase, roomId }) => {
+    // hostBase z.B. "http://192.168.1.10:55555"
+    if (!hostBase || !roomId) throw new Error('hostBase/roomId required');
+    const url = `${hostBase.replace(/\/+$/, '')}/api/rooms/${encodeURIComponent(roomId)}/export.zip`;
+    const roomsDir = getLocalRoomsDir();
+    const zipPath = path.join(roomsDir, `room-${roomId}.zip`);
+    const extractDir = path.join(roomsDir, roomId);
+
+    // Download
+    await downloadToFile(url, zipPath);
+
+    // Entpacken (altes Ziel löschen)
+    if (fs.existsSync(extractDir)) fs.rmSync(extractDir, { recursive: true, force: true });
+    fs.mkdirSync(extractDir, { recursive: true });
+    await fs.createReadStream(zipPath).pipe(unzipper.Extract({ path: extractDir })).promise();
+
+    return { ok: true, path: extractDir };
+});
+
+
+
+
 
 // ipcMain.handle('get-settings', () => {
 //   return readSettings();
